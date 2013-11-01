@@ -17,3 +17,8 @@
 .view-admin-contenido #edit-date-filter-max-wrapper{
     float: left;
 }
+
+#edit-field-medio, #edit-field-categoria {
+    float: left;
+    width: 50%;
+}
