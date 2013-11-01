@@ -1707,8 +1707,8 @@ function eclip_send_clip($node) {
   $message = array(
     'id'      => 'clipper_key',
     'from'    => $from,
-    'to'      => 'gerardocadau@gmail.com',
-    //'to'      => 'clipping@e-clip.cl',
+    //'to'      => 'gerardocadau@gmail.com',
+    'to'      => 'clipping@e-clip.cl',
     'subject' => $node->title,    
     'body'    => theme($template_name, array('node' => $node, 'news' => _eclip_get_news_by_clip($node->nid))),
     'headers' => array(
