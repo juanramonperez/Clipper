@@ -1,0 +1,12 @@
+name = Eclip
+description = A multi-column theme which can be configured to modify colors and switch between fixed and fluid width layouts.
+package = Core
+version = VERSION
+core = 7.x
+;stylesheets[all][] = style.css
+;stylesheets[all][] = global.css
+stylesheets[all][] = fresh.css
+stylesheets[all][] = templates.css
+stylesheets[print][] = print.css
+settings[eclip_width] = fluid
+scripts[] = scripts.js

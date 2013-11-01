@@ -1,0 +1,6 @@
+name = Eclip core
+description = Eclip base module.
+core = 7.x
+package = Eclip
+
+dependencies[] = ctools

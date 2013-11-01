@@ -1,0 +1,19 @@
+/* 
+    Document   : fresh
+    Created on : 12/03/2013, 16:53:13
+    Author     : gerardo
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.view-admin-contenido label[for="edit-fecha"] { 
+    display: none;
+}
+
+.view-admin-contenido #edit-date-filter-min-wrapper{
+    float: left;
+}
+
+.view-admin-contenido #edit-date-filter-max-wrapper{
+    float: left;
+}

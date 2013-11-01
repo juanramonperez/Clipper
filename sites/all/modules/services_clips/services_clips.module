@@ -1,0 +1,195 @@
+<?php
+
+/*
+ * Implements hook_menu().
+ */
+
+function services_clips_menu() {
+    $items['sevices_test'] = array(
+        'title' => 'Test page',
+        'page callback' => 'services_clips_test_page',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+}
+
+/**
+ * Callback for test page
+ */
+function services_clips_test_page() {
+    $base_url = 'http://eclip/rest';
+    $params = http_build_query(array(
+        'username' => 'admin',
+        'password' => 'qwerty',
+            ));
+    // set up the request
+    $curl = curl_init($base_url . '/user/login.json');
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_POST, true);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+    // make the request
+    $response = curl_exec($curl);
+    curl_close($curl);
+    $user_data = json_decode($response);
+    // login successful
+    if (isset($user_data->sessid)) {
+        $node_params = http_build_query(array(
+            'type' => 'page',
+            'title' => 'Test page',
+        ));
+        // set up the authentication request
+        $curl_node = curl_init($base_url . '/node.json');
+        curl_setopt($curl_node, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl_node, CURLOPT_POST, true);
+        curl_setopt($curl_node, CURLOPT_POSTFIELDS, $node_params);
+        curl_setopt($curl_node, CURLOPT_COOKIE, $user_data->session_name . '=' . $user_data->sessid);
+        // make the request
+        $node_response = curl_exec($curl_node);
+        curl_close($curl_node);
+        var_dump(json_decode($node_response));
+    }
+    return 'Hola';
+}
+
+/**
+ * Implements hook_perm().
+ */
+function services_clips_permission() {
+    return array(
+        'list news' => array(
+            'title' => t('List news'),
+            'description' => t('List news via web services.'),
+        ),
+    );
+}
+
+/**
+ * Implements hook_ctools_plugin_api().
+ */
+function services_clips_ctools_plugin_api($owner, $api) {
+    if ($owner == 'services' && $api == 'services') {
+        return array(
+            'version' => 3,
+        );
+    }
+}
+
+/**
+ * Implements hook_services_resources().
+ */
+function services_clips_services_resources() {
+    return array(
+        'clip' => array(
+            'index' => array(
+                'help' => 'Retrieves a listing of clips',
+                'callback' => '_clipresource_index',
+                'access callback' => 'user_access',
+                'access arguments' => array('list news'),
+                'access arguments append' => FALSE,
+                'args' => array(
+                    array(
+                        'name' => 'token',
+                        'type' => 'string',
+                        'description' => '',
+                        'source' => array(
+                            'param' => 'token',
+                        ),
+                        'optional' => FALSE,
+                    ),
+                    array(
+                        'name' => 'date',
+                        'type' => 'string',
+                        'description' => '',
+                        'source' => array(
+                            'param' => 'date',
+                        ),
+                        'optional' => TRUE,
+                        'default value' => NULL,
+                    ),
+                    array(
+                        'name' => 'limit',
+                        'type' => 'int',
+                        'description' => '',
+                        'source' => array(
+                            'param' => 'limit',
+                        ),
+                        'optional' => TRUE,
+                        'default value' => 3,
+                    ),
+                ),
+            ),
+        ),
+    );
+}
+
+/**
+ * Callback for listing clips.
+ *
+ * @param string $hash
+ * @param string $date (format dd-mm-yyyy)
+ * @param int $limit
+ * @return array
+ */
+function _clipresource_index($token, $date, $limit) {
+    //return $token;
+    $query = db_select('node', 'n');
+    $query->fields('n', array('nid'));
+    $query->leftJoin('field_data_field_token', 't', 't.entity_id = n.nid AND (t.entity_type = :type AND t.deleted = :deleted)', array(':type' => 'node', ':deleted' => 0));
+    $query->condition('n.type', 'cliente')
+            ->condition('n.status', '1')
+            ->condition('t.field_token_value', $token)
+            ->range(0, 1);
+    $customer = $query->execute()->fetch();
+    if (isset($customer->nid)) {
+        $noticias = array();
+        // Obteniendo el ultimo clipping.
+        $query = db_select('node', 'n');
+        $query->fields('n', array('nid'))
+                ->condition('n.type', 'clip')
+                ->condition('n.status', '1')
+                ->range(0, 1)
+                ->orderBy('n.created', 'DESC');
+        $query->leftJoin('field_data_field_cliente', 'c', 'c.entity_id = n.nid AND (c.entity_type = :type AND c.deleted = :deleted)', array(':type' => 'node', ':deleted' => 0));
+        $query->condition('c.field_cliente_target_id', $customer->nid);
+        if ($date != NULL) {
+            $fecha_inicio = strtotime($date);
+            $fecha_fin = strtotime($date) + 86400;
+            $query->condition('n.created', $fecha_inicio, '>=');
+            $query->condition('n.created', $fecha_fin, '<=');
+        }
+        $clip = $query->execute()->fetch();
+        if (isset($clip->nid)) {
+            $query = db_select('node', 'n');
+            $query->fields('n', array('nid', 'title', 'created'))
+                    ->fields('h', array('field_hash_value'))
+                    ->fields('a', array('article_data_id'))
+                    ->fields('c', array('field_cliente_target_id'))
+                    ->fields('t', array('name'))
+                    ->condition('n.type', 'noticia')
+                    ->condition('n.status', '1')
+                    ->condition('a.clip_nid', $clip->nid)
+                    ->condition('a.highlighted', 1)
+                    ->range(0, $limit)
+                    ->orderBy('a.weight', 'ASC');
+            $query->leftJoin('eclip_article_data', 'a', 'a.article_id = n.nid');
+            $query->leftJoin('field_data_field_medio', 'm', 'm.entity_id = n.nid AND (m.entity_type = :type AND m.deleted = :deleted)', array(':type' => 'node', ':deleted' => 0));
+            $query->leftJoin('taxonomy_term_data', 't', 't.tid = m.field_medio_tid');
+            $query->leftJoin('field_data_field_cliente', 'c', 'c.entity_id = a.clip_nid AND (c.entity_type = :type AND c.deleted = :deleted)', array(':type' => 'node', ':deleted' => 0));
+            $query->leftJoin('field_data_field_hash', 'h', 'h.entity_id = c.field_cliente_target_id AND (h.entity_type = :type AND h.deleted = :deleted)', array(':type' => 'node', ':deleted' => 0));
+            $results = $query->execute()->fetchAll();
+            foreach ($results as $item) {
+                $noticias[] = array(
+                    'id' => $item->nid,
+                    'title' => $item->title,
+                    'created' => date('d-m-Y', $item->created),
+                    'medio' => $item->name,
+                    'link' => url('clip/' . $item->field_hash_value . '/' . $clip->nid . '/' . $item->article_data_id, array('absolute' => TRUE)),
+                );
+            }
+        }
+        return $noticias;
+    } else {
+        return array('error' => 1, 'message' => t('Usted no está autorizado para visitar esta página.'));
+    }
+}

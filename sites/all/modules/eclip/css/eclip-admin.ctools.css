@@ -1,0 +1,1049 @@
+/* @group Buttons */
+
+.ctools-button-processed {
+  background-color: #ffffff;
+  border-color: #cccccc;
+  font-size: 11px;
+  padding-bottom: 2px;
+  padding-top: 2px;
+}
+
+.ctools-button-processed,
+.ctools-button-processed input {
+  text-transform: lowercase;
+}
+
+.ctools-button-processed:hover {
+  border-color: #b8b8b8;
+}
+
+.ctools-button-processed:active {
+  border-color: #a0a0a0;
+}
+
+.ctools-button-processed .ctools-content {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.ctools-dropbutton-processed {
+  position: absolute;
+}
+
+.ctools-dropbutton-processed .ctools-content {
+  border-right: 1px solid #e8e8e8;
+}
+
+.ctools-dropbutton-processed .ctools-content ul {
+  margin: 0;
+  padding: 0;
+}
+
+.ctools-content ul.actions {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+}
+
+.ctools-button-processed .ctools-content a {
+  background-image: none;
+  border: medium none;
+}
+
+.ctools-dropbutton-processed.open:hover {
+  border-color: #D0D0D0;
+}
+
+.ctools-dropbutton-processed.open {
+  z-index: 100;
+}
+
+.ctools-dropbutton-processed .ctools-link {
+  border-left: 1px solid #ffffff;
+}
+
+.ctools-dropbutton-processed.open .ctools-content {
+    padding-bottom: 4px;
+}
+
+.ctools-dropbutton-processed li a,
+.ctools-dropbutton-processed li input {
+  padding-right: 9px;
+}
+
+.ctools-dropbutton-processed.open li + li {
+  border-top: 1px solid #efefef;
+  margin-top: 4px;
+  padding-bottom: 0;
+  padding-top: 4px;
+}
+
+.ctools-twisty:focus {
+  outline: medium none;
+}
+
+.ctools-no-js .ctools-content ul {
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-left: 0;
+}
+
+.views-display-top .ctools-button-processed {
+  font-size: 12px;
+  position: absolute;
+  right: 12px;
+  top: 7px;
+}
+
+.views-ui-display-tab-bucket .ctools-button-processed {
+  position: absolute;
+  right: 5px;
+  top: 4px;
+}
+
+.views-ui-display-tab-actions .ctools-button-processed li a,
+.views-ui-display-tab-actions .ctools-button-processed input {
+  background: none;
+  border: medium;
+  font-family: inherit;
+  font-size: 12px;
+  padding-bottom: 0;
+  padding-left: 12px;
+  padding-top: 0;
+  margin-bottom: 0;
+}
+
+.views-ui-display-tab-actions .ctools-button-processed input:hover {
+  background: none;
+}
+
+/* @end */
+
+/* @group Collapsible */
+
+.ctools-toggle {
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-style: solid;
+  border-width: 5px 5px 0;
+  display: inline-block;
+  float: left;
+  height: 0;
+  margin-right: 2px;
+  margin-top: 0.4545em;
+  width: 0;
+}
+
+.ctools-toggle.ctools-toggle-collapsed {
+  border-bottom-color: transparent;
+  border-left:  4px solid;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-width: 5px 0 5px 5px;
+  margin-left: 2px;
+  margin-right: 5px;
+  margin-top: 0.3333em;
+}
+
+.ctools-toggle:hover,
+.ctools-collapsible-handle:hover {
+  cursor: pointer;
+}
+
+.ctools-export-ui-row {
+  margin-bottom: 0;
+  padding-top: 0;
+}
+
+.ctools-export-ui-row label {
+  display: block;
+  float: left;
+  width: 55px;
+}
+
+.views-display-settings .ctools-toggle {
+  color: #000000;
+}
+
+.views-display-column > .ctools-toggle {
+  margin-left: 6px;
+  margin-right: 3px;
+  margin-top: 10px;
+}
+.views-display-column > .ctools-toggle.ctools-toggle-collapsed {
+  margin-left: 9px;
+  margin-right: 5px;
+  margin-top: 8px;
+}
+
+.views-display-column > .ctools-collapsible-handle {
+  border-color: #F3F3F3;
+  border-style: solid;
+  border-width: 1px 1px 0;
+  font-size: 13px;
+  font-weight: normal;
+  margin: 0;
+  padding: 6px 3px;
+}
+
+.views-display-column > .ctools-toggle.ctools-toggle-collapsed + .ctools-collapsible-handle {
+  border-width: 1px;
+}
+
+.views-display-column > .ctools-collapsible-content > .views-ui-display-tab-bucket:first-child {
+  border-top: medium none;
+}
+
+h2.ctools-collapsible-handle {
+  display: inline;
+  clear: both;
+}
+
+/* @end */
+
+/* @group Dependent */
+
+.dependent-options {
+  margin-left: 18px; /* LTR */
+}
+
+/* @end */
+
+/* @group Export */
+
+/* Override for filter button on the views list screen */
+#ctools-export-ui-list-form .form-submit {
+  margin-top: 0em !important;
+  margin-right: 0em;
+}
+
+.ctools-export-ui-row + .ctools-export-ui-row {
+  margin-top: 1em;
+}
+
+.ctools-export-ui-fourth-row input {
+  margin-top: 5px !important;
+}
+
+/* @end */
+
+/* @group Jump list */
+
+#views-live-preview .ctools-jump-menu-select{
+  max-width: 450px;
+}
+
+/* @end */
+
+/**
+ * The .seven.css file is intended to contain styles that override declarations
+ * in the Seven admin theme.
+ */
+
+/* @group Content */
+
+.views-ui-display-tab-bucket h1,
+.views-ui-display-tab-bucket h2,
+.views-ui-display-tab-bucket h3,
+.views-ui-display-tab-bucket h4,
+.views-ui-display-tab-bucket h5 {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+/* @end */
+
+/* @group Forms */
+
+.views-ui-dialog fieldset {
+  padding-top: 2.5em;
+}
+
+fieldset fieldset {
+  border: medium none;
+}
+
+/**
+ * Seven positions the legend absolutely, but does not have a way to ignore
+ * fieldsets without a legend so we make one up.
+ */
+fieldset.fieldset-no-legend {
+  padding-top: 0;
+}
+
+/**
+ * Being extra safe here and scoping this to the add view wizard form (where
+ * a layout problem occurs for the Display format fieldset if we don't fix its
+ * padding), but it's probably safe to just let it apply everywhere.
+ */
+#views-ui-add-form fieldset fieldset .fieldset-wrapper {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.views-display-tab fieldset {
+  padding: 0 12px;
+}
+
+.views-display-tab .fieldset-wrapper {
+  padding: 10px 12px 12px;
+}
+
+.views-display-tab fieldset.box-padding .fieldset-wrapper {
+  padding: 0;
+}
+
+.views-display-tab legend + .fieldset-wrapper {
+  padding-top: 2.5em;
+}
+
+.views-admin .form-item label.option,
+#views-ui-preview-form .form-item label.option {
+  font-size: 1em;
+}
+
+#views-ui-preview-form .form-submit {
+  margin-top: 3px;
+}
+
+.views-admin input.form-submit,
+.views-ui-dialog input.form-submit,
+.views-admin a.button,
+.views-ui-dialog a.button {
+  margin-bottom: 0;
+  margin-right: 0; /* LTR */
+  margin-top: 0;
+}
+
+/* Override for a button on the edit display screen */
+#edit-displays-preview-controls .form-submit {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+/* Override for filter button on the views list screen */
+#ctools-export-ui-list-form .form-submit {
+  margin-bottom: 0;
+}
+
+#ctools-export-ui-list-form .ctools-export-ui-first-row .form-item {
+  margin-top: 3px;
+  margin-right: 5px; /* LTR */
+}
+
+.form-item,
+.form-item .form-item {
+  margin-bottom: 0;
+  margin-top: 9px;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.form-actions {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.form-item .form-item {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.form-radios > .form-item {
+  margin-top: 3px;
+}
+
+/* @group Dependent options
+ *
+ * Dependent options are identified in CTools dependent.js
+ */
+
+/* The .dependent-options.form-item is necessary to supercede the Seven .form-item
+ * reset declaration that sets the margin to zero.
+ */
+.dependent-options,
+.dependent-options.form-item,
+.form-item-options-expose-required,
+.form-item-options-expose-label,
+.form-item-options-expose-description {
+  margin-left: 1.5em;
+}
+
+.views-admin-dependent .form-item .form-item,
+.views-admin-dependent .form-type-checkboxes,
+.views-admin-dependent .form-type-radios,
+.views-admin-dependent .dependent-options,
+.views-admin-dependent .form-item .form-item,
+.views-admin-dependent .dependent-options .form-type-select,
+.views-admin-dependent .dependent-options .form-type-textfield,
+.form-item-options-expose-required,
+.form-item-options-expose-label,
+.form-item-options-expose-description {
+  margin-bottom: 6px;
+  margin-top: 6px;
+}
+
+.views-admin-dependent .form-type-radio,
+.views-admin-dependent .form-radios .form-item {
+  margin-bottom: 2px;
+  margin-top: 2px;
+}
+
+/* @end */
+
+/* @end */
+
+/* @group Lists */
+
+.views-admin ul.secondary,
+.views-admin .item-list ul {
+  margin: 0;
+  padding: 0;
+}
+
+.views-admin ul.secondary {
+  clear: none;
+}
+
+.views-displays ul.secondary li a,
+.views-displays ul.secondary li.active a,
+.views-displays ul.secondary li.active a.active {
+  padding: 2px 7px 3px;
+}
+
+.views-displays ul.secondary li.active a,
+.views-displays ul.secondary li.active a.active {
+  border: 1px solid transparent;
+}
+
+.views-admin .links li {
+  padding-right: 0; /* LTR */
+}
+
+.views-admin .button .links li {
+  padding-right: 12px; /* LTR */
+}
+
+.page-admin-structure-views #content ul.action-links {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.views-display-top ul.secondary {
+  background-color: transparent;
+  float: left
+}
+
+.views-display-top .secondary .action-list li {
+  float: none;
+  margin: 0;
+}
+
+/* @end */
+
+/* @group Buttons */
+
+.ctools-button-processed ul {
+  margin: 0;
+}
+
+/* Override for input elements that are themed like ctools-buttons */
+.ctools-button-processed input.form-submit:hover {
+  background-image: none;
+  color: #0074BD;
+  text-shadow: none;
+}
+
+.ctools-button-processed input.form-submit:active {
+  background: none;
+  border: medium none;
+  color: #0074BD;
+  text-shadow: none;
+}
+
+/* @end */
+
+/* @group Tables */
+
+table td,
+table th {
+  vertical-align: top;
+}
+
+/* @end */
+
+/* @group Attachment details */
+
+#edit-display-settings-title {
+  color: #008BCB;
+}
+
+/* @end */
+
+/* @group Attachment details tabs
+ *
+ * The tabs that switch between sections
+ */
+
+.views-displays .secondary {
+ text-align: left; /* LTR */
+}
+
+.views-displays .secondary > li:first-child {
+ padding-left: 0;
+}
+
+.views-admin .icon.add {
+  background-position: center 3px;
+}
+
+.views-displays .secondary a {
+  background-color: #f1f1f1;
+  -moz-border-radius: 7px;
+  -webkit-border-radius: 7px;
+  border-radius: 7px;
+  color: #008BCB;
+}
+
+.views-displays .secondary a:hover > .icon.add {
+  background-position: center -25px;
+}
+
+.views-displays .secondary .open > a {
+  -moz-border-radius: 7px 7px 0 0;
+  -webkit-border-radius: 7px 7px 0 0;
+  border-radius: 7px 7px 0 0;
+}
+
+.views-displays .secondary .open > a:hover {
+  background-color: #f1f1f1;
+  color: #008BCB;
+}
+
+.views-displays .secondary .action-list  li:first-child {
+  -moz-border-radius: 0 7px 0 0;
+  -webkit-border-radius: 0 7px 0 0;
+  border-radius: 0 7px 0 0;
+}
+
+.views-displays .secondary .action-list  li:last-child {
+  -moz-border-radius: 0 0 7px 7px;
+  -webkit-border-radius: 0 0 7px 7px;
+  border-radius: 0 0 7px 7px;
+}
+
+.views-displays .secondary .action-list input.form-submit {
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  color: #008BCB;
+}
+
+/* @end */
+
+/* @group Attachment buckets
+ *
+ * These are the individual "buckets," or boxes, inside the display settings area
+ */
+
+.views-ui-display-tab-bucket h3 {
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.views-ui-display-tab-bucket .links {
+  padding: 2px 6px 4px;
+}
+
+.views-ui-display-tab-bucket .links li + li {
+  margin-left: 3px;
+}
+
+/* @end */
+
+/* @group Rearrange filter criteria */
+
+#views-ui-rearrange-filter-form .action-links {
+  margin: 0;
+  padding: 0;
+}
+
+#views-ui-rearrange-filter-form table {
+  border: medium none;
+}
+
+#views-ui-rearrange-filter-form [id^="views-row"] {
+  border: medium none;
+}
+
+#views-ui-rearrange-filter-form tr td:last-child {
+  border-right: medium none;
+}
+
+#views-ui-rearrange-filter-form .filter-group-operator-row {
+  border-left: 1px solid transparent !important;
+  border-right: 1px solid transparent !important;
+}
+
+#views-ui-rearrange-filter-form tr.drag td {
+  background-color: #FFEE77 !important;
+}
+
+#views-ui-rearrange-filter-form tr.drag-previous td {
+  background-color: #FFFFBB !important;
+}
+
+/* @end */
+
+/* @group Live preview elements */
+
+.views-query-info pre {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+/* @group Query info table */
+
+.views-query-info table {
+  -moz-border-radius: 7px;
+  -webkit-border-radius: 7px;
+  border-radius: 7px;
+  -webkit-border-horizontal-spacing: 1px;
+  -webkit-border-vertical-spacing: 1px;
+}
+
+.views-query-info table tr td:last-child {
+  /* Fixes a Seven style that bleeds down into this table unnecessarily */
+  border-right: 0 none;
+}
+
+/* @end */
+
+/* @end */
+
+/* @group Add view */
+
+.form-item-page-create,
+.form-item-block-create {
+  margin-top: 13px;
+}
+
+/* @end */
+
+/* @group Modal dialog box
+ *
+ * The contents of the popup dialog on the views edit form.
+ */
+
+.views-ui-dialog .ui-dialog-titlebar-close {
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border-color: #cccccc;
+  right: -27px;
+  top: -1px;
+}
+
+.views-ui-dialog fieldset.collapsible {
+  padding-top: 1.5em;
+}
+
+.views-ui-dialog fieldset.collapsed {
+  padding-top: 2.5em;
+}
+
+.filterable-option .form-item.form-type-checkbox {
+  /* This selector is aggressive because Seven's reset for .form-items is aggressive. */
+  padding-bottom: 4px;
+  padding-left: 4px;
+  padding-top: 4px;
+}
+
+/* @end */
+
+/* @group CTools */
+
+/* @group Buttons */
+
+.ctools-button-processed {
+  background-image:
+    -moz-linear-gradient(
+      -90deg,
+      #ffffff 0px,
+      #f9f9f9 100%);
+  background-image:
+    -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      color-stop(0.0, rgba(255, 255, 255, 1.0)),
+      color-stop(1.0, rgba(249, 249, 249, 1.0))
+    );
+  background-image:
+    -webkit-linear-gradient(
+      -90deg,
+      #ffffff 0px,
+      #f9f9f9 100%);
+  background-image:
+    linear-gradient(
+      -90deg,
+      #ffffff 0px,
+      #f9f9f9 100%);
+  -moz-border-radius: 11px 11px 11px 11px;
+  -webkit-border-radius: 11px 11px 11px 11px;
+  border-radius: 11px 11px 11px 11px;
+}
+
+.ctools-button-processed:hover {
+  background-image:
+    -moz-linear-gradient(
+      -90deg,
+      #ffffff 0px,
+      #f1f1f1 100%);
+  background-image:
+    -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      color-stop(0.0, rgba(255, 255, 255, 1.0)),
+      color-stop(1.0, rgba(241, 241, 241, 1.0))
+    );
+  background-image:
+    -webkit-linear-gradient(
+      -90deg,
+      #ffffff 0px,
+      #f1f1f1 100%);
+  background-image:
+    linear-gradient(
+      -90deg,
+      #ffffff 0px,
+      #f1f1f1 100%);
+}
+
+.ctools-dropbutton-processed.open:hover {
+  background-image:
+    -moz-linear-gradient(
+      -90deg,
+      #ffffff 0px,
+      #f9f9f9 100%);
+  background-image:
+    -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      color-stop(0.0, rgba(255, 255, 255, 1.0)),
+      color-stop(1.0, rgba(249, 249, 249, 1.0))
+    );
+  background-image:
+    -webkit-linear-gradient(
+      -90deg,
+      #ffffff 0px,
+      #f9f9f9 100%);
+  background-image:
+    linear-gradient(
+      -90deg,
+      #ffffff 0px,
+      #f9f9f9 100%);
+}
+
+.ctools-dropbutton-processed.open {
+  -moz-box-shadow: 1px 1px 2px rgba(0,0,0,0.25);
+  -webkit-box-shadow: 1px 1px 2px rgba(0,0,0,0.25);
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.25);
+}
+
+/* @end */
+
+/* @group Collapsible */
+
+.ctools-toggle {
+  margin-top: 0.6667em;
+}
+
+.ctools-toggle.ctools-toggle-collapsed {
+  margin-top: 0.5em;
+}
+
+.views-display-settings .ctools-toggle {
+  color: #008BCB;
+}
+
+.views-display-column > .ctools-toggle {
+  margin-top: 14px;
+}
+
+.views-display-column > .ctools-toggle.ctools-toggle-collapsed {
+  margin-top: 12px;
+}
+
+.views-display-column > .ctools-collapsible-handle {
+  color: #008BCB;
+}
+
+.views-ui-display-tab-actions .ctools-button-processed input {
+  color: #0074BD;
+}
+
+/* @end */
+
+/* @end */
+
+
+
+/* gerardo */
+
+.settings-top{
+  position: relative;
+}
+
+.settings-left{
+  width: 20%;
+  float: left;
+}
+
+.settings-right{
+  width: 78%;
+  float: left;
+}
+
+.zone-label{
+  text-align: right;
+}
+
+.inline-edit{
+  margin: 0 10px;
+  float: left;
+}
+
+.eclip-ui-bucket {
+  border: 1px solid #F3F3F3;
+  line-height: 20px;
+  margin: 0;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.clear-both{
+  clear: both;
+}
+
+.news-add-item a{
+  padding-left: 15px; /* LTR */
+  background: transparent url('../images/add.png') no-repeat 0 center;
+  line-height: 30px;
+}
+
+.change-template-button{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+
+/**************** Jquery ui **************/
+.category-actions{
+  position: absolute;
+  width: 50px;
+  right: 0;
+}
+
+.category-title{
+  padding-right: 50px;
+}
+
+.portlet-header{
+  position: relative
+}
+
+a.add-grupo{
+  margin-left: 15px;
+}
+
+.clipper-placeholder, .news-content.news-group,
+.clipper-placeholder-disabled{
+  margin: 3px;
+  padding-bottom: 100px;
+  border: 2px dashed #999;
+  padding: 5px;
+  position: relative;
+  background-color: #ECFAFF;
+}
+
+.clipper-placeholder-disabled{
+  background-color: #ebb;
+}
+
+.news-content.news-group {
+  padding-top: 25px;
+  background-color: #FFFF99;
+  position: relative;
+  min-height: 50px;
+}
+
+.news-content.news-group .close-group{
+  cursor: pointer;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+}
+
+.news-medio{
+  display:block;
+  font-size: 9px;
+  color: #666;
+}
+
+.news-medio .date-PM {
+    background-color: #0074BD;
+    color: #fff;
+    font-weight: bold;
+}
+
+.news-medio .date-AM {
+    background-color: #007700;
+    color: #fff;
+    font-weight: bold;
+}
+
+.settings-left .clipper-placeholder {
+  background-color: #FFF;
+}
+
+
+.clipper-placeholder span.zone-label{
+  font-weight: normal;
+  font-size: 15px;
+  width: 75px;
+  margin: 1.154em 0;
+  color: #999;
+}
+
+.portlet {
+  margin: 0 0 1em 0;
+}
+
+.settings-categories .portlet {
+  width: 100%;
+  float: left;
+  margin: 0 1% 1em 0;
+}
+
+.portlet-header {
+  background-color: #E0E0D8; 
+  padding-bottom: 4px; 
+  padding-left: 0.2em; 
+  font-weight: bold; 
+  cursor: move;
+}
+
+.portlet-destacado .portlet-header {
+  background-color: #0074BD;
+  color: #FFF;
+}
+
+.portlet-header .ui-icon {
+  cursor: pointer;
+  float: right; 
+}
+
+.portlet-content { padding: 0.4em; }
+.ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; background-color: transparent;}
+.ui-sortable-placeholder * { visibility: hidden; }
+
+.news-content { list-style-type: none; margin: 0; padding: 0; }
+.news-content span.ui-icon-arrowthick-2-n-s {position: absolute; left: 0; top: 0; cursor:move; }
+.news-content span.ui-icon-circle-close {}
+.news-content span.news-actions{position: absolute; right: 0; top: 0; cursor: pointer; width: 48px;}
+.news-content span.news-actions span{float: left;}
+.news-item {padding-left: 5px; background-color: #fff; position: relative;}
+.news-item.ui-sortable-helper{ border: 1px dotted black;}
+.news-content .ui-sortable-placeholder { background-color: transparent;}
+.news-title{display: block; padding: 0 48px 0 15px;}
+.news-item.status-0 .news-title {text-decoration:line-through;}
+.news-content .view-content{min-height: 30px;}
+
+.news-item.vote-0 .ui-vote{ background-position: -96px -144px;}
+.news-item.vote-1 .ui-vote{ background-position: -128px -192px; }
+.news-item.vote-2 .ui-vote{ background-position: -16px -192px; }
+.news-item.vote-3 .ui-vote{ background-position: -160px -192px; }
+
+#settings-grupo, 
+#settings-cliente, 
+#settings-template{
+  float: left;
+  margin-left: 20px;
+}
+
+.settings-main .form-item label{
+  display: inline;
+  padding: 0 5px;
+}
+
+.settings-main .container-inline-date{
+  clear: none;
+  float: left;
+}
+
+.settings-main .container-inline-date .date-padding {
+  padding: 9px 0;
+  float: none;
+}
+
+.settings-main .container-inline-date .form-item{
+  padding: 0;  
+}
+
+.settings-main #edit-highlighted {
+    clear: both;
+}
+
+.settings-main #edit-file-upload {
+    width: 220px;
+}
+
+
+
+/************ Templates ***********/
+
+#main-content .form-item{
+  float: left;
+  margin: 0 0 0 20px;
+}
+
+.main-left{
+  width: 67%;
+  float: left;
+}
+
+.main-right{
+  width: 33%;
+  float: left;
+}
+
+.eclip-03 .main-left{
+  width: 50%;
+  float: left;
+}
+
+.eclip-03 .main-right{
+  width: 50%;
+  float: left;
+}
+
+.eclip-04 .main-left,
+.eclip-04 .main-center{
+  width: 40%;
+  float: left;
+}
+
+.eclip-04 .main-right{
+  width: 20%;
+  float: left;
+}
+
+/******** Ocultando un Warning. todo funciona bien pero arroja un warning @todo ***/
+
+.page-adm-eclip-add .messages.error {
+    display: none;
+}

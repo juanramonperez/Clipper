@@ -1,0 +1,444 @@
+@charset "utf-8";
+/* CSS Document */
+
+#_msgDebug{
+
+position:fixed;
+padding:10px;
+width:400px;
+overflow:hidden;
+background:#FFFFCC;
+border:2px solid #993300;
+bottom:0px;
+left:100%;
+margin-left:-400px;
+
+}
+
+#_msgDebug p{
+
+padding:0px;
+margin:0px;
+color:#FF0000;
+font-size:11px;
+font-weight:800;
+font-family:Arial, Helvetica, sans-serif;
+
+}
+
+
+
+#titleSite{
+
+float:left;
+margin-left:5px;
+margin-top:16px;
+width:340px;
+
+}
+
+#titleSite h1{
+
+
+color:#FFFFFF;
+font-family:"Trebuchet MS",Arial,Helvetica,sans-serif;
+font-size:18px;
+
+}
+
+body{
+
+background:#020202;
+margin:0px;
+
+}
+
+/*******************************************************TOOLTIPS*******************************************************/
+
+
+
+/********************************************************END TOOLTIPS******************************************************/
+
+
+/*******************************************************mainConteiner*************************************************/
+
+#mainConteiner{
+
+width:913px;
+margin:0px auto;
+overflow:hidden;
+
+}
+
+.page-intranet #mainConteiner{
+
+width:100%;
+
+}
+
+/***********************************************header**********************************************************/
+
+#header{
+
+width:913px;
+
+}
+
+.page-intranet #header{
+    width: 100%;
+}
+
+#logo{
+
+float:left;
+height:33px;
+margin-left:12px;
+margin-top:8px;
+overflow:hidden;
+width:165px;
+
+}
+
+#headerUserInfo{
+
+width:339px;
+height:40px;
+overflow:hidden;
+float:right;
+margin-right:8px;
+text-align:right;
+
+}
+
+#pWelcomeUser{
+
+color:#FFF;
+font-family:"Trebuchet MS";
+font-size:12px;
+margin:0px;
+margin-top:5px;
+width:230px;
+float:left;
+margin-left:80px;
+
+}
+
+#aClose{
+
+float:right;
+margin-top:4px;
+
+
+}
+
+#pfecha{
+
+clear:both;
+color:#818c8f;
+font-family:Tahoma;
+font-size:11px;
+
+}
+
+#menuMain{
+
+width:913px;
+height:44px;
+background:url(images/barMenu.jpg);
+overflow:hidden;
+padding-left:10px;
+padding-top:8px;
+
+}
+
+.page-intranet #menuMain{
+    width: 100%;
+}
+
+#contentConteiner{
+
+background:#f4f5f6;
+width:913px;
+overflow:hidden;
+padding-bottom:20px;
+
+}
+
+.page-intranet #contentConteiner{
+width:100%;
+
+}
+
+#footer{
+    width:913px;
+    height:37px;
+}
+
+.page-intranet #footer{
+
+width:100%;
+
+}
+
+#logoNova{
+    float:right;
+}
+
+#ulModulos{	
+	margin:0px;
+	padding:0px;
+	width:900px;
+	height:48px;
+	
+}
+
+#ulModulos li{
+	
+	margin:0px;
+	padding:0px;
+	float:left;
+	list-style:none;
+	
+}
+
+.btnModulo{
+
+height:34px;
+padding-left:6px;
+padding-top:5px;
+width:38px;
+display:block;
+background:url(images/backBtn.png);
+
+}
+
+#tModulos{
+
+margin-left:57px;
+
+}
+
+.btnModuloDp{
+
+width: 391px;
+height:105px;
+background:url(images/modulosBacDp.jpg);
+
+}
+
+.btnModuloDpOver{
+
+width: 391px;
+height:105px;
+background:url(images/modulosBacDpOver.jpg);
+
+}
+
+.btnModuloDp img{
+
+margin-left:8px;
+margin-top:8px;
+float:left;
+
+}
+
+.tituloModulo{
+
+color:#A31110;
+float:left;
+font-family:"Trebuchet MS";
+font-size:14px;
+font-weight:bold;
+margin-top:12px;
+margin-left:10px;
+width:268px;
+
+}
+
+.dpModulo{
+
+color:#000;
+float:left;
+font-family:"Trebuchet MS";
+font-size:12px;
+margin:0px;
+margin-top:-18px;
+margin-left:10px;
+width:268px;
+
+}
+
+
+/***********************************************END header**********************************************************/
+
+/*******************************************************END mainConteiner*************************************************/
+
+
+/***************************************************Navegador de Secciones**************************************************/
+
+#navLeftSecciones{
+
+width:227px;
+float:left;
+overflow:hidden;
+background:white;
+padding-top:7px;
+padding-bottom:7px;
+border-right:1px solid #CCCCCC;
+border-bottom:1px solid #CCCCCC;
+
+}
+
+
+#navRightSecciones{
+
+    width:227px;
+    float:left;
+    padding-top:7px;
+    padding-bottom:7px;
+
+}
+
+#contentSeccionesDetail{
+  float:left;
+  width:677px;
+  overflow:hidden;
+}
+
+.no-sidebars #contentSeccionesDetail{
+  width:913px;
+}
+
+.page-intranet.no-sidebars #contentSeccionesDetail{
+  width:100%;
+}
+
+
+.aTree{
+
+font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+font-size:12px;
+color:#333;
+
+}
+
+.aTreeFile{
+
+font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+font-size:12px;
+color:#333;
+
+}
+
+.aTreeFile:hover{
+
+text-decoration:none;
+color:#900;
+
+}
+
+.aTree:hover{
+
+text-decoration:none;
+color:#900;
+
+}
+
+#contentSeccionesDetail h1{
+
+color:#333333;
+font-size:16px;
+padding-top:4px;
+border-bottom:2px solid #666;
+margin-left:5px;
+width:666px;
+
+}
+
+.aTreeSelected{
+
+color:#C00;
+font-weight:bold;
+
+}
+
+.aTreeArtSelected{
+
+color:#C00;
+font-weight:bold;
+
+}
+
+#frameContent{
+
+width:666px;
+margin-left:6px;
+margin-bottom:10px;
+
+}
+
+#menuActionModule{
+
+width:668px;
+height:40px;
+background:url(images/backActionModulos.jpg) left top repeat-x;
+margin:0px auto;
+
+}
+
+#cierreLeft{
+
+float:left;
+
+}
+
+#cierreRigth{
+
+float:right;
+
+}
+
+/***************************************************END Navegador de Secciones**************************************************/
+
+#block-eclip-related-news{
+    padding-top: 10px;
+}
+
+.views-field-field-image-video-1 .file-image{
+    float: left;
+    margin-right: 5px;
+}
+
+.destacado{
+    padding: 10px;
+}
+
+.destacado .views-slideshow-cycle-main-frame-row-item{
+    position: relative;
+    height: 400px;
+    overflow: hidden;
+}
+
+.destacado .views-field-nothing{
+    padding: 5px;
+    z-index: 1000;
+    background: #fff;
+    position: absolute;
+    bottom: 0;
+}
+
+.float-left{
+    float: left;
+}
+
+.view-main-new .views-field-body, .view-front-get-news .views-field-body{
+    clear: both;
+}
+
+.view-main-new .view-content{
+  min-height: 200px;
+}
+
+.view-main-new .ctools-dropdown, .view-front-get-news .ctools-dropdown{
+  margin-left: 10px;
+}

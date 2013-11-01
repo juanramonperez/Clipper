@@ -1,0 +1,6 @@
+name = Services Clips
+description = Build clips endpoints.
+package = Services
+core = 7.x
+dependencies[] = services
+dependencies[] = eclip

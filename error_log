@@ -1,0 +1,52 @@
+[15-Nov-2012 17:58:31] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 64 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[15-Nov-2012 17:58:42] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 32 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[15-Nov-2012 17:58:44] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 32 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[15-Nov-2012 17:58:47] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 79 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[15-Nov-2012 17:59:05] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 32 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[15-Nov-2012 17:59:08] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[15-Nov-2012 17:59:14] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[16-Nov-2012 00:34:07] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[16-Nov-2012 00:34:10] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[16-Nov-2012 00:37:25] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[16-Nov-2012 00:37:27] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[16-Nov-2012 00:37:50] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[16-Nov-2012 00:37:53] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[16-Nov-2012 00:37:53] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[16-Nov-2012 00:37:54] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[16-Nov-2012 00:37:55] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[16-Nov-2012 00:37:56] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[16-Nov-2012 00:37:57] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[16-Nov-2012 00:37:58] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[16-Nov-2012 00:40:36] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[16-Nov-2012 00:41:18] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[16-Nov-2012 09:37:14] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[16-Nov-2012 09:38:50] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18 bytes) in /home/clippere/public_html/clipper/includes/cache.inc on line 447
+[30-Nov-2012 13:38:00] PHP Fatal error:  Call to undefined function date_default_timezone() in /home/clippere/public_html/clipper/sites/all/modules/eclip/eclip.module on line 175
+[30-Nov-2012 14:02:34] PHP Fatal error:  Call to undefined function date_default_timezone() in /home/clippere/public_html/clipper/sites/all/modules/eclip/eclip.module on line 175
+[13-Dec-2012 19:40:13] PHP Fatal error:  Call to undefined function eclip_build_add_eclip_form_left() in /home/clippere/public_html/clipper/sites/all/modules/eclip/eclip.module on line 617
+[14-Dec-2012 11:16:29] PHP Fatal error:  Call to undefined function eclip_build_add_eclip_form_left() in /home/clippere/public_html/clipper/sites/all/modules/eclip/eclip.module on line 629
+[14-Dec-2012 13:53:35] PHP Fatal error:  Call to undefined function eclip_build_add_eclip_form_left() in /home/clippere/public_html/clipper/sites/all/modules/eclip/eclip.module on line 629
+[08-Jan-2013 10:45:46] PHP Fatal error:  Call to undefined function media_variable_get() in /home/clippere/public_html/clipper/sites/all/modules/media/media.install on line 789
+[08-Jan-2013 16:21:47] PHP Parse error:  syntax error, unexpected ';' in /home/clippere/public_html/clipper/sites/all/modules/views_php/plugins/views/views_php_handler_field.inc(202) : runtime-created function on line 1
+[08-Jan-2013 16:21:47] PHP Fatal error:  Function name must be a string in /home/clippere/public_html/clipper/sites/all/modules/views_php/plugins/views/views_php_handler_field.inc on line 219
+[08-Jan-2013 16:22:08] PHP Parse error:  syntax error, unexpected ':' in /home/clippere/public_html/clipper/sites/all/modules/views_php/plugins/views/views_php_handler_field.inc(202) : runtime-created function on line 1
+[08-Jan-2013 16:22:08] PHP Fatal error:  Function name must be a string in /home/clippere/public_html/clipper/sites/all/modules/views_php/plugins/views/views_php_handler_field.inc on line 219
+[11-Jan-2013 17:08:40] PHP Fatal error:  Call to undefined function eclip_build_otros_medios_link() in /home/clippere/public_html/clipper/sites/all/modules/views_php/plugins/views/views_php_handler_field.inc(202) : runtime-created function on line 2
+[18-Jan-2013 16:25:30] PHP Parse error:  syntax error, unexpected ';' in /home/clippere/public_html/clipper/sites/all/modules/views_php/plugins/views/views_php_handler_field.inc(202) : runtime-created function on line 1
+[18-Jan-2013 16:25:30] PHP Fatal error:  Function name must be a string in /home/clippere/public_html/clipper/sites/all/modules/views_php/plugins/views/views_php_handler_field.inc on line 219
+[25-Jan-2013 15:56:38] PHP Fatal error:  Cannot create references to/from string offsets nor overloaded objects in /home/clippere/public_html/clipper/includes/common.inc on line 6518
+[25-Jan-2013 15:56:58] PHP Fatal error:  Cannot create references to/from string offsets nor overloaded objects in /home/clippere/public_html/clipper/includes/common.inc on line 6518
+[25-Jan-2013 15:58:50] PHP Fatal error:  Cannot create references to/from string offsets nor overloaded objects in /home/clippere/public_html/clipper/includes/common.inc on line 6518
+[25-Jan-2013 15:59:39] PHP Fatal error:  Cannot create references to/from string offsets nor overloaded objects in /home/clippere/public_html/clipper/includes/common.inc on line 6518
+[25-Jan-2013 15:59:57] PHP Fatal error:  Cannot create references to/from string offsets nor overloaded objects in /home/clippere/public_html/clipper/includes/common.inc on line 6518
+[25-Jan-2013 16:00:00] PHP Fatal error:  Cannot create references to/from string offsets nor overloaded objects in /home/clippere/public_html/clipper/includes/common.inc on line 6518
+[25-Jan-2013 16:00:15] PHP Fatal error:  Cannot create references to/from string offsets nor overloaded objects in /home/clippere/public_html/clipper/includes/common.inc on line 6518
+[25-Jan-2013 16:02:59] PHP Fatal error:  Cannot create references to/from string offsets nor overloaded objects in /home/clippere/public_html/clipper/includes/common.inc on line 6518
+[25-Jan-2013 16:10:02] PHP Fatal error:  Cannot create references to/from string offsets nor overloaded objects in /home/clippere/public_html/clipper/includes/common.inc on line 6518
+[25-Jan-2013 16:10:08] PHP Fatal error:  Cannot create references to/from string offsets nor overloaded objects in /home/clippere/public_html/clipper/includes/common.inc on line 6518
+[08-Mar-2013 18:30:29] PHP Parse error:  syntax error, unexpected '<' in /home/clippere/public_html/clipper/sites/all/modules/views_php/plugins/views/views_php_handler_field.inc(202) : runtime-created function on line 6
+[08-Mar-2013 18:30:29] PHP Fatal error:  Function name must be a string in /home/clippere/public_html/clipper/sites/all/modules/views_php/plugins/views/views_php_handler_field.inc on line 219
+[12-Mar-2013 19:15:19] PHP Parse error:  syntax error, unexpected '<' in /home/clippere/public_html/clipper/sites/all/modules/views_php/plugins/views/views_php_handler_field.inc(131) : runtime-created function on line 1
+[12-Mar-2013 19:15:19] PHP Fatal error:  Function name must be a string in /home/clippere/public_html/clipper/sites/all/modules/views_php/plugins/views/views_php_handler_field.inc on line 138
+[12-Mar-2013 19:15:24] PHP Parse error:  syntax error, unexpected '<' in /home/clippere/public_html/clipper/sites/all/modules/views_php/plugins/views/views_php_handler_field.inc(131) : runtime-created function on line 1
+[12-Mar-2013 19:15:24] PHP Fatal error:  Function name must be a string in /home/clippere/public_html/clipper/sites/all/modules/views_php/plugins/views/views_php_handler_field.inc on line 138
