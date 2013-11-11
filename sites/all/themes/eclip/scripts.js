@@ -10,7 +10,7 @@
                 var totalHeight = 0;
                 $(category).find('.news-item').each(function(key, noticia){
                     //console.log($(noticia).outerHeight(true));                    
-                    if(key == 5){
+                    if(key == $('.node-clip').data('limit')){
                         $(category).height(totalHeight).css('overflow', 'hidden').attr('max', totalHeight);
                         $(category).parent()
                             .append('<a class="vermas collapsed" href="#">[Ver más]</a>')

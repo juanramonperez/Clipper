@@ -204,6 +204,7 @@ function _eclip_build_news_email_by_zone($news, $zone, $url_prefix, $args = arra
   isset($args['category_background']) ? $category_background = $args['category_background'] : $category_background = 'transparent';
   isset($args['category_color'])      ? $category_color = $args['category_color'] : $category_color = '#000';
   isset($args['link_color'])          ? $link_color = $args['link_color'] : $link_color = '#000';
+  isset($args['limite'])              ? $limite = $args['limite'] : $limite = 5;
   if (isset($news[$zone])) {
     //dpm($news[$zone]);
     foreach ($news[$zone] as $cat_tid => $new) {
@@ -211,8 +212,7 @@ function _eclip_build_news_email_by_zone($news, $zone, $url_prefix, $args = arra
       //dpm($new);
       $result = views_get_view_result('front_get_news', 'default', $cat_tid, $new['clip_nid'], $new['news']);
       foreach ($result as $key => $item) {
-        if($key == 5) {
-          $output.= '<div>' . l('[Ver más]', 'clip/' . $url_prefix . '/' . $item->eclip_article_data_clip_nid, array('absolute' => TRUE)) . '</div>';
+        if($key == (int)$limite) {       
           break;
         }
         $path = 'clip/' . $url_prefix . '/' . $item->eclip_article_data_clip_nid . '/' . $item->article_data_id;
@@ -225,6 +225,7 @@ function _eclip_build_news_email_by_zone($news, $zone, $url_prefix, $args = arra
         $output.= '<strong>' . $medio . '</strong> - ' .  $fecha ;
         $output.= '<div>' . $bajada . '</div>';
       }
+      $output.= '<div>' . l('[Ver más]', 'clip/' . $url_prefix . '/' . $new['clip_nid'], array('absolute' => TRUE)) . '</div>';
       //dpm($result);
     }
   }
@@ -970,6 +971,8 @@ function _custom_prepare_email_vars(&$variables){
   
   $variables['header']              = theme_image(array('path' => $cliente->field_header['und'][0]['uri'], 'attributes' => array()));
   $variables['imagen_destacado']    = isset($variables['node']->field_imagen_destacado['und'][0]['uri']) ? theme_image_style(array('style_name' => 'destacado', 'path' => $variables['node']->field_imagen_destacado['und'][0]['uri'], 'attributes' => array('style' => 'border: 2px solid ' . $variables['image_border']), 'width' => NULL, 'height' => NULL)) : '';  
+  
+  $variables['limite'] = isset($variables['node']->field_limite['und'][0]['value']) ? $variables['node']->field_limite['und'][0]['value'] : 5;  
 }
 
 /**
@@ -1148,6 +1151,13 @@ function _eclip_jqueryui_cliente_theme_form($form, $form_state, $node = NULL, $o
     '#default_value' => isset($node->field_imagen_destacado['und'][0]['fid']) ? $node->field_imagen_destacado['und'][0]['fid'] : '',
     '#description' => t("Imagen del destacado."),
     '#upload_location' => 'public://'
+  ); 
+  $form['main']['left']['limite'] = array(
+    '#type' => 'select',
+    '#title' => t('Limite por categoría'),
+    '#options' => array(3 => 3, 5 => 5, 7 => 7),
+    '#default_value' => isset($node->field_limite['und'][0]['value']) ? $node->field_limite['und'][0]['value'] : 5,
+    '#description' => t('Número de notas que se muestran antes del [Ver más].'),
   );  
   $form['main']['left']['highlighted'] = array(
     '#theme_wrappers' => array('container'),
@@ -1358,6 +1368,7 @@ function _eclip_jqueryui_cliente_theme_form_submit($form, $form_state) {
         }else{
             unset($node->field_imagen_destacado);
         }
+        $node->field_limite = array('und' => array(array('value' => $form_state['values']['limite'])));
         node_save($node);
         drupal_set_message('Se ha editado correctamente el clip');
       }
@@ -1381,6 +1392,7 @@ function _eclip_jqueryui_cliente_theme_form_submit($form, $form_state) {
         if($form_state['values']['file']){
             $node->field_imagen_destacado = array('und' => array((array)file_load($form_state['values']['file'])));
         }
+        $node->field_limite = array('und' => array(array('value' => $form_state['values']['limite'])));
         node_save($node);
         $nid = $node->nid;
         $positions = unserialize($form_state['values']['positions']);
@@ -1707,8 +1719,8 @@ function eclip_send_clip($node) {
   $message = array(
     'id'      => 'clipper_key',
     'from'    => $from,
-    //'to'      => 'gerardocadau@gmail.com',
-    'to'      => 'clipping@e-clip.cl',
+    'to'      => 'gerardocadau@gmail.com',
+    //'to'      => 'clipping@e-clip.cl',
     'subject' => $node->title,    
     'body'    => theme($template_name, array('node' => $node, 'news' => _eclip_get_news_by_clip($node->nid))),
     'headers' => array(

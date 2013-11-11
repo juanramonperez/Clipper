@@ -26,10 +26,10 @@
           <tbody>
             <tr>
               <td style="width: 66%; vertical-align:top; border-right: 2px solid <?php print $borde_zona ?>">
-                <?php print _eclip_build_news_email_by_zone($news, 1, $url_prefix, array('category_background' => $category_background, 'category_color' => $category_color, 'link_color' => $link_color)); ?>
+                <?php print _eclip_build_news_email_by_zone($news, 1, $url_prefix, array('category_background' => $category_background, 'category_color' => $category_color, 'link_color' => $link_color, 'limite' => $limite)); ?>
               </td>
               <td style="width: 33%; vertical-align:top;">
-                <?php print _eclip_build_news_email_by_zone($news, 2, $url_prefix, array('category_background' => $category_background, 'category_color' => $category_color, 'link_color' => $link_color)); ?>
+                <?php print _eclip_build_news_email_by_zone($news, 2, $url_prefix, array('category_background' => $category_background, 'category_color' => $category_color, 'link_color' => $link_color, 'limite' => $limite)); ?>
               </td>              
             </tr>
           </tbody>
@@ -42,7 +42,7 @@
           <tbody>
             <tr>
               <td style="font-size:0.8em; width: 66%; vertical-align:top; border-top: 2px solid <?php print $borde_zona ?>;">
-                <?php print _eclip_build_news_email_by_zone($news, 3, $url_prefix, array('category_background' => $category_background, 'category_color' => $category_color, 'link_color' => $link_color)); ?>
+                <?php print _eclip_build_news_email_by_zone($news, 3, $url_prefix, array('category_background' => $category_background, 'category_color' => $category_color, 'link_color' => $link_color, 'limite' => $limite)); ?>
               </td>              
             </tr>
           </tbody>

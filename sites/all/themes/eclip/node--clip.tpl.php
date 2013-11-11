@@ -1,4 +1,4 @@
-<div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?>"<?php print $attributes; ?>>
+<div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?>"<?php print $attributes; ?> data-limit="<?php isset($node->field_limite['und'][0]['value']) ? print $node->field_limite['und'][0]['value'] : print '5' ?>">
     <?php 
     $args = array(
         'op' => 'view', 
