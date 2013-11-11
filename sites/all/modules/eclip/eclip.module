@@ -1621,20 +1621,26 @@ function _eclip_theme_file($url, $style = 'default'){
         $mime = file_get_mimetype($url);
         
         if(in_array($mime, $image_types)){
-            $output = theme('image', array('path' => $url));
-            $output.= l(t('Descargar imagen'), $url, array('attributes' => array('target' => '_blank')));
+            $output = '<div class="file-container">';
+            $output.= theme('image', array('path' => $url));
+            $output.= '<p style="text-align: right">' . l(t('Descargar imagen'), $url, array('attributes' => array('target' => '_blank'))) . '</p>';
+            $output.= '</div>';
             return $output;
         }
         if(in_array($mime, $video_types)){
             $preset = jw_player_preset_load('full_video');
 
             if(isset($preset['settings']['width']) && isset($preset['settings']['height'])){
-                $output = theme('jw_player', array('file_url' => $url, 'width' => $preset['settings']['width'], 'height' => $preset['settings']['height']));
-                $output.= l(t('Descargar video'), $url, array('attributes' => array('target' => '_blank')));
+                $output = '<div class="file-container">';
+                $output.= theme('jw_player', array('file_url' => $url, 'width' => $preset['settings']['width'], 'height' => $preset['settings']['height']));
+                $output.= '<p style="text-align: right">' . l(t('Descargar video'), $url, array('attributes' => array('target' => '_blank'))) . '</p>';
+                $output.= '</div>';
                 return $output;                
             }else{
-                $output = theme('jw_player', array('file_url' => $url, 'width' => 600, 'height' => 450));
-                $output.= l(t('Descargar video'), $url, array('attributes' => array('target' => '_blank')));
+                $output = '<div class="file-container">';
+                $output.= theme('jw_player', array('file_url' => $url, 'width' => 600, 'height' => 450));
+                $output.= '<p style="text-align: right">' . l(t('Descargar video'), $url, array('attributes' => array('target' => '_blank'))) . '</p>';
+                $output.= '</div>';
                 return $output;                
             }
         }        
