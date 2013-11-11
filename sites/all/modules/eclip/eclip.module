@@ -122,6 +122,7 @@ function eclip_test_page() {
  */
 function _eclip_build_news_by_zone($news, $zone) {
   $output = '';
+  //dpm($news);
   if (isset($news[$zone])) {
     //dpm($news[$zone]);
     foreach ($news[$zone] as $cat_tid => $new) {
@@ -148,7 +149,7 @@ function _eclip_build_news_email_destacados_1($nid, $url_prefix, $args = array()
     isset($item->field_field_medio[0]['rendered']['#markup']) ? $medio = $item->field_field_medio[0]['rendered']['#markup'] : $medio = '';
     isset($item->field_body[0]['raw']['value']) ? $bajada = $item->field_body[0]['raw']['value'] : $bajada = '';
     isset($item->field_field_fecha[0]['rendered']['#markup']) ? $fecha = $item->field_field_fecha[0]['rendered']['#markup'] : $fecha = '';
-    isset($item->node_eclip_article_data_title) ? $title = l($item->node_eclip_article_data_title, $path, array('absolute' => TRUE, 'attributes' => array('style' => 'color: ' . $link_color))) : $title = '';
+    isset($item->node_eclip_article_data_title) ? $title = l($item->node_eclip_article_data_title, $path, array('absolute' => TRUE, 'attributes' => array('style' => 'text-decoration: none; color: ' . $link_color))) : $title = '';
 
     $output.= '<h3>' . $title . '</h3>';
     $output.= '<strong>' . $medio . '</strong> - ' .  $fecha ;
@@ -177,7 +178,7 @@ function _eclip_build_news_email_destacados_2($nid, $url_prefix, $args = array()
       isset($item->field_field_medio[0]['rendered']['#markup']) ? $medio = $item->field_field_medio[0]['rendered']['#markup'] : $medio = '';
       isset($item->field_body[0]['raw']['value']) ? $bajada = $item->field_body[0]['raw']['value'] : $bajada = '';
       isset($item->field_field_fecha[0]['rendered']['#markup']) ? $fecha = $item->field_field_fecha[0]['rendered']['#markup'] : $fecha = '';
-      isset($item->node_eclip_article_data_title) ? $title = l($item->node_eclip_article_data_title, $path, array('absolute' => TRUE, 'attributes' => array('style' => 'color: ' . $link_color))) : $title = '';
+      isset($item->node_eclip_article_data_title) ? $title = l($item->node_eclip_article_data_title, $path, array('absolute' => TRUE, 'attributes' => array('style' => 'text-decoration: none; color: ' . $link_color))) : $title = '';
       if($key == 0){
         $output.= '<td style="vertical-align: top; width:33%;">';
       } else {
@@ -219,7 +220,7 @@ function _eclip_build_news_email_by_zone($news, $zone, $url_prefix, $args = arra
         isset($item->field_field_medio[0]['rendered']['#markup']) ? $medio = $item->field_field_medio[0]['rendered']['#markup'] : $medio = '';
         isset($item->field_body[0]['raw']['value']) ? $bajada = $item->field_body[0]['raw']['value'] : $bajada = '';
         isset($item->field_field_fecha[0]['rendered']['#markup']) ? $fecha = $item->field_field_fecha[0]['rendered']['#markup'] : $fecha = '';
-        isset($item->node_eclip_article_data_title) ? $title = l($item->node_eclip_article_data_title, $path, array('absolute' => TRUE,'attributes' => array('style' => 'color: ' . $link_color))) : $title = '';
+        isset($item->node_eclip_article_data_title) ? $title = l($item->node_eclip_article_data_title, $path, array('absolute' => TRUE,'attributes' => array('style' => 'text-decoration: none; color: ' . $link_color))) : $title = '';
         
         $output.= '<h3>' . $title . '</h3>';
         $output.= '<strong>' . $medio . '</strong> - ' .  $fecha ;
@@ -240,7 +241,7 @@ function _eclip_get_news_by_clip($nid) {
   $query = db_select('eclip_article_data', 'a');
   $query->leftJoin('eclip_cat_data', 'c', 'c.cat_tid = a.cat_tid');
   $query
-      ->fields('a', array('article_id', 'grupo'))
+      ->fields('a', array('article_id', 'grupo', 'weight'))
       ->fields('c', array('cat_tid'))
       ->condition('a.clip_nid', $nid)
       ->condition('a.status', '1')
@@ -251,28 +252,27 @@ function _eclip_get_news_by_clip($nid) {
   $result = $query->execute()->fetchAll();
   $clips = array();
   //dpm($result);
+  // Vericando que no haya notas repetidas y agrupandolas por categoria
   foreach ($result as $value) {
     if(!in_array($value->article_id, $clips)){
         $articles[$value->cat_tid][] = $value;
         $clips[] = $value->article_id;
     }    
   }
-  //dpm($result);
-  //dpm($articles);
   // limpiando 
   if(isset($articles) && !empty($articles)) {
     foreach ($articles as $key_categories => $categories) {
-      $grupo = 0;
+      $grupos = array();
       foreach ($categories as $key_news => $news) {
-        if ($grupo != 0 && $grupo == $news->grupo) {
+        if ($news->grupo != '0' && in_array($news->grupo, $grupos)) {
           unset($articles[$key_categories][$key_news]);
         } else {
           $args[$key_categories][] = $news->article_id;
         }
-        $grupo = $news->grupo;
+        //$grupo = $news->grupo;
+        $grupos[] = $news->grupo;        
       }
     }
-    //dpm($args);
     $query = db_select('eclip_cat_data', 'c');
     $query->leftJoin('taxonomy_term_data', 't', 'c.cat_tid = t.tid');
     $query
