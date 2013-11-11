@@ -50,11 +50,17 @@ tbody {
     padding-top: 1px;
 }
 
+a{
+    text-decoration: none;
+}
+
 a.vermas{
+    text-decoration: underline;
     text-align: right;
     padding: 5px;
     display: block;
     margin: auto;
+    font-size: 12px;
 }
 
 /******** Dropdown noticias relacionadas *******/
