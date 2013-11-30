@@ -379,12 +379,11 @@ function eclip_build_add_eclip_categories($form, $form_state, $node, $op) {
     $output .= '<div class="clear-both"></div>';
     return $output;
   }
-  //isset($form_state['values']['date_from']) ? watchdog('date', format_date(strtotime($form_state['values']['date_from']))) : '';
-  //isset($form_state['values']['date_to']) ? watchdog('date', format_date(strtotime($form_state['values']['date_to']))) : '';
-  $grupo = isset($form_state['values']['grupo']) && $form_state['values']['grupo'] ? $form_state['values']['grupo'] : 'all';
+  $categoria = $form_state['values']['categoria'] ? $form_state['values']['categoria'] : 'all';
+  $grupo     = isset($form_state['values']['grupo']) && $form_state['values']['grupo'] ? $form_state['values']['grupo'] : 'all';
   $date_from = isset($form_state['values']['date_from']) && $form_state['values']['date_from'] ? format_date(strtotime($form_state['values']['date_from']), 'custom', 'YmdHi') : date('YmdHi');
-  $date_to = isset($form_state['values']['date_to']) && $form_state['values']['date_to'] ? format_date(strtotime($form_state['values']['date_to']), 'custom', 'YmdHi') : date('YmdHi');
-  $output = views_embed_view('todos_los_articulos', 'default', $grupo, $date_from, $date_to);
+  $date_to   = isset($form_state['values']['date_to']) && $form_state['values']['date_to'] ? format_date(strtotime($form_state['values']['date_to']), 'custom', 'YmdHi') : date('YmdHi');
+  $output    = views_embed_view('todos_los_articulos', 'default', $grupo, $date_from, $date_to, $categoria);
   $output .= '<div class="clear-both"></div>';
   return $output;
 }
@@ -511,6 +510,19 @@ function _eclip_get_all_categories() {
   return taxonomy_get_tree(2);
 }
 
+/**
+ * Returns a array for use with #options in a form field
+ */
+function _eclip_get_taxonomy_options($machine_name) {
+  $options    = array();
+  $vocabulary = taxonomy_vocabulary_machine_name_load($machine_name);
+  $tree       = taxonomy_get_tree($vocabulary->vid);
+  foreach ($tree as $item) {
+    $options[$item->tid] = str_repeat('-', $item->depth) . $item->name;
+  }
+  return $options;
+}
+
 /*
  * Build jquery ui markups
  */
@@ -600,6 +612,14 @@ function eclip_build_add_eclip_form_top($form, $form_state, $node, $op) {
 //    ),
     '#disabled' => $op == 'edit' ? TRUE : FALSE,
   );
+  
+  $form['top']['categoria'] = array(
+    '#type'    => 'select',
+    '#title'   => t('Categoria'),
+    '#empty_option' => t('Seleccionar'),
+    '#options' => _eclip_get_taxonomy_options('categorias_clip'),
+    '#disabled' => $op == 'edit' ? TRUE : FALSE,
+  );  
 
   $form['top']['title'] = array(
     '#type' => 'textfield',
