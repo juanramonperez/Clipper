@@ -40,7 +40,7 @@ function eclip_menu() {
     'access arguments' => array('administer clips'),
     'type' => MENU_CALLBACK,
   );
-  $items['adm/news/%ctools_js/%node/view'] = array(
+  $items['adm/news/%node/view'] = array(
     'title' => 'Noticia',
     'page callback' => 'eclip_build_view_news_page',
     'page arguments' => array(2, 3),
@@ -737,13 +737,8 @@ function eclip_add_new($js = NULL, $tid = NULL) {
   $output = ctools_modal_form_wrapper('eclip_add_new_form', $form_state);
   if (!empty($form_state['executed'])) {
     // We'll just overwrite the form output if it was successful.
-    $output = array();
-    $node = node_load($form_state['values']['nid']);
-    $medio = taxonomy_term_load($node->field_medio['und'][0]['tid']);
-    $markup = '<div class="news-item new-' . $form_state['values']['nid'] . ' status-1 vote-1"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><span class="news-title">' . $form_state['values']['title'] . '<span class="news-medio">' . $medio->name . '</span></span><span class="news-actions"><span class="ui-icon ui-vote"></span><a href="/clipper/adm/news/nojs/' . $form_state['values']['nid'] . '/view" class="ctools-use-modal"><span class="ui-icon ui-icon-circle-zoomin"></span></a><span class="ui-icon ui-icon-circle-close"></span></span></div>';
-    ctools_add_js('ajax-responder');
-    $output[] = ajax_command_append('.category-' . $tid . ' .news-content .view-content', $markup);
-    $output[] = ctools_modal_command_dismiss(t('Add success'));
+    $output = views_embed_view('helper_agregar_noticia');
+    ctools_modal_render(t('Add car'), $output);
   }
   print ajax_render($output);
   exit;
@@ -753,16 +748,10 @@ function eclip_add_new($js = NULL, $tid = NULL) {
  * Add new node modal window
  */
 
-function eclip_build_view_news_page($js = NULL, $node = NULL) {
-  //print_r($node);exit;
-  if (!$js) {
-    return MENU_ACCESS_DENIED;
-  }
-  ctools_include('modal');
-  ctools_include('ajax');
+function eclip_build_view_news_page($node = NULL) {
   //$contents = render(node_view($node));
-  $contents = views_embed_view('preview_new', 'default', $node->nid);
-  return ctools_modal_render($node->title, $contents);
+  $content = views_embed_view('preview_new', 'default', $node->nid);
+  return $content;
 }
 
 /*
@@ -791,11 +780,22 @@ function eclip_add_new_form($form_state) {
   $form['title'] = array(
     '#title' => t('Search'),
     '#type' => 'textfield',
-    '#autocomplete_path' => 'adm/node/autocomplete/noticia',
   );
+  $form['medio'] = array(
+    '#type'    => 'select',
+    '#title'   => t('Categoria'),
+    '#empty_option' => t('Seleccionar'),
+    '#options' => _eclip_get_taxonomy_options('medios'),
+  );
+  $form['categoria'] = array(
+    '#type'    => 'select',
+    '#title'   => t('Categoria'),
+    '#empty_option' => t('Seleccionar'),
+    '#options' => _eclip_get_taxonomy_options('categorias_clip'),
+  );  
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Add'),
+    '#value' => t('Buscar'),
   );
   return $form;
 }
@@ -1624,7 +1624,7 @@ function eclip_form_media_import_alter(&$form, &$form_state, $form_id) {
  */
 function _eclip_theme_file($url, $style = 'default'){
     //dpm($url);
-    //$url = $url;
+    $url = 'sites/default/files/upload/' . $url;
     $image_types = array('image/jpg', 'image/jpeg', 'image/png', 'image/gif');
     $video_types = array('video/mp4');
     if(file_exists($url)){
