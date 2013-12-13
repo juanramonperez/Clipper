@@ -1619,9 +1619,8 @@ function eclip_form_media_import_alter(&$form, &$form_state, $form_id) {
 /**
  * Helper function to print images from url
  */
-function _eclip_theme_file($url, $style = 'default'){
-    //dpm($url);
-    $url = 'sites/default/files/upload/' . $url;
+function _eclip_theme_file($url, $style = 'default'){    
+    $url = url('sites/default/files/upload/' . $url, array('absolute' => TRUE));
     $image_types = array('image/jpg', 'image/jpeg', 'image/png', 'image/gif');
     $video_types = array('video/mp4');
     if(file_exists($url)){
