@@ -63,6 +63,10 @@ a.vermas{
     font-size: 12px;
 }
 
+a.btn-volver{
+    font-size: 12px;
+}
+
 /******** Dropdown noticias relacionadas *******/
 html.js div.ctools-dropdown div.ctools-dropdown-container{
     width: 405px;
