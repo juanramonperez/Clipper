@@ -124,9 +124,11 @@ function eclip_preprocess_page(&$vars) {
       }
       if(isset($cliente->field_footer['und'][0]['value']) && $footer = $cliente->field_footer['und'][0]['value']){
         $vars['footer_text'] = $footer;
+        drupal_set_title($footer);
       }      
       isset($cliente->field_background_color['und'][0]['rgb']) ? drupal_add_css('body { background-color: ' . $cliente->field_background_color['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';
       isset($cliente->field_category_background['und'][0]['rgb']) ? drupal_add_css('.category-title { background-color: ' . $cliente->field_category_background['und'][0]['rgb'] . ' !important ; width: 98%; padding: 2px 1%; }', array('type' => 'inline')) : '';
+      isset($cliente->field_liston_color['und'][0]['rgb']) ? drupal_add_css('.category-title { border-bottom: 2px solid ' . $cliente->field_liston_color['und'][0]['rgb'] . ' !important ; }', array('type' => 'inline')) : '';
       isset($cliente->field_category_color['und'][0]['rgb']) ? drupal_add_css('.category-title { color: ' . $cliente->field_category_color['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';
       isset($cliente->field_link_color['und'][0]['rgb']) ? drupal_add_css('a { color: ' . $cliente->field_link_color['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';
       isset($cliente->field_background_color_inner['und'][0]['rgb']) ? drupal_add_css('#contentConteiner { background-color: ' . $cliente->field_background_color_inner['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';
@@ -137,8 +139,9 @@ function eclip_preprocess_page(&$vars) {
       isset($cliente->field_background_footer['und'][0]['rgb']) ? drupal_add_css('#footer { background-color:  ' . $cliente->field_background_footer['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';
       isset($cliente->field_footer_color['und'][0]['rgb']) ? drupal_add_css('#footer { color: ' . $cliente->field_footer_color['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';
       
-      isset($cliente->field_borde_zona['und'][0]['rgb']) ? drupal_add_css('.destacado, .destacado-2, .destacado-2 .views-field-nothing, .main-left-inner, .main-center-inner, .main-bottom  { border-color: ' . $cliente->field_borde_zona['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';
-      isset($cliente->field_borde_destacado['und'][0]['rgb']) ? drupal_add_css('.destacado img  { border-color: ' . $cliente->field_borde_zona['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';      
+      isset($cliente->field_borde_zona['und'][0]['rgb']) ? drupal_add_css('.main-left-inner, .main-center-inner, .main-bottom  { border-color: ' . $cliente->field_borde_zona['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';
+      isset($cliente->field_borde_inferior_destacado['und'][0]['rgb']) ? drupal_add_css('.destacado, .destacado-2, .destacado-2 .views-field-nothing { border-color: ' . $cliente->field_borde_inferior_destacado['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';
+      isset($cliente->field_borde_destacado['und'][0]['rgb']) ? drupal_add_css('.destacado img  { border-color: ' . $cliente->field_borde_destacado['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';      
       //isset($cliente->field_news_border['und'][0]['rgb']) ? drupal_add_css('.news-item { border-color: ' . $cliente->field_news_border['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';
 //      
       //drupal_add_css('body {background: url("' . $background . '") !important ;}', array('type' => 'inline'));     
