@@ -204,12 +204,13 @@ function _eclip_build_news_email_by_zone($news, $zone, $url_prefix, $args = arra
   $output = '';
   isset($args['category_background']) ? $category_background = $args['category_background'] : $category_background = 'transparent';
   isset($args['category_color'])      ? $category_color = $args['category_color'] : $category_color = '#000';
+  isset($args['category_border'])     ? $category_border = $args['category_border'] : $category_border = 'transparent';
   isset($args['link_color'])          ? $link_color = $args['link_color'] : $link_color = '#000';
   isset($args['limite'])              ? $limite = $args['limite'] : $limite = 5;
   if (isset($news[$zone])) {
     //dpm($news[$zone]);
     foreach ($news[$zone] as $cat_tid => $new) {
-      $output.= '<h2 style="width: 98%; padding: 2px 1%; background-color:' . $category_background  . '; color: ' . $category_color . '">' . $new['name'] . '</h2>';
+      $output.= '<h2 style="width: 98%; padding: 2px 1%; background-color:' . $category_background  . '; color: ' . $category_color . '; border-bottom: 2px solid ' . $category_border . ';">' . $new['name'] . '</h2>';
       //dpm($new);
       $result = views_get_view_result('front_get_news', 'default', $cat_tid, $new['clip_nid'], $new['news']);
       foreach ($result as $key => $item) {
@@ -226,7 +227,7 @@ function _eclip_build_news_email_by_zone($news, $zone, $url_prefix, $args = arra
         $output.= '<strong>' . $medio . '</strong> - ' .  $fecha ;
         $output.= '<div>' . $bajada . '</div>';
       }
-      $output.= '<div>' . l('[Ver más]', 'clip/' . $url_prefix . '/' . $new['clip_nid'], array('absolute' => TRUE)) . '</div>';
+      $output.= '<div>' . l('[más]', 'clip/' . $url_prefix . '/' . $new['clip_nid'], array('absolute' => TRUE, 'attributes' => array('style' => 'color:' . $link_color))) . '</div>';
       //dpm($result);
     }
   }
@@ -960,6 +961,7 @@ function _custom_prepare_email_vars(&$variables){
   
   $variables['category_color']      = isset($cliente->field_category_color['und'][0]['rgb']) ? $cliente->field_category_color['und'][0]['rgb'] : '';
   $variables['category_background'] = isset($cliente->field_category_background['und'][0]['rgb']) ? $cliente->field_category_background['und'][0]['rgb'] : '';
+  $variables['category_border']     = isset($cliente->field_liston_color['und'][0]['rgb']) ? $cliente->field_liston_color['und'][0]['rgb'] : '';
   $variables['background_color']    = isset($cliente->field_background_color['und'][0]['rgb']) ? $cliente->field_background_color['und'][0]['rgb'] : '';
   
   $variables['background_color_inner']  = isset($cliente->field_background_color_inner['und'][0]['rgb']) ? $cliente->field_background_color_inner['und'][0]['rgb'] : '';
@@ -970,6 +972,7 @@ function _custom_prepare_email_vars(&$variables){
   $variables['page_border']         = isset($cliente->field_page_border['und'][0]['rgb']) ? $cliente->field_page_border['und'][0]['rgb'] : '';  
   $variables['news_border']         = isset($cliente->field_news_border['und'][0]['rgb']) ? $cliente->field_news_border['und'][0]['rgb'] : '';  
   $variables['borde_zona']          = isset($cliente->field_borde_zona['und'][0]['rgb']) ? $cliente->field_borde_zona['und'][0]['rgb'] : '';
+  $variables['borde_inferior_destacado'] = isset($cliente->field_borde_inferior_destacado['und'][0]['rgb']) ? $cliente->field_borde_inferior_destacado['und'][0]['rgb'] : '';
   $variables['borde_destacado']     = isset($cliente->field_borde_destacado['und'][0]['rgb']) ? $cliente->field_borde_destacado['und'][0]['rgb'] : '';
   $variables['footer_color']        = isset($cliente->field_footer_color['und'][0]['rgb']) ? $cliente->field_footer_color['und'][0]['rgb'] : '';
   $variables['background_footer']   = isset($cliente->field_background_footer['und'][0]['rgb']) ? $cliente->field_background_footer['und'][0]['rgb'] : '';
