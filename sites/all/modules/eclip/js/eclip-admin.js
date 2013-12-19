@@ -77,7 +77,7 @@
                 $(this).disableSelection();
             });
             
-            $('.add-new', context).once('eclip', function () {
+            $('.view-helper-agregar-noticia .add-new', context).once('eclip', function () {
                 var $this  = $(this);
                 $this.click(function(e){
                     e.preventDefault();
