@@ -1158,7 +1158,7 @@ function _eclip_jqueryui_cliente_theme_form($form, $form_state, $node = NULL, $o
   $form['main']['left']['limite'] = array(
     '#type' => 'select',
     '#title' => t('Limite por categoría'),
-    '#options' => array(3 => 3, 5 => 5, 7 => 7),
+    '#options' => array(3 => 3, 5 => 5, 7 => 7, 100 => t('Sin limite')),
     '#default_value' => isset($node->field_limite['und'][0]['value']) ? $node->field_limite['und'][0]['value'] : 5,
     '#description' => t('Número de notas que se muestran antes del [Ver más].'),
   );  
