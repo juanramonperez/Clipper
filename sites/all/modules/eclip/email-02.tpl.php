@@ -35,20 +35,7 @@
           </tbody>
         </table>        
       </td>
-    </tr>
-    <tr>
-      <td>
-        <table style="width: 100%">
-          <tbody>
-            <tr>
-              <td style="font-size:0.8em; width: 66%; vertical-align:top; border-top: 2px solid <?php print $borde_zona ?>;">
-                <?php print _eclip_build_news_email_by_zone($news, 3, $url_prefix, array('category_background' => $category_background, 'category_color' => $category_color, 'link_color' => $link_color, 'category_border' => $category_border, 'limite' => $limite)); ?>
-              </td>              
-            </tr>
-          </tbody>
-        </table>        
-      </td>
-    </tr>    
+    </tr>  
     <tr>
       <td style="text-align: center; border-top: 2px solid <?php print $borde_zona ?>;">
         <?php print $footer; ?>
