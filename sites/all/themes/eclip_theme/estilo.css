@@ -1,0 +1,138 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 20/02/2014, 22:03:16
+    Author     : focus
+*/
+
+body .eclip-05{
+    font-family: 'Gotham'; 
+    font-weight: normal;
+    font-size: 13px;
+}
+
+.eclip-05 .category{
+    padding-bottom: 20px;
+}
+
+.wrapper{
+    width: 1000px;
+    margin: auto;
+    margin-top: 30px;
+}
+
+.header{
+    width: 1000px;
+    background-color: white;
+    margin: auto;
+}
+
+.main-title .title{
+    padding: 10px;
+    margin-top: 20px;
+    margin-left: 30px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.main-title{
+    background-color: #008b8b;
+}
+
+.zone-top .noticia .title,
+.zone-middle .noticia .title{
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.zone-top .column1 .noticia .title{
+    font-weight: bold;
+    font-size: 20px;
+}
+
+
+.zone-top,
+.zone-middle,
+.zone-bottom{
+    background-color: white;
+    margin-top: 20px;
+}
+
+.zone-top,
+.zone-bottom,
+.zone-middle {
+    padding: 20px 0;
+}
+
+
+.column-inner{
+    padding: 0 15px;
+}
+
+.medio-fecha {
+    font-weight: bold;
+}
+
+.category-title {
+    font-weight: bold;
+    font-size: 18px;    
+}
+
+
+.zone-top .column.column1{
+    width: 40%;
+    float: left;
+    clear: left;
+}
+
+.zone-top .column.column2,
+.zone-top .column.column3{
+    width: 30%;
+    float: left;
+}
+
+.zone-middle .column.column1,
+.zone-middle .column.column2,
+.zone-middle .column.column3,
+.zone-bottom .column.column1,
+.zone-bottom .column.column2,
+.zone-bottom .column.column3{
+    width: 33%;
+    float: left;
+}
+
+.zone-top .column.column1 .image{
+    margin-bottom: 15px;
+    overflow: hidden;    
+}
+
+.zone-top .column.column2 .image{
+    margin-bottom: 15px;
+    overflow: hidden;    
+}
+
+.zone-middle .column .noticia .image{
+    width: auto;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.zone-bottom .noticia .title{
+    font-weight: bold;
+    font-size: 15px;
+    margin-top: 20px;
+}
+
+.zone-bottom .noticia.con-imagen .image{
+    margin-right: 15px;
+    float: left;
+}
+
+.zone-bottom .noticia.con-imagen .title,
+.zone-bottom .noticia.con-imagen .medio-fecha,
+.zone-bottom .noticia.con-imagen .description{
+    margin-left: 95px;
+}

@@ -1,0 +1,96 @@
+/* 
+    Document   : fresh
+    Created on : 25/02/2013, 09:59:22
+    Author     : gerardo
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.9em;
+}
+
+tbody {
+    border: 0;
+}
+
+#mainConteiner { 
+    width: 913px;
+    margin:auto;
+}
+
+#navRightSecciones {
+    float: left;
+    width: 200px;
+}
+
+.one-sidebar.sidebar-second #contentSeccionesDetail{
+    float: left;
+    width: 713px;
+}
+
+.archive-block-footer{
+    padding-top: 10px;
+}
+
+.imagen-destacado {
+    padding-top: 8px;
+    padding-left: 8px;
+    width: 352px;
+    float: left;
+}
+
+.noticias-destacado.with-image {
+    width: 540px;
+    float: left;
+}
+
+.news-item{
+    padding-top: 1px;
+}
+
+a{
+    text-decoration: none;
+}
+
+a.vermas{
+    text-decoration: underline;
+    text-align: right;
+    padding: 5px;
+    display: block;
+    margin: auto;
+    font-size: 12px;
+}
+
+a.btn-volver{
+    font-size: 12px;
+}
+
+/******** Dropdown noticias relacionadas *******/
+html.js div.ctools-dropdown div.ctools-dropdown-container{
+    width: 405px;
+}
+
+html.js div.ctools-dropdown div.ctools-dropdown-container ul li a{
+    padding: 5px 0;
+    width: 400px;
+}
+
+/****************** Bloque destacados ************/
+
+#block-eclip-related-news .views-row{
+    padding: 5px 0; 
+}
+
+@font-face {
+    font-family: Gotham;
+    src: url(fonts/gotham/Gotham-Book.otf);
+    font-weight:normal;
+}
+
+@font-face {
+    font-family: Gotham;
+    src: url(fonts/gotham/Gotham-Medium.otf);
+    font-weight:bold;
+}

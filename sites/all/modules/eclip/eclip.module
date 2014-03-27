@@ -94,23 +94,23 @@ function eclip_permission() {
  * Page callback to display links and render a container for AJAX stuff.
  */
 function eclip_test_page() {
-  $node = node_load(669);
+  $node = node_load(12213);
   $message = array(
     'from'    => 'info@eclip.com',
-    'to'      => 'clipping@e-clip.cl',
+    'to'      => 'gerardocadau@gmail.com',
     'subject' => 'test',    
-    'body'    => theme('email_04', array('node' => $node, 'news' => _eclip_get_news_by_clip($node->nid))),
+    'body'    => theme('test_email'),
     'headers' => array('Content-Type' => 'text/html; charset=UTF-8'),   //needed
   ); 
 
   $system = drupal_mail_system('eclip', 'key');
 
-//  if($system->mail($message)){
-//    drupal_set_message('Sent.');  
-//  }else{
-//    drupal_set_message('Fail.', 'error');  
-//  }
-  $output = theme('email_04', array('node' => $node, 'news' => _eclip_get_news_by_clip($node->nid)));
+  if($system->mail($message)){
+    drupal_set_message('Sent.');  
+  }else{
+    drupal_set_message('Fail.', 'error');  
+  }
+  $output = theme('test_email');
   //dpm($output);
   //return 'hola';
   return $output;
@@ -908,15 +908,97 @@ function eclip_theme() {
     $return[$theme->field_machine_name_value] =
         array(
           'template' => $theme->field_machine_name_value, // your template file called custompage.tpl.php
-          'variables' => array('op' => null, 'node' => null),
+          'variables' => array('op' => null, 'node' => null, 'colores' => null),
     );
     $return[$theme->field_email_template_value] =
         array(
           'template' => str_replace('_', '-', $theme->field_email_template_value), // your template file called custompage.tpl.php
-          'variables' => array('op' => null, 'node' => null),
-    );  
+          'variables' => array('op' => null, 'node' => null, 'colores' => null),
+    );
   }
+  $return['news_category'] = array(
+    'template' => 'templates/news-category',
+    'variables'   => array(
+      'titulo'    => null, 
+      'noticias'  => null,
+      'colores'   => null,
+      'limit'     => null,
+    ),
+  );  
+  $return['news_item'] = array(
+    'template' => 'templates/news-item',
+    'variables' => array(
+      'titulo'  => null, 
+      'link'    => null,
+      'medio'   => null,
+      'bajada'  => null,
+      'fecha'   => null,
+      'imagen'  => null,
+      'colores' => null,
+      'relacionadas' => null,
+    ),
+  );
+  $return['news_related_item'] = array(
+    'template' => 'templates/news-related-item',
+    'variables' => array(
+      'titulo'  => null, 
+      'link'    => null,
+      'colores' => null,
+    ),
+  );
+  $return['test_email'] = array(
+    'template' => 'templates/test-email',
+  );   
   return $return;
+}
+
+function _theme_destacado (&$destacados, $start = 0, $limit = 3, $colores){
+  //dpm($colores);
+  $output = '';
+  for ($i = $start; $i < $start + $limit; $i++) { 
+    if(isset($destacados[$i])){
+      $noticia = array(
+        'titulo'  => $destacados[$i]->titulo, 
+        'link'    => $destacados[$i]->environment . '/' . $destacados[$i]->space . '/' . $destacados[$i]->clip_nid . '/' . $destacados[$i]->article_id,
+        'medio'   => $destacados[$i]->medio,
+        'bajada'  => $destacados[$i]->bajada,
+        'fecha'   => format_date(strtotime($destacados[$i]->fecha), 'largo_sin_hora'),
+        'imagen'  => $destacados[$i]->imagen,
+        'colores' => $colores,
+        'relacionadas' => null,
+      );
+      $output.= theme('news_item', $noticia);   
+    }    
+  }
+  return $output;
+}
+
+function _theme_categoria($news, $zone, $colores){
+  $output   = '';
+  //dpm($news);
+  if (isset($news[$zone])) {
+    foreach ($news[$zone] as $cat_tid => $new) {
+      //dpm($news[$zone]);
+      //dpm($new);
+      $noticias = array();
+      $results  = views_get_view_result('front_get_news', 'default', $cat_tid, $new['clip_nid'], $new['news']);
+      foreach ($results as $key => $result_item) {
+          $noticia = array(
+            'titulo'  => $result_item->node_eclip_article_data_title,
+            'link'    => arg(0) . '/' . arg(1) . '/' . $result_item->eclip_article_data_clip_nid . '/' . $result_item->article_data_id,
+            'medio'   => isset($result_item->field_field_medio[0]['rendered']['#markup']) ? $result_item->field_field_medio[0]['rendered']['#markup'] : '',
+            'bajada'  => isset($result_item->field_body[0]['rendered']['#markup']) ? $result_item->field_body[0]['rendered']['#markup'] : '',
+            'fecha'   => isset($result_item->field_field_fecha[0]['raw']['value']) ? format_date(strtotime($result_item->field_field_fecha[0]['raw']['value']), 'largo_sin_hora') : '',
+            'imagen'  => isset($result_item->field_field_server_destacado[0]['raw']['url']) ? _eclip_get_url_file($result_item->field_field_server_destacado[0]['raw']['url']) : '',
+            'colores' => $colores,
+            'relacionadas' => null,
+          );
+          $noticias[] = $noticia;
+      }
+      $output.= theme('news_category', array('titulo' => $new['name'], 'noticias' => $noticias, 'colores' => $colores));
+    }
+  }
+  return $output;
 }
 
 /**
@@ -949,6 +1031,54 @@ function template_preprocess_email_03(&$variables){
 function template_preprocess_email_04(&$variables){
   //dpm($variables['news']);
   _custom_prepare_email_vars($variables);
+}
+
+/**
+ * Preprocess function
+ */
+function template_preprocess_email_05(&$variables){
+  $cliente = node_load($variables['node']->field_cliente['und'][0]['target_id']);
+  
+  $variables['colores']['body_background'] = _eclip_theme_render_field($cliente, $cliente->field_background_color, 'field_background_color');
+  $variables['colores']['category_background'] = _eclip_theme_render_field($cliente, $cliente->field_category_background, 'field_category_background');
+  $variables['colores']['liston_color'] = _eclip_theme_render_field($cliente, $cliente->field_liston_color, 'field_liston_color');
+  $variables['colores']['category_color'] = _eclip_theme_render_field($cliente, $cliente->field_category_color, 'field_category_color');
+  $variables['colores']['link_color'] = _eclip_theme_render_field($cliente, $cliente->field_link_color, 'field_link_color');
+  $variables['colores']['background_color_inner'] = _eclip_theme_render_field($cliente, $cliente->field_background_color_inner, 'field_background_color_inner');
+  $variables['colores']['font_color'] = _eclip_theme_render_field($cliente, $cliente->field_font_color, 'field_font_color');
+  $variables['colores']['image_border'] = _eclip_theme_render_field($cliente, $cliente->field_image_border, 'field_image_border');
+  $variables['colores']['page_border'] = _eclip_theme_render_field($cliente, $cliente->field_page_border, 'field_page_border');
+  $variables['colores']['news_border'] = _eclip_theme_render_field($cliente, $cliente->field_news_border, 'field_news_border');
+  $variables['colores']['background_footer'] = _eclip_theme_render_field($cliente, $cliente->field_background_footer, 'field_background_footer');
+  $variables['colores']['footer_color'] = _eclip_theme_render_field($cliente, $cliente->field_footer_color, 'field_footer_color');
+  $variables['colores']['borde_zona'] = _eclip_theme_render_field($cliente, $cliente->field_borde_zona, 'field_borde_zona'); 
+  $variables['colores']['borde_inferior_destacado'] = _eclip_theme_render_field($cliente, $cliente->field_borde_inferior_destacado, 'field_borde_inferior_destacado');
+  $variables['colores']['borde_destacado'] = _eclip_theme_render_field($cliente, $cliente->field_borde_destacado, 'field_borde_destacado');
+  $variables['colores']['title_font']   = '';
+  $variables['colores']['title_size']   = '';
+  $variables['colores']['title_weight'] = '';
+  $variables['colores']['title_decoration']  = 'none';
+
+  $variables['url_prefix']          = isset($cliente->field_hash['und'][0]['value']) ? $cliente->field_hash['und'][0]['value'] : '';
+  $variables['footer']              = isset($cliente->field_footer['und'][0]['value']) ? $cliente->field_footer['und'][0]['value'] : '';  
+  $variables['header']              = theme_image(array('path' => $cliente->field_header['und'][0]['uri'], 'attributes' => array()));
+  $variables['imagen_destacado']    = isset($variables['node']->field_imagen_destacado['und'][0]['uri']) ? theme_image_style(array('style_name' => 'destacado', 'path' => $variables['node']->field_imagen_destacado['und'][0]['uri'], 'attributes' => array('style' => 'border: 2px solid ' . $variables['image_border']), 'width' => NULL, 'height' => NULL)) : '';
+  $variables['limite'] = isset($variables['node']->field_limite['und'][0]['value']) ? $variables['node']->field_limite['und'][0]['value'] : 5;
+
+  $destacados = views_get_view_result('front_destacados', 'todos', $variables['node']->nid);
+  foreach ($destacados as $destacado) {
+    $noticia = new stdClass();
+    $noticia->titulo  = $destacado->node_eclip_article_data_title;
+    $noticia->clip_nid    = $destacado->eclip_article_data_clip_nid;
+    $noticia->article_id  = $destacado->article_data_id;
+    $noticia->environment = 'clip';
+    $noticia->space       = $variables['url_prefix'];
+    $noticia->medio   = isset($destacado->field_field_medio[0]['rendered']['#markup']) ? $destacado->field_field_medio[0]['rendered']['#markup'] : '';
+    $noticia->bajada  = isset($destacado->field_body[0]['rendered']['#markup']) ? $destacado->field_body[0]['rendered']['#markup'] : '';
+    $noticia->fecha   = isset($destacado->field_field_fecha[0]['raw']['value']) ? $destacado->field_field_fecha[0]['raw']['value'] : '';
+    $noticia->imagen  = isset($destacado->field_field_server_destacado[0]['raw']['url']) ? _eclip_get_url_file($destacado->field_field_server_destacado[0]['raw']['url']) : '';
+    $variables['destacados'][] = $noticia;
+  }  
 }
 
 /**
@@ -1620,6 +1750,14 @@ function eclip_form_media_import_alter(&$form, &$form_state, $form_id) {
 }
 
 /**
+ * Helper function to get the real url image
+ */
+
+function _eclip_get_url_file($path, $style = 'default'){
+  return url('sites/default/files/upload/' . $path, array('absolute' => TRUE));
+}
+
+/**
  * Helper function to print images from url
  */
 function _eclip_theme_file($url, $style = 'default'){    
@@ -1752,5 +1890,14 @@ function eclip_send_clip($node) {
     drupal_set_message('E-mail enviado.');  
   }else{
     drupal_set_message('No se ha podido enviar el E-mail.', 'error');  
+  }
+}
+
+
+function _eclip_theme_render_field($entity, $field, $field_name, $key = 0){
+  $items = field_get_items('node', $entity, $field_name);
+  if(isset($items[$key])){
+    $value = field_view_value('node', $entity, $field_name, $items[$key]);
+    return render($value);
   }
 }

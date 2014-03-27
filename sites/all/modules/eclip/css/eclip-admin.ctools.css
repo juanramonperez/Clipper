@@ -1042,6 +1042,13 @@ a.add-grupo{
   float: left;
 }
 
+.eclip-05 .main-left,
+.eclip-05 .main-center,
+.eclip-05 .main-right{
+  width: 33%;
+  float: left;
+}
+
 /******** Ocultando un Warning. todo funciona bien pero arroja un warning @todo ***/
 
 .page-adm-eclip-add .messages.error {
