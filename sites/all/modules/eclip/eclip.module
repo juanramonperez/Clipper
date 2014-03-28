@@ -1,44 +1,52 @@
 <?php
 
-/*
+/**
+ * Implements hook_init(). 
+ */
+function eclip_init(){
+  drupal_add_library('system', 'ui.sortable');
+  drupal_add_library('system', 'ui.button');    
+  drupal_add_js(drupal_get_path('module', 'eclip') . '/js/eclip-admin.js');  
+  drupal_add_js(array('eclip' => array('positions' => '')), 'setting');  
+  drupal_add_css(drupal_get_path('module', 'eclip') . '/css/fresh.css');
+  drupal_add_css(drupal_get_path('module', 'eclip') . '/css/eclip-admin.ctools.css');
+}
+
+/**
  * Implements hook_menu().
  */
-
 function eclip_menu() {
-  $items['adm/node/autocomplete/%'] = array(
-    'title' => 'Autocomplete node',
-    'page callback' => 'eclip_autocomplete_callback',
-    'page arguments' => array(3),
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK,
-  );
-  $items['adm/taxonomy/autocomplete/%'] = array(
-    'title' => 'Autocomplete taxonomy',
-    'page callback' => 'eclip_autocomplete_term_callback',
-    'page arguments' => array(3),
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK,
-  );
-  $items['adm/%ctools_js/%/add/new'] = array(
-    'title' => 'Add node by category',
-    'page callback' => 'eclip_add_new',
-    'page arguments' => array(1, 2),
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK,
-  );
-  $items['adm/%ctools_js/%/add/group'] = array(
-    'title' => 'Add group by category',
-    'page callback' => 'eclip_add_group',
-    'page arguments' => array(1, 2),
-    'access arguments' => array('administer clips'),
-    'type' => MENU_CALLBACK,
-  );
   $items['adm/eclip/%node/add'] = array(
     'title' => 'Nuevo e-clip',
     'page callback' => 'eclip_build_add_clip_page',
     'page arguments' => array(2, 'add'),
     'access arguments' => array('administer clips'),
     'type' => MENU_CALLBACK,
+    'file' => 'eclip.admin.inc',
+  );
+  $items['adm/eclip/%node/edit'] = array(
+    'title' => 'Editar e-clip',
+    'page callback' => 'eclip_build_add_clip_page',
+    'page arguments' => array(2, 'edit'),
+    'access arguments' => array('administer clips'),
+    'type' => MENU_CALLBACK,
+    'file' => 'eclip.admin.inc',
+  );
+  $items['adm/eclip/cliente/%node/add'] = array(
+    'title' => 'Agregar clip por cliente',
+    'page callback' => 'eclip_build_add_clip_cliente_page',
+    'page arguments' => array(3, 'add'),
+    'access arguments' => array('administer clips'),
+    'type' => MENU_CALLBACK,
+    'file' => 'eclip.admin.inc',
+  );
+  $items['adm/eclip/cliente/%node/edit'] = array(
+    'title' => 'Editar clip por cliente',
+    'page callback' => 'eclip_build_add_clip_cliente_page',
+    'page arguments' => array(3, 'edit'),
+    'access arguments' => array('administer clips'),
+    'type' => MENU_CALLBACK,
+    'file' => 'eclip.admin.inc',
   );
   $items['adm/news/%node/view'] = array(
     'title' => 'Noticia',
@@ -47,27 +55,13 @@ function eclip_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
-  $items['adm/eclip/%node/edit'] = array(
-    'title' => 'Editar e-clip',
-    'page callback' => 'eclip_build_add_clip_page',
-    'page arguments' => array(2, 'edit'),
+  $items['adm/%ctools_js/%/add/group'] = array(
+    'title' => 'Add group by category',
+    'page callback' => 'eclip_add_group',
+    'page arguments' => array(1, 2),
     'access arguments' => array('administer clips'),
     'type' => MENU_CALLBACK,
-  );
-  $items['adm/eclip/cliente/%node/add'] = array(
-    'title' => 'Agregar clip por cliente',
-    'page callback' => 'eclip_build_add_clip_cliente_page',
-    'page arguments' => array(3, 'add'),
-    'access arguments' => array('administer clips'),
-    'type' => MENU_CALLBACK,
-  );
-  $items['adm/eclip/cliente/%node/edit'] = array(
-    'title' => 'Editar clip por cliente',
-    'page callback' => 'eclip_build_add_clip_cliente_page',
-    'page arguments' => array(3, 'edit'),
-    'access arguments' => array('administer clips'),
-    'type' => MENU_CALLBACK,
-  );
+  );  
   $items['test'] = array(
     'title' => 'test',
     'page callback' => 'eclip_test_page',
@@ -87,6 +81,100 @@ function eclip_permission() {
       'title' => t('Administer clips'),
       'description' => t('Add, edit, remove clips.'),
     ),
+  );
+}
+
+/**
+ * Implements hook_theme().
+ */
+function eclip_theme() {
+  $return = array();
+  $themes = _eclip_get_all_templates();
+  foreach ($themes as $theme) {
+    $return[$theme->field_machine_name_value] =
+        array(
+          'template' => $theme->field_machine_name_value, // your template file called custompage.tpl.php
+          'variables' => array('op' => null, 'node' => null, 'colores' => null),
+    );
+    $return[$theme->field_email_template_value] =
+        array(
+          'template' => str_replace('_', '-', $theme->field_email_template_value), // your template file called custompage.tpl.php
+          'variables' => array('op' => null, 'node' => null, 'colores' => null),
+    );
+  }
+  $return['news_category'] = array(
+    'template' => 'templates/news-category',
+    'variables'   => array(
+      'titulo'    => null, 
+      'noticias'  => null,
+      'colores'   => null,
+      'limit'     => null,
+    ),
+  );  
+  $return['news_item'] = array(
+    'template' => 'templates/news-item',
+    'variables' => array(
+      'titulo'  => null, 
+      'link'    => null,
+      'medio'   => null,
+      'bajada'  => null,
+      'fecha'   => null,
+      'imagen'  => null,
+      'colores' => null,
+    ),
+  );
+  $return['news_related'] = array(
+    'template' => 'templates/news-related',
+    'variables' => array(
+      'article_id'  => null, 
+      'colores' => null,
+    ),
+  );
+  $return['test_email'] = array(
+    'template' => 'templates/test-email',
+  );   
+  return $return;
+}
+
+/**
+ * Implements hook_node_delete().
+ */
+function eclip_node_delete($node) {
+  db_delete('eclip_cat_data')
+      ->condition('clip_nid', $node->nid)
+      ->execute();
+  db_delete('eclip_highlighted')
+      ->condition('clip_nid', $node->nid)
+      ->execute();
+  db_delete('eclip_article_data')
+      ->condition('clip_nid', $node->nid)
+      ->execute();
+}
+
+/**
+ * Implements hook_views_query_alter()
+ */
+function eclip_views_query_alter(&$view, &$query) {
+  if ($view->name == 'embed_articulos') {
+    if (isset($query->where[0])) {
+      $full_date = array_keys($query->where[0]['conditions'][1]['value']);
+      $full_date1 = array_keys($query->where[0]['conditions'][2]['value']);
+      
+      //watchdog('query', print_r($full_date1, 1));
+      $query->where[0]['conditions'][1]['field'] = "DATE_FORMAT((DATE_ADD('19700101', INTERVAL node.created SECOND) + INTERVAL -10800 SECOND), '%Y%m%d%H%i') >= " . $full_date[0];
+      $query->where[0]['conditions'][2]['field'] = "DATE_FORMAT((DATE_ADD('19700101', INTERVAL node.created SECOND) + INTERVAL -10800 SECOND), '%Y%m%d%H%i') <= " . $full_date1[0];
+    }
+    watchdog('query', print_r($query->where, 1));
+  }
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function eclip_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'eclip'),
   );
 }
 
@@ -295,104 +383,9 @@ function _eclip_get_news_by_clip($nid) {
   }
 }
 
-/*
- * Helper to include all files needed to build a modal window
- */
-
-function _eclip_include_ctools_modal() {
-  static $ctools_js_added = FALSE;
-  if ($ctools_js_added) {
-    return; // Don't add the JavaScript and CSS multiple times.
-  }
-  // Include the CTools tools that we need.
-  ctools_include('ajax');
-  ctools_include('modal');
-  ctools_modal_add_js();
-  // Create our own javascript that will be used to theme a modal.
-  $common_style = array(
-    'modalOptions' => array(
-      'opacity' => .5,
-      'background-color' => '#000',
-    ),
-    'animation' => 'fadeIn',
-    'modalTheme' => 'EclipDefaultModal',
-  );
-  $sample_style = array(
-    'eclip-modal-small' => array(
-  'modalSize' => array(
-    'type' => 'fixed',
-    'width' => 300,
-    'height' => 250,
-  ),
-    ) + $common_style,
-    'eclip-modal-medium' => array(
-  'modalSize' => array(
-    'type' => 'fixed',
-    'width' => 600,
-    'height' => 550,
-  ),
-    ) + $common_style,
-    'eclip-modal-login' => array(
-  'modalSize' => array(
-    'type' => 'fixed',
-    'width' => 450,
-    'height' => 300,
-  ),
-    ) + $common_style,
-    'eclip-modal-large' => array(
-  'modalSize' => array(
-    'type' => 'fixed',
-    'width' => 800,
-    'height' => 600,
-  ),
-    ) + $common_style,
-  );
-
-  drupal_add_js($sample_style, 'setting');
-  ctools_add_js('eclip-modal', 'eclip');
-  ctools_add_css('eclip-modal', 'eclip');
-  $ctools_js_added = TRUE;
-}
-
-/*
- * Build add clip form 
- */
-
-function eclip_build_add_clip_cliente_page($node = NULL, $op = '') {
-  $form = drupal_get_form('_eclip_jqueryui_cliente_theme_form', $node, $op);
-  $output = drupal_render($form);
-  return $output;
-}
-
-/*
- * Build add clip form 
- */
-
-function eclip_build_add_clip_page($node = NULL, $op = '') {
-  $form = drupal_get_form('_eclip_jqueryui_theme_form', $node, $op);
-  $output = drupal_render($form);
-  return $output;
-}
-
-function eclip_build_add_eclip_categories($form, $form_state, $node, $op) {
-  if ($op == 'edit') {
-    $output = views_embed_view('helper_get_categories', 'default', 0, $node->nid);
-    $output .= '<div class="clear-both"></div>';
-    return $output;
-  }
-  $categoria = $form_state['values']['categoria'] ? $form_state['values']['categoria'] : 'all';
-  $grupo     = isset($form_state['values']['grupo']) && $form_state['values']['grupo'] ? $form_state['values']['grupo'] : 'all';
-  $date_from = isset($form_state['values']['date_from']) && $form_state['values']['date_from'] ? format_date(strtotime($form_state['values']['date_from']), 'custom', 'YmdHi') : date('YmdHi');
-  $date_to   = isset($form_state['values']['date_to']) && $form_state['values']['date_to'] ? format_date(strtotime($form_state['values']['date_to']), 'custom', 'YmdHi') : date('YmdHi');
-  $output    = views_embed_view('todos_los_articulos', 'default', $grupo, $date_from, $date_to, $categoria);
-  $output .= '<div class="clear-both"></div>';
-  return $output;
-}
-
-/*
+/**
  * Helper, get all templates
  */
-
 function _eclip_get_all_templates() {
   $query = db_select('node', 'n');
   $query->innerJoin('field_data_field_machine_name', 'm', 'm.entity_id = n.nid AND (m.entity_type = :type AND m.deleted = :deleted)', array(':type' => 'node', ':deleted' => 0));
@@ -403,31 +396,6 @@ function _eclip_get_all_templates() {
       ->fields('e', array('field_email_template_value'))
       ->condition('n.type', 'template')
       ->condition('n.status', '1');
-  return $query->execute()->fetchAll();
-}
-
-/*
- * Helper, get all templates
- */
-
-function _eclip_get_last_clips($tid = '', $limit = 50) {
-  if ($tid) {
-    $query = db_select('node', 'n');
-    $query->innerJoin('field_data_field_grupo', 'grupo', 'grupo.entity_id = n.nid AND (grupo.entity_type = :type AND grupo.deleted = :deleted)', array(':type' => 'node', ':deleted' => 0));
-    $query
-        ->fields('n', array('nid', 'title'))
-        ->condition('n.type', 'clip')
-        ->condition('n.status', '1')
-        ->condition('grupo.field_grupo_tid', $tid);
-    $query->range(0, $limit);
-  } else {
-    $query = db_select('node', 'n');
-    $query
-        ->fields('n', array('nid', 'title'))
-        ->condition('n.type', 'clip')
-        ->condition('n.status', '1');
-    $query->range(0, $limit);
-  }
   return $query->execute()->fetchAll();
 }
 
@@ -459,10 +427,9 @@ function _eclip_get_positions_by_clip($clip_nid) {
   return $query->execute()->fetchAll();
 }
 
-/*
+/**
  * Helper, get all customers
  */
-
 function _eclip_get_all_customers() {
   $query = db_select('node', 'n');
   $query
@@ -472,10 +439,9 @@ function _eclip_get_all_customers() {
   return $query->execute()->fetchAll();
 }
 
-/*
+/**
  * Helper, get customers by group
  */
-
 function _eclip_get_customers_by_group($tid = '') {
   if ($tid) {
     $query = db_select('node', 'n');
@@ -495,18 +461,16 @@ function _eclip_get_customers_by_group($tid = '') {
   return $query->execute()->fetchAll();
 }
 
-/*
+/**
  * Helper, get all groups
  */
-
 function _eclip_get_all_groups() {
   return taxonomy_get_tree(4);
 }
 
-/*
+/**
  * Helper, get all categories
  */
-
 function _eclip_get_all_categories() {
   return taxonomy_get_tree(2);
 }
@@ -524,237 +488,18 @@ function _eclip_get_taxonomy_options($machine_name) {
   return $options;
 }
 
-/*
- * Build jquery ui markups
- */
-
-function _eclip_jqueryui_theme_form($form, $form_state, $node, $op) {
-  //dpm($op); 
-
-  $form['main'] = array(
-    '#theme_wrappers' => array('container'),
-    '#id' => 'main-content',
-    '#attributes' => array('class' => array('settings-main')),
-  );
-  $form['main'] += eclip_build_add_eclip_form_top($form, $form_state, $node, $op);
-  $form['main']['categories'] = array(
-    '#theme_wrappers' => array('container'),
-    '#attributes' => array('class' => array('eclip-ui-bucket', 'settings-categories')),
-  );
-  $form['main']['categories']['placeholder'] = array(
-    '#theme_wrappers' => array('container'),
-    '#attributes' => array('class' => array('clipper-placeholder', 'zone-0')),
-    '#markup' => eclip_build_add_eclip_categories($form, $form_state, $node, $op),
-  );
-
-  $form['main']['bottom'] = array(
-    '#theme_wrappers' => array('container'),
-    '#id' => 'main-bottom',
-    '#attributes' => array('class' => array('eclip-ui-bucket', 'clear-both')),
-  );
-  $form['main']['bottom']['hidden'] = array(
-    '#theme_wrappers' => array('container'),
-    '#type' => 'actions',
-    '#attributes' => array('class' => array('hidden-fields')),
-  );
-  $form['main']['bottom']['hidden']['positions'] = array(
-    '#type' => 'hidden',
-    '#attributes' => array('id' => array('positions')),
-  );
-  $form['main']['bottom']['hidden']['node'] = array(
-    '#type' => 'hidden',
-    '#value' => isset($node->nid) ? $node->nid : null,
-  );
-  $form['main']['bottom']['hidden']['option'] = array(
-    '#type' => 'hidden',
-    '#value' => $op,
-  );
-  $form['main']['bottom']['actions'] = array(
-    '#type' => 'actions',
-    '#attributes' => array('class' => array('clear-both')),
-  );
-  $form['main']['bottom']['actions']['save'] = array(
-    '#type' => 'submit',
-    '#value' => t('Save'),
-  );
-  $form['main']['bottom']['actions']['delete'] = array(
-    '#type' => 'submit',
-    '#value' => t('Delete'),
-  );
-  return $form;
-}
-
-/*
- * Build top
- */
-
-function eclip_build_add_eclip_form_top($form, $form_state, $node, $op) {
-  $form['top'] = array(
-    '#theme_wrappers' => array('container'),
-    '#attributes' => array('class' => array('eclip-ui-bucket', 'settings-top')),
-  );
-  $options = _eclip_get_grupo_dropdown_options();
-  $selected = isset($form_state['values']['grupo']) ? $form_state['values']['grupo'] : key($options);
-  $form['top']['grupo'] = array(
-    '#type' => 'select',
-    '#title' => t('Grupo'),
-    '#options' => $options,
-    '#default_value' => $op == 'edit' ? $node->field_grupo['und'][0]['tid'] : $selected,
-//    '#ajax' => array(
-//      'callback' => 'eclip_change_group_callback',
-//      'progress' => array(
-//        'type' => 'throbber',
-//        'message' => '',
-//      ),
-//    ),
-    '#disabled' => $op == 'edit' ? TRUE : FALSE,
-  );
-  
-  $form['top']['categoria'] = array(
-    '#type'    => 'select',
-    '#title'   => t('Categoria'),
-    '#empty_option' => t('Seleccionar'),
-    '#options' => _eclip_get_taxonomy_options('categorias_clip'),
-    '#disabled' => $op == 'edit' ? TRUE : FALSE,
-  );  
-
-  $form['top']['title'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Title'),
-    '#size' => 15,
-    '#default_value' => $op == 'edit' ? $node->title : date('d/m/Y'),
-  );
-
-  $dateformat = 'd/m/Y H:i';
-  $form['top']['date_from'] = array(
-    '#type' => 'date_popup',
-    '#size' => 10,
-    '#date_timezone' => date_default_timezone(),
-    '#date_format' => $dateformat,
-    '#date_year_range' => '-3:0',
-    '#date_increment' => 15,
-    '#default_value' => date('Y-m-d 00:00:00'),
-  );
-
-  $form['top']['date_to'] = array(
-    '#type' => 'date_popup',
-    '#size' => 10,
-    '#date_timezone' => date_default_timezone(),
-    '#date_format' => $dateformat,
-    '#date_year_range' => '-3:0',
-    '#date_increment' => 15,
-    '#default_value' => date('Y-m-d 23:59:59'),
-  );
-  
-  $form['top']['submit'] = array(
-    '#type' => 'submit',
-    '#ajax' => array(
-      'callback' => 'eclip_change_date_callback',
-      'name' => 'submit1',
-      'progress' => array(
-        'type' => 'throbber',
-        'message' => '',
-      ),      
-    ),
-    '#value' => t('Filtrar'),
-  );
-
-  $form['top']['clear'] = array(
-    '#theme_wrappers' => array('container'),
-    '#attributes' => array('class' => array('clear-both')),
-  );
-  return $form;
-}
-
-/*
- * Validate form
- */
-
-function _eclip_jqueryui_theme_form_validate($form, $form_state) {
-  if ($form_state['values']['grupo'] == '') {
-    form_set_error('grupo', 'Debe seleccionar un grupo');
-  }
-}
-
-/*
- * Submit form
- */
-
-function _eclip_jqueryui_theme_form_submit($form, $form_state) {
-  //dpm($form_state);
-  if ($form_state['values']['option'] == 'edit') {
-    if (node_access('update', 'clip_grupo')) {
-      $nid = $form_state['values']['node'];
-      $node = node_load($nid);
-      // node
-      $node->title = $form_state['values']['title'];
-      node_save($node);
-      // positions
-      _eclip_delete_positions($nid);
-      $positions = unserialize($form_state['values']['positions']);
-      _eclip_save_positions($nid, $positions['categories'], $positions['news']);
-      drupal_set_message('Se ha editado correctamente el clip');
-    }
-  } elseif ($form_state['values']['option'] == 'add') {
-    if (node_access('create', 'clip_grupo')) {
-      //dpm($form_state);
-      global $user;
-      $node = new stdClass();
-      $node->title = $form_state['values']['title'];
-      $node->uid = $user->uid;
-      $node->status = 1;
-      $node->type = 'clip_grupo';
-      $node->language = 'und';
-      // fields
-      $node->field_grupo = array('und' => array(array('tid' => $form_state['values']['grupo'])));
-      $node->field_clip_maestro = array('und' => array(array('target_id' => $form_state['values']['node'])));
-      node_save($node);
-      $nid = $node->nid;
-      $positions = unserialize($form_state['values']['positions']);
-      _eclip_save_positions($nid, $positions['categories'], $positions['news']);
-      drupal_set_message('Se ha creado correctamente un nuevo clip');
-    }
-  }
-}
-
-/*
+/**
  * Add new node modal window
  */
-
-function eclip_add_new($js = NULL, $tid = NULL) {
-  if (!$js) {
-    return drupal_get_form('eclip_add_new_form');
-  }
-  ctools_include('modal');
-  ctools_include('ajax');
-  $form_state = array(
-    'title' => t('Agregar noticia'),
-    'ajax' => TRUE,
-  );
-  $output = ctools_modal_form_wrapper('eclip_add_new_form', $form_state);
-  if (!empty($form_state['executed'])) {
-    // We'll just overwrite the form output if it was successful.
-    $output = views_embed_view('helper_agregar_noticia');
-    ctools_modal_render(t('Add car'), $output);
-  }
-  print ajax_render($output);
-  exit;
-}
-
-/*
- * Add new node modal window
- */
-
 function eclip_build_view_news_page($node = NULL) {
   //$contents = render(node_view($node));
   $content = views_embed_view('preview_new', 'default', $node->nid);
   return $content;
 }
 
-/*
+/**
  * Add new group of related news
  */
-
 function eclip_add_group($type = 'ajax', $tid = '') {
   if ($type) {
     $output = '<div class="news-content news-group"><span class="close-group ui-icon ui-icon-circle-close"></span></div>';
@@ -767,189 +512,6 @@ function eclip_add_group($type = 'ajax', $tid = '') {
   } else {
     return MENU_ACCESS_DENIED;
   }
-}
-
-/*
- * Add new node (autocomplete) form
- */
-
-function eclip_add_new_form($form_state) {
-  $form['title'] = array(
-    '#title' => t('Search'),
-    '#type' => 'textfield',
-  );
-  $form['medio'] = array(
-    '#type'    => 'select',
-    '#title'   => t('Categoria'),
-    '#empty_option' => t('Seleccionar'),
-    '#options' => _eclip_get_taxonomy_options('medios'),
-  );
-  $form['categoria'] = array(
-    '#type'    => 'select',
-    '#title'   => t('Categoria'),
-    '#empty_option' => t('Seleccionar'),
-    '#options' => _eclip_get_taxonomy_options('categorias_clip'),
-  );  
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Buscar'),
-  );
-  return $form;
-}
-
-/*
- * Add new node (autocomplete) form submit
- */
-
-function eclip_add_new_form_submit($form, &$form_state) {
-  $values = explode('|', $form_state['values']['title']);
-  $form_state['values']['title'] = $values[0];
-  $form_state['values']['nid'] = $values[1];
-}
-
-/*
- * Add new node (autocomplete) form
- */
-
-function eclip_edit_cliente_form() {
-  $form['title'] = array(
-    '#title' => t('Search'),
-    '#type' => 'textfield',
-    '#autocomplete_path' => 'adm/node/autocomplete/cliente',
-  );
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Add'),
-  );
-  return $form;
-}
-
-/*
- * Add new node (autocomplete) form
- */
-
-function eclip_edit_grupo_form() {
-  $form['title'] = array(
-    '#title' => t('Search'),
-    '#type' => 'textfield',
-    '#autocomplete_path' => 'adm/taxonomy/autocomplete/4',
-  );
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Add'),
-  );
-  return $form;
-}
-
-/*
- * Add new node (autocomplete) form
- */
-
-function eclip_edit_title_form() {
-  $form['title'] = array(
-    '#title' => t('Title'),
-    '#type' => 'textfield',
-  );
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Add'),
-  );
-  return $form;
-}
-
-/*
- * Autocomplete node callback
- */
-
-function eclip_autocomplete_callback($type = '', $string = '') {
-  $matches = array();
-  if ($string) {
-    $result = db_select('node', 'n')
-        ->fields('n', array('nid', 'title'))
-        ->condition('title', db_like($string) . '%', 'LIKE')
-        ->condition('type', $type)
-        ->range(0, 10)
-        ->execute();
-    foreach ($result as $node) {
-      $matches[$node->title . '|' . $node->nid] = check_plain($node->title) . " (nid=$node->nid)";
-    }
-  }
-  drupal_json_output($matches);
-}
-
-/*
- * Autocomplete node callback
- */
-
-function eclip_autocomplete_term_callback($vid = '', $string = '') {
-  $matches = array();
-  if ($string) {
-    $result = db_select('taxonomy_term_data', 't')
-        ->fields('t', array('tid', 'name'))
-        ->condition('name', db_like($string) . '%', 'LIKE')
-        ->condition('vid', $vid)
-        ->range(0, 10)
-        ->execute();
-    foreach ($result as $term) {
-      $matches[$term->name] = check_plain($term->name) . " (tid=$term->tid)";
-    }
-  }
-  drupal_json_output($matches);
-}
-
-/*
- * Implements hook_theme().
- */
-
-function eclip_theme() {
-  $return = array();
-  $themes = _eclip_get_all_templates();
-  foreach ($themes as $theme) {
-    $return[$theme->field_machine_name_value] =
-        array(
-          'template' => $theme->field_machine_name_value, // your template file called custompage.tpl.php
-          'variables' => array('op' => null, 'node' => null, 'colores' => null),
-    );
-    $return[$theme->field_email_template_value] =
-        array(
-          'template' => str_replace('_', '-', $theme->field_email_template_value), // your template file called custompage.tpl.php
-          'variables' => array('op' => null, 'node' => null, 'colores' => null),
-    );
-  }
-  $return['news_category'] = array(
-    'template' => 'templates/news-category',
-    'variables'   => array(
-      'titulo'    => null, 
-      'noticias'  => null,
-      'colores'   => null,
-      'limit'     => null,
-    ),
-  );  
-  $return['news_item'] = array(
-    'template' => 'templates/news-item',
-    'variables' => array(
-      'titulo'  => null, 
-      'link'    => null,
-      'medio'   => null,
-      'bajada'  => null,
-      'fecha'   => null,
-      'imagen'  => null,
-      'colores' => null,
-      'relacionadas' => null,
-    ),
-  );
-  $return['news_related_item'] = array(
-    'template' => 'templates/news-related-item',
-    'variables' => array(
-      'titulo'  => null, 
-      'link'    => null,
-      'colores' => null,
-    ),
-  );
-  $return['test_email'] = array(
-    'template' => 'templates/test-email',
-  );   
-  return $return;
 }
 
 function _theme_destacado (&$destacados, $start = 0, $limit = 3, $colores){
@@ -1004,8 +566,15 @@ function _theme_categoria($news, $zone, $colores){
 /**
  * Preprocess function
  */
+function template_preprocess_news_related(&$variables){
+  dpm($variables);
+}
+
+
+/**
+ * Preprocess function
+ */
 function template_preprocess_email_01(&$variables){
-  //dpm($variables['news']);
   _custom_prepare_email_vars($variables);
 }
 
@@ -1013,7 +582,6 @@ function template_preprocess_email_01(&$variables){
  * Preprocess function
  */
 function template_preprocess_email_02(&$variables){
-  //dpm($variables['news']);
   _custom_prepare_email_vars($variables);
 }
 
@@ -1021,7 +589,6 @@ function template_preprocess_email_02(&$variables){
  * Preprocess function
  */
 function template_preprocess_email_03(&$variables){
-  //dpm($variables['news']);
   _custom_prepare_email_vars($variables);
 }
 
@@ -1029,7 +596,6 @@ function template_preprocess_email_03(&$variables){
  * Preprocess function
  */
 function template_preprocess_email_04(&$variables){
-  //dpm($variables['news']);
   _custom_prepare_email_vars($variables);
 }
 
@@ -1115,96 +681,8 @@ function _custom_prepare_email_vars(&$variables){
 }
 
 /**
- * Implements hook_views_api().
+ * Build dropdown for Clientes
  */
-function eclip_views_api() {
-  return array(
-    'api' => 3,
-    'path' => drupal_get_path('module', 'eclip'),
-  );
-}
-
-/*
- * Change group callback
- */
-
-function eclip_change_group_callback($form, $form_state) {
-  $commands = array();
-  //$commands[] = ajax_command_html('.settings-right', $form_state['values']['title']);
-  $commands[] = ajax_command_html('.clipper-placeholder.zone-0', eclip_build_add_eclip_categories($form, $form_state));
-  return array('#type' => 'ajax', '#commands' => $commands);
-}
-
-/*
- * Change customer callback
- */
-
-function eclip_change_customer_callback($form, $form_state) {
-  $commands = array();
-  if (isset($form_state['values']['cliente']) && isset($form_state['values']['node'])) {
-    $last_clip = _eclip_get_last_clip_by_customer($form_state['values']['cliente']);
-    if(isset($last_clip->nid)){
-      // load last positions
-      $last_positions = _eclip_get_positions_by_clip($last_clip->nid);
-      drupal_add_js(array('eclip' => array('positions' => $last_positions)), 'setting');
-    }   
-    $cliente  = node_load($form_state['values']['cliente']);
-    $nid      = $form_state['values']['node'];
-    $tids     = array();
-    foreach ($cliente->field_categoria['und'] as $categoria) {
-      $tids[] = $categoria['tid'];
-    }
-    $args       = implode('+', $tids);
-    $output     = views_embed_view('helper_get_categories', 'default', 0, $nid, $args);
-    $commands[] = ajax_command_html('.clipper-placeholder.zone-0', $output);
-    $commands[] = eclip_command_update_positions();
-  } else {
-    $commands[] = ajax_command_html('.clipper-placeholder.zone-0', t('Error'));
-  }
-  return array('#type' => 'ajax', '#commands' => $commands);
-}
-
-/*
- * Change template callback
- */
-
-function eclip_change_template_callback($form, $form_state) {
-  $commands = array();
-  $template = node_load($form_state['values']['template']);
-  $template_name = $template->field_machine_name['und'][0]['value'];
-  $commands[] = ajax_command_html('.settings-right', theme($template_name, array('op' => 'edit', 'node' => NULL)));
-  //$commands[] = ajax_command_html('.settings-left', eclip_build_add_eclip_cliente_form_left($form, $form_state));
-  return array('#type' => 'ajax', '#commands' => $commands);
-}
-
-/*
- * Callback change date
- */
-
-function eclip_change_date_callback($form, $form_state) {
-  $commands[] = ajax_command_html('.clipper-placeholder.zone-0', eclip_build_add_eclip_categories($form, $form_state));
-  return array('#type' => 'ajax', '#commands' => $commands);
-}
-
-/*
- * 
- */
-
-function _eclip_get_clip_dropdown_options($tid = '') {
-
-  $clips = _eclip_get_last_clips($tid, 5);
-  $options = array();
-  $options = array('' => t('Seleccionar'));
-  foreach ($clips as $clip) {
-    $options[$clip->nid] = $clip->title;
-  }
-  return $options;
-}
-
-/*
- * 
- */
-
 function _eclip_get_cliente_dropdown_options($tid = '') {
   $clientes = _eclip_get_customers_by_group($tid);
   $options = array();
@@ -1215,10 +693,9 @@ function _eclip_get_cliente_dropdown_options($tid = '') {
   return $options;
 }
 
-/*
- * 
+/**
+ * Build dropdown for grupos
  */
-
 function _eclip_get_grupo_dropdown_options() {
   $grupos = _eclip_get_all_groups();
   $options = array();
@@ -1229,10 +706,9 @@ function _eclip_get_grupo_dropdown_options() {
   return $options;
 }
 
-/*
+/**
  * Implements hook_date_popup_process_alter()
  */
-
 function eclip_date_popup_process_alter(&$element, &$form_state, $context) {
   if ($element['#name'] == 'date_from') {
     $element['date']['#title'] = t('Desde');
@@ -1246,312 +722,17 @@ function eclip_date_popup_process_alter(&$element, &$form_state, $context) {
 }
 
 /**
- * Implements hook_views_query_alter()
+ * Helper to delete positions of clips
  */
-function eclip_views_query_alter(&$view, &$query) {
-  if ($view->name == 'embed_articulos') {
-    if (isset($query->where[0])) {
-      $full_date = array_keys($query->where[0]['conditions'][1]['value']);
-      $full_date1 = array_keys($query->where[0]['conditions'][2]['value']);
-      
-      //watchdog('query', print_r($full_date1, 1));
-      $query->where[0]['conditions'][1]['field'] = "DATE_FORMAT((DATE_ADD('19700101', INTERVAL node.created SECOND) + INTERVAL -10800 SECOND), '%Y%m%d%H%i') >= " . $full_date[0];
-      $query->where[0]['conditions'][2]['field'] = "DATE_FORMAT((DATE_ADD('19700101', INTERVAL node.created SECOND) + INTERVAL -10800 SECOND), '%Y%m%d%H%i') <= " . $full_date1[0];
-    }
-    watchdog('query', print_r($query->where, 1));
-  }
-  //watchdog('query', (string)$query);
-}
-
-/*
- * Build jquery ui markups
- */
-
-function _eclip_jqueryui_cliente_theme_form($form, $form_state, $node = NULL, $op = '') {
-  drupal_add_library('system', 'ui.slider');
-  $form['main'] = array(
-    '#theme_wrappers' => array('container'),
-    '#id' => 'main-content',
-    '#attributes' => array('class' => array('settings-main')),
-  );
-  $form['main']+= eclip_build_add_eclip_cliente_form_top($form, $form_state, $node, $op);
-  $form['main']['left'] = array(
-    '#theme_wrappers' => array('container'),
-    '#attributes' => array('class' => array('eclip-ui-bucket', 'settings-left')),
-  );
-  $form['main']['left']['file'] = array(
-    '#type' => 'managed_file',
-    '#name' => 'custom_content_block_image',
-    '#title' => t('Imagen'),
-    '#size' => 30,
-    '#default_value' => isset($node->field_imagen_destacado['und'][0]['fid']) ? $node->field_imagen_destacado['und'][0]['fid'] : '',
-    '#description' => t("Imagen del destacado."),
-    '#upload_location' => 'public://'
-  ); 
-  $form['main']['left']['limite'] = array(
-    '#type' => 'select',
-    '#title' => t('Limite por categoría'),
-    '#options' => array(3 => 3, 5 => 5, 7 => 7, 100 => t('Sin limite')),
-    '#default_value' => isset($node->field_limite['und'][0]['value']) ? $node->field_limite['und'][0]['value'] : 5,
-    '#description' => t('Número de notas que se muestran antes del [Ver más].'),
-  );  
-  $form['main']['left']['highlighted'] = array(
-    '#theme_wrappers' => array('container'),
-    '#attributes' => array('class' => array('zone-destacado')),
-    '#markup' => eclip_build_add_eclip_cliente_highlighted($form, $form_state, $node, $op),
-  );    
-  $form['main']['left']['placeholder'] = array(
-    '#theme_wrappers' => array('container'),
-    '#attributes' => array('class' => array('clipper-placeholder', 'zone-0')),
-    '#markup' => eclip_build_add_eclip_cliente_form_left($form, $form_state, $node, $op),
-  );
-  // Right settings
-  if ($op == 'edit') {
-    $template = node_load($node->field_theme['und'][0]['target_id']);
-    $template_name = $template->field_machine_name['und'][0]['value'];
-  } else {
-    $template_name = 'eclip-01';
-  }
-  $form['main']['right'] = array(
-    '#theme_wrappers' => array('container'),
-    '#markup' => theme($template_name, array('op' => $op, 'node' => $node)),
-    '#attributes' => array('class' => array('eclip-ui-bucket', 'settings-right')),
-  );
-
-  $form['main']['bottom'] = array(
-    '#theme_wrappers' => array('container'),
-    '#id' => 'main-bottom',
-    '#attributes' => array('class' => array('eclip-ui-bucket', 'clear-both')),
-  );
-  $form['main']['bottom']['hidden'] = array(
-    '#theme_wrappers' => array('container'),
-    '#type' => 'actions',
-    '#attributes' => array('class' => array('hidden-fields')),
-  );
-  $form['main']['bottom']['hidden'] = array(
-    '#theme_wrappers' => array('container'),
-    '#type' => 'actions',
-    '#attributes' => array('class' => array('hidden-fields')),
-  );
-  $form['main']['bottom']['hidden']['positions'] = array(
-    '#type' => 'hidden',
-    '#attributes' => array('id' => array('positions')),
-  );  $form['main']['bottom']['actions']['send'] = array(
-    '#type' => 'submit',
-    '#value' => t('Send e-mail'),
-  );  
-  $form['main']['bottom']['hidden']['node'] = array(
-    '#type' => 'hidden',
-    '#value' => isset($node->nid) ? $node->nid : NULL,
-  );
-  $form['main']['bottom']['hidden']['option'] = array(
-    '#type' => 'hidden',
-    '#value' => $op,
-  );
-  $form['main']['bottom']['actions'] = array(
-    '#type' => 'actions',
-    '#attributes' => array('class' => array('clear-both')),
-  );
-  $form['main']['bottom']['actions']['save'] = array(
-    '#type' => 'submit',
-    '#value' => t('Save'),
-  );
-  $form['main']['bottom']['actions']['send'] = array(
-    '#type' => 'submit',
-    '#value' => t('Send e-mail'),
-  );    
-  $form['main']['bottom']['actions']['delete'] = array(
-    '#type' => 'submit',
-    '#value' => t('Delete'),
-  );
-  return $form;
-}
-
-/*
- * Build form top
- */
-
-function eclip_build_add_eclip_cliente_form_top($form, $form_state, $node = NULL, $op = '') {
-  //eclip_load(6);
-  $form['top'] = array(
-    '#theme_wrappers' => array('container'),
-    '#attributes' => array('class' => array('eclip-ui-bucket', 'settings-top')),
-  );
-  $options = _eclip_get_grupo_dropdown_options();
-  $selected = isset($node->field_grupo['und'][0]['tid']) ? $node->field_grupo['und'][0]['tid'] : key($options);
-  $form['top']['grupo'] = array(
-    //'#theme_wrappers' => array('container'),
-    '#type' => 'select',
-    '#title' => t('Grupo'),
-    '#options' => $options,
-    '#default_value' => $selected,
-    '#prefix' => '<div id="settings-grupo">',
-    '#suffix' => '</div>',
-    '#ajax' => array(
-      'callback' => 'eclip_group_dependent_dropdown_callback',
-      'wrapper' => 'dependant-group',
-      'progress' => array(
-        'type' => 'throbber',
-        'message' => '',
-      ),
-    ),
-    '#disabled' => TRUE, // siempre deshabilitado ya sea para añadir o editar
-  );
-  $form['top']['dependant'] = array(
-    '#theme_wrappers' => array('container'),
-    '#attributes' => array('id' => array('dependant-group')),
-  );
-  $form['top']['dependant']['cliente'] = array(
-    '#type' => 'select',
-    '#title' => t('Cliente'),
-    '#prefix' => '<div id="settings-cliente">',
-    '#suffix' => '</div>',
-    '#options' => _eclip_get_cliente_dropdown_options($selected),
-    '#default_value' => isset($node->field_cliente['und'][0]['target_id']) ? $node->field_cliente['und'][0]['target_id'] : '',
-    '#disabled' => isset($node->field_cliente['und'][0]['target_id']) ? TRUE : FALSE,
-    '#ajax' => array(
-      'callback' => 'eclip_change_customer_callback',
-      'progress' => array(
-        'type' => 'throbber',
-        'message' => '',
-      ),
-    ),
-  );
-  $templates = _eclip_get_all_templates();
-  $options = array();
-  foreach ($templates as $template) {
-    $options[$template->nid] = $template->title;
-  }
-  $form['top']['template'] = array(
-    '#type' => 'select',
-    '#title' => t('Template'),
-    '#options' => $options,
-    '#prefix' => '<div id="settings-template">',
-    '#suffix' => '</div>',
-    '#ajax' => array(
-      'callback' => 'eclip_change_template_callback',
-    ),
-    '#default_value' => isset($node->field_theme['und'][0]['target_id']) ? $node->field_theme['und'][0]['target_id'] : '',
-    '#disabled' => isset($node->field_cliente['und'][0]['target_id']) ? TRUE : FALSE,
-  );
-  //dpm($node);
-  $form['top']['clear'] = array(
-    '#theme_wrappers' => array('container'),
-    '#attributes' => array('class' => array('clear-both')),
-  );
-  return $form;
-}
-
-/*
- * Build form left
- */
-
-function eclip_build_add_eclip_cliente_form_left($form, $form_state, $node = NULL, $op = '') {
-  if ($op == 'edit') {
-    return views_embed_view('helper_get_categories', 'default', 0, $node->nid, 'all');
-  } elseif ($op == 'add') {
-    return t('Seleccione un cliente');
-  }
-}
-
-/*
- * Build form left
- */
-
-function eclip_build_add_eclip_cliente_highlighted($form, $form_state, $node = NULL, $op = '') {
-  $output = '
-  <div class="portlet-destacado ui-widget ui-widget-content ui-helper-clearfix">  
-    <div class="portlet-header ui-widget-header">
-      <span class="category-title">DESTACADOS</span>
-      <span class="category-actions">
-        <span class="ui-icon ui-icon-minusthick"></span>
-      </span>
-    </div>
-    <div class="portlet-content">';
-  if ($op == 'edit') {
-    $output.= views_embed_view('helper_get_highlighted', 'default', $node->nid);
-  } elseif ($op == 'add') {
-    $output.= views_embed_view('helper_get_highlighted', 'default', 0);
-  }
-  $output.= '</div></div>';
-  return $output;
-}
-
-/*
- * Validate form
- */
-
-function _eclip_jqueryui_cliente_theme_form_validate($form, $form_state) {
-  if ($form_state['values']['cliente'] == '') {
-    form_set_error('cliente', 'Debe seleccionar un cliente');
-  }
-}
-
-function _eclip_jqueryui_cliente_theme_form_submit($form, $form_state) {
-  //dpm($form_state);dpm($form);
-  if($form_state['values']['op'] == t('Send e-mail') || $form_state['values']['op'] == t('Save') ){    
-    if ($form_state['values']['option'] == 'edit') {
-      if (node_access('update', 'clip')) {
-        $nid = $form_state['values']['node'];
-        // positions
-        _eclip_delete_positions($nid);
-        $positions = unserialize($form_state['values']['positions']);
-        //watchdog('positions', print_r($positions, 1));
-        _eclip_save_positions($nid, $positions['categories'], $positions['news'], $positions['highlighted']);
-        $node = node_load($nid);
-        if($form_state['values']['file']){
-            $node->field_imagen_destacado = array('und' => array((array)file_load($form_state['values']['file'])));
-        }else{
-            unset($node->field_imagen_destacado);
-        }
-        $node->field_limite = array('und' => array(array('value' => $form_state['values']['limite'])));
-        node_save($node);
-        drupal_set_message('Se ha editado correctamente el clip');
-      }
-    } elseif ($form_state['values']['option'] == 'add') {
-      if (node_access('create', 'clip')) {
-        global $user;
-        // nodo padre
-        $node_grupo = node_load($form_state['values']['node']);
-        $node_cliente = node_load($form_state['values']['cliente']);
-        $node = new stdClass();
-        $node->title = $node_cliente->title . ' - ' . date('d/m/Y');
-        $node->uid = $user->uid;
-        $node->status = 1;
-        $node->type = 'clip';
-        $node->language = 'und';
-        // fields
-        $node->field_grupo = array('und' => array(array('tid' => $node_grupo->field_grupo['und'][0]['tid'])));
-        $node->field_clip_grupo = array('und' => array(array('target_id' => $form_state['values']['node'])));
-        $node->field_cliente = array('und' => array(array('target_id' => $form_state['values']['cliente'])));
-        $node->field_theme = array('und' => array(array('target_id' => $form_state['values']['template'])));
-        if($form_state['values']['file']){
-            $node->field_imagen_destacado = array('und' => array((array)file_load($form_state['values']['file'])));
-        }
-        $node->field_limite = array('und' => array(array('value' => $form_state['values']['limite'])));
-        node_save($node);
-        $nid = $node->nid;
-        $positions = unserialize($form_state['values']['positions']);
-        _eclip_save_positions($nid, $positions['categories'], $positions['news'], $positions['highlighted']);
-        drupal_set_message('Se ha creado correctamente un nuevo clip');
-      }
-    }
-    if($form_state['values']['op'] == t('Send e-mail')){
-      eclip_send_clip($node);
-    }    
-  }  
-  return;
-
-}
-
-;
-
 function _eclip_delete_positions($nid) {
   db_query('DELETE FROM {eclip_article_data} WHERE clip_nid = :nid', array(':nid' => $nid));
   db_query('DELETE FROM {eclip_cat_data} WHERE clip_nid = :nid', array(':nid' => $nid));
   db_query('DELETE FROM {eclip_highlighted} WHERE clip_nid = :nid', array(':nid' => $nid));
 }
 
+/**
+ * Helper to save positions of clips
+ */
 function _eclip_save_positions($nid = null, $categories = array(), $news = array(), $highlighted = array()) {
   foreach ($categories as $category) {
     $cat_data_id = db_insert('eclip_cat_data')
@@ -1595,13 +776,6 @@ function _eclip_save_positions($nid = null, $categories = array(), $news = array
 }
 
 /**
- * 
- */
-function eclip_group_dependent_dropdown_callback($form, $form_state) {
-  return $form['main']['top']['dependant'];
-}
-
-/**
  * Clipper load
  */
 function eclip_load($id) {
@@ -1610,56 +784,6 @@ function eclip_load($id) {
       ->fields('a')
       ->condition('a.article_data_id', $id);
   return $query->execute()->fetch();
-}
-
-/**
- * Implements hook_node_delete().
- */
-function eclip_node_delete($node) {
-  db_delete('eclip_cat_data')
-      ->condition('clip_nid', $node->nid)
-      ->execute();
-  db_delete('eclip_highlighted')
-      ->condition('clip_nid', $node->nid)
-      ->execute();
-  db_delete('eclip_article_data')
-      ->condition('clip_nid', $node->nid)
-      ->execute();
-}
-
-/**
- * Implements hook_block_info().
- */
-function eclip_block_info() {
-  $blocks['related_news'] = array(
-    'info' => t('Related news'),
-  );
-  return $blocks;
-}
-
-/**
- * Implements hook_block_view().
- */
-function eclip_block_view($delta) {
-  switch ($delta) {
-    case 'related_news':
-      $block['content'] = eclip_build_related_news_block();
-      break;
-  }
-  return $block;
-}
-
-/**
- * Build the related news block
- * @return string 
- */
-function eclip_build_related_news_block() {
-  $output = '';
-  $clip = eclip_load(arg(3));
-  if (!empty($clip)) {
-    $output = views_embed_view('front_related_news', 'default', $clip->clip_nid, $clip->cat_tid, $clip->grupo, $clip->article_data_id);
-  }
-  return $output;
 }
 
 /**
@@ -1712,47 +836,8 @@ function eclip_command_update_positions() {
 }
 
 /**
- * Implements hook_init(). 
- */
-function eclip_init(){
-  drupal_add_library('system', 'ui.sortable');
-  drupal_add_library('system', 'ui.button');    
-  drupal_add_js(drupal_get_path('module', 'eclip') . '/js/eclip-admin.js');  
-  drupal_add_js(array('eclip' => array('positions' => '')), 'setting');  
-  drupal_add_css(drupal_get_path('module', 'eclip') . '/css/fresh.css');
-  drupal_add_css(drupal_get_path('module', 'eclip') . '/css/eclip-admin.ctools.css');
-  // Don't load javascript unless libraries module is present.
-//  if (module_exists('libraries')) {
-//    // Load jQuery Cycle
-//    if ($cycle_path = _custom_get_cycle_library_path()) {
-//      drupal_add_js($cycle_path);
-//    }
-//  }
-}
-
-/*
- * Implements hook_form_id_alter().
- */
-function eclip_form_media_import_alter(&$form, &$form_state, $form_id) {
-    //dpm($form_id);
-    //dpm($form);
-  $form['directory'] = array(
-      '#type' => 'select',
-      '#options' => array(
-          'sites/default/files/upload' => 'sites/default/files/upload'
-      )
-  );
-  $form['customer'] = array(
-    '#type' => 'textfield',
-    '#title' => t('User'),
-    '#autocomplete_path' => 'user/autocomplete',
-  );
-}
-
-/**
  * Helper function to get the real url image
  */
-
 function _eclip_get_url_file($path, $style = 'default'){
   return url('sites/default/files/upload/' . $path, array('absolute' => TRUE));
 }
@@ -1807,9 +892,8 @@ function _eclip_build_archive_clips($hash){
 }
 
 /**
- * Upload image
+ * Upload image form
  */
-
 function eclip_upload_image($form, &$form_state) {
   $form = array();
   $form['file'] = array(
@@ -1823,6 +907,9 @@ function eclip_upload_image($form, &$form_state) {
   return $form;
 }
 
+/**
+ * Submit handler for eclip_upload_image form
+ */ 
 function eclip_upload_image_submit($form, &$form_state) {
   if (isset($form_state['values']['custom_content_block_image'])) {
     $file = file_load($form_state['values']['custom_content_block_image']);
@@ -1834,36 +921,7 @@ function eclip_upload_image_submit($form, &$form_state) {
 }
 
 /**
- * Gets the path to the jQuery cycle library.
- *
- * @return
- *   The path to the cycle library js file, or FALSE if not found.
- */
-function _custom_get_cycle_library_path() {
-  $cycle_path = libraries_get_path('jquery.cycle');
-
-  if (!empty($cycle_path)) {
-    // Attempt to use minified version of jQuery cycle plugin.
-    if (file_exists($cycle_path . '/jquery.cycle.all.min.js')) {
-      $cycle_path .= '/jquery.cycle.all.min.js';
-    }
-    // Otherwise use non-minified version if available.
-    elseif (file_exists($cycle_path . '/jquery.cycle.all.js')) {
-      $cycle_path .= '/jquery.cycle.all.js';
-    }
-    else {
-      $cycle_path = FALSE;
-    }
-  }
-  else {
-    $cycle_path = FALSE;
-  }
-
-  return $cycle_path;
-}
-
-/**
- * Page callback to display links and render a container for AJAX stuff.
+ * Send clip via email
  */
 function eclip_send_clip($node) {
   $from = 'info@e-clip.cl';
@@ -1893,7 +951,9 @@ function eclip_send_clip($node) {
   }
 }
 
-
+/**
+ * Helper function to render a field
+ */
 function _eclip_theme_render_field($entity, $field, $field_name, $key = 0){
   $items = field_get_items('node', $entity, $field_name);
   if(isset($items[$key])){
