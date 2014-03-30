@@ -6,7 +6,6 @@ core = 7.x
 ;stylesheets[all][] = style.css
 ;stylesheets[all][] = global.css
 stylesheets[all][] = fresh.css
-stylesheets[all][] = estilo.css
 stylesheets[all][] = templates.css
 stylesheets[print][] = print.css
 settings[eclip_width] = fluid

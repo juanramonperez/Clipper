@@ -9,7 +9,7 @@ and open the template in the editor.
 */
 
 body .eclip-05{
-    font-family: 'Gotham'; 
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
     font-weight: normal;
     font-size: 13px;
 }
@@ -36,6 +36,10 @@ body .eclip-05{
     margin-left: 30px;
     font-size: 28px;
     font-weight: bold;
+}
+
+.noticia{
+    padding-top: 1px;
 }
 
 .main-title{

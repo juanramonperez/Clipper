@@ -105,6 +105,7 @@ function eclip_theme() {
   $return['news_category'] = array(
     'template' => 'templates/news-category',
     'variables'   => array(
+      'email'     => false,
       'titulo'    => null, 
       'noticias'  => null,
       'colores'   => null,
@@ -114,6 +115,8 @@ function eclip_theme() {
   $return['news_item'] = array(
     'template' => 'templates/news-item',
     'variables' => array(
+      'article_id' => null,
+      'email'   => false,
       'titulo'  => null, 
       'link'    => null,
       'medio'   => null,
@@ -514,12 +517,13 @@ function eclip_add_group($type = 'ajax', $tid = '') {
   }
 }
 
-function _theme_destacado (&$destacados, $start = 0, $limit = 3, $colores){
-  //dpm($colores);
+function _theme_destacado(&$destacados, $start = 0, $limit = 3, $colores, $email = false){
   $output = '';
   for ($i = $start; $i < $start + $limit; $i++) { 
     if(isset($destacados[$i])){
       $noticia = array(
+        'article_id' => $destacados[$i]->article_id,
+        'email'   => $email,
         'titulo'  => $destacados[$i]->titulo, 
         'link'    => $destacados[$i]->environment . '/' . $destacados[$i]->space . '/' . $destacados[$i]->clip_nid . '/' . $destacados[$i]->article_id,
         'medio'   => $destacados[$i]->medio,
@@ -527,7 +531,6 @@ function _theme_destacado (&$destacados, $start = 0, $limit = 3, $colores){
         'fecha'   => format_date(strtotime($destacados[$i]->fecha), 'largo_sin_hora'),
         'imagen'  => $destacados[$i]->imagen,
         'colores' => $colores,
-        'relacionadas' => null,
       );
       $output.= theme('news_item', $noticia);   
     }    
@@ -535,17 +538,16 @@ function _theme_destacado (&$destacados, $start = 0, $limit = 3, $colores){
   return $output;
 }
 
-function _theme_categoria($news, $zone, $colores){
+function _theme_categoria($news, $zone, $colores, $email = false){
   $output   = '';
-  //dpm($news);
   if (isset($news[$zone])) {
-    foreach ($news[$zone] as $cat_tid => $new) {
-      //dpm($news[$zone]);
-      //dpm($new);
+    foreach ($news[$zone] as $cat_tid => $new) {;
       $noticias = array();
       $results  = views_get_view_result('front_get_news', 'default', $cat_tid, $new['clip_nid'], $new['news']);
       foreach ($results as $key => $result_item) {
           $noticia = array(
+            'article_id' => $result_item->article_data_id,
+            'email'   => $email,
             'titulo'  => $result_item->node_eclip_article_data_title,
             'link'    => arg(0) . '/' . arg(1) . '/' . $result_item->eclip_article_data_clip_nid . '/' . $result_item->article_data_id,
             'medio'   => isset($result_item->field_field_medio[0]['rendered']['#markup']) ? $result_item->field_field_medio[0]['rendered']['#markup'] : '',
@@ -553,11 +555,10 @@ function _theme_categoria($news, $zone, $colores){
             'fecha'   => isset($result_item->field_field_fecha[0]['raw']['value']) ? format_date(strtotime($result_item->field_field_fecha[0]['raw']['value']), 'largo_sin_hora') : '',
             'imagen'  => isset($result_item->field_field_server_destacado[0]['raw']['url']) ? _eclip_get_url_file($result_item->field_field_server_destacado[0]['raw']['url']) : '',
             'colores' => $colores,
-            'relacionadas' => null,
           );
           $noticias[] = $noticia;
       }
-      $output.= theme('news_category', array('titulo' => $new['name'], 'noticias' => $noticias, 'colores' => $colores));
+      $output.= theme('news_category', array('email' => $email, 'titulo' => $new['name'], 'noticias' => $noticias, 'colores' => $colores));
     }
   }
   return $output;
@@ -567,7 +568,15 @@ function _theme_categoria($news, $zone, $colores){
  * Preprocess function
  */
 function template_preprocess_news_related(&$variables){
-  dpm($variables);
+  $clip     = eclip_load($variables['article_id']);
+  $related  = eclip_get_related_news($clip);
+  $variables['relacionadas'] = array();
+  if(!empty($related)){
+    foreach ($related as $noticia) {
+      $variables['relacionadas'][] = l($noticia->title . ' - (' . $noticia->name . ')', 'clip/' . arg(1) . '/' . $noticia->clip_nid . '/' . $noticia->article_data_id, array('absolute' => TRUE, 'attributes' => array('style' => 'display:block; margin-top: 5px; color:' . $variables['colores']['link_color'] . '; text-decoration:' . $variables['colores']['title_decoration'] . '; font-family
+  :' . $variables['colores']['title_font'])));
+    }
+  }
 }
 
 
