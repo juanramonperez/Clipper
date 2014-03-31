@@ -7,13 +7,7 @@
 ?>
 <?php if($op == 'view') :// el clip se esta viendo (no esta siendo editado)?>
     <?php $news = _eclip_get_news_by_clip($node->nid); ?>
-    <!--
-    <div class="main-title">
-        <div class="title">
-            Destacados
-        </div>
-    </div>
-    -->
+    <?php drupal_add_css(drupal_get_path('module', 'eclip') . '/css/eclip-05.css'); ?>
     <div class="zone-top main clearfix" style="background-color: <?php print $colores['background_color_inner'] ?>">
         <div class="column column1">
             <div class="column-inner">
