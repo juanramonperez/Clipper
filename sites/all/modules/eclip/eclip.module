@@ -116,6 +116,7 @@ function eclip_theme() {
     'template' => 'templates/news-item',
     'variables' => array(
       'article_id' => null,
+      'show_image' => 1,
       'email'   => false,
       'titulo'  => null, 
       'link'    => null,
@@ -523,6 +524,7 @@ function _theme_destacado(&$destacados, $start = 0, $limit = 3, $colores, $email
     if(isset($destacados[$i])){
       $noticia = array(
         'article_id' => $destacados[$i]->article_id,
+        'show_image' => $destacados[$i]->show_image,
         'email'   => $email,
         'titulo'  => $destacados[$i]->titulo, 
         'link'    => $destacados[$i]->environment . '/' . $destacados[$i]->space . '/' . $destacados[$i]->clip_nid . '/' . $destacados[$i]->article_id,
@@ -547,6 +549,7 @@ function _theme_categoria($news, $zone, $colores, $email = false){
       foreach ($results as $key => $result_item) {
           $noticia = array(
             'article_id' => $result_item->article_data_id,
+            'show_image' => $result_item->eclip_article_data_image,
             'email'   => $email,
             'titulo'  => $result_item->node_eclip_article_data_title,
             'link'    => arg(0) . '/' . arg(1) . '/' . $result_item->eclip_article_data_clip_nid . '/' . $result_item->article_data_id,
@@ -640,7 +643,7 @@ function template_preprocess_email_05(&$variables){
   $variables['imagen_destacado']    = isset($variables['node']->field_imagen_destacado['und'][0]['uri']) ? theme_image_style(array('style_name' => 'destacado', 'path' => $variables['node']->field_imagen_destacado['und'][0]['uri'], 'attributes' => array('style' => 'border: 2px solid ' . $variables['image_border']), 'width' => NULL, 'height' => NULL)) : '';
   $variables['limite'] = isset($variables['node']->field_limite['und'][0]['value']) ? $variables['node']->field_limite['und'][0]['value'] : 5;
 
-  $destacados = views_get_view_result('front_destacados', 'todos', $variables['node']->nid);
+  $destacados = views_get_view_result('front_destacados', 'todos', $variables['node']->nid);  
   foreach ($destacados as $destacado) {
     $noticia = new stdClass();
     $noticia->titulo  = $destacado->node_eclip_article_data_title;
@@ -765,6 +768,7 @@ function _eclip_save_positions($nid = null, $categories = array(), $news = array
           'vote' => $new[4],
           'grupo' => $new[5],
           'highlighted' => 0,
+          'image' => $new[6],
         ))
         ->execute();
   }
@@ -779,6 +783,7 @@ function _eclip_save_positions($nid = null, $categories = array(), $news = array
           'vote' => $highlight[3],
           'grupo' => 0,
           'highlighted' => 1,
+          'image' => $highlight[4],
         ))
         ->execute();
   }

@@ -53,6 +53,20 @@
                     });
                 });
             });
+
+            $('.news-actions .ui-image', context).once('eclip', function () {
+                $(this).click(function() {
+                    $(this).parents('.news-item:first').each(function(){
+                        if($(this).hasClass('image-0')){
+                            $(this).removeClass('image-0');
+                            $(this).addClass('image-1');
+                        } else if($(this).hasClass('image-1')){
+                            $(this).removeClass('image-1');
+                            $(this).addClass('image-0');
+                        }
+                    });
+                });
+            });            
             
             $('.close-group', context).once('eclip', function () {
                 $(this).click(function() {
@@ -86,6 +100,7 @@
                 var noticia;
                 var status;
                 var vote;
+                var image;
                 var clip = {
                     categories: [],
                     news: [],
@@ -109,10 +124,11 @@
                             noticiaId = getId('new', noticia.attr('class'));
                             status    = getId('status', noticia.attr('class'));
                             vote      = getId('vote', noticia.attr('class'));
+                            image     = getId('image', noticia.attr('class'));
                             noticia.parents('.news-group:first').each(function(){
                               groupId   = getId('group', $(this).attr('class'));
                             });                            
-                            clip.news.push([parseInt(categoryId), parseInt(noticiaId), key, parseInt(status), parseInt(vote), parseInt(groupId)]);           
+                            clip.news.push([parseInt(categoryId), parseInt(noticiaId), key, parseInt(status), parseInt(vote), parseInt(groupId), parseInt(image)]);           
                         });
                     });          
                 });
@@ -122,8 +138,9 @@
                         noticia   = $(this);
                         noticiaId = getId('new', noticia.attr('class'));
                         status    = getId('status', noticia.attr('class'));
-                        vote      = getId('vote', noticia.attr('class'));                        
-                        clip.highlighted.push([parseInt(noticiaId), key, parseInt(status), parseInt(vote)]);
+                        vote      = getId('vote', noticia.attr('class'));
+                        image     = getId('image', noticia.attr('class'));
+                        clip.highlighted.push([parseInt(noticiaId), key, parseInt(status), parseInt(vote), parseInt(image)]);
                     });
                 });
                 $('#positions').val(serialize(clip));
