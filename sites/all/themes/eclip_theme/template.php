@@ -229,6 +229,7 @@ function eclip_theme_preprocess_node(&$vars) {
           $noticia->show_image  = $destacado->eclip_article_data_image;
           $noticia->clip_nid    = $destacado->eclip_article_data_clip_nid;
           $noticia->article_id  = $destacado->article_data_id;
+          $noticia->fuente      = isset($destacado->field_field_fuente[0]['rendered']['#markup']) ? $destacado->field_field_fuente[0]['rendered']['#markup'] : '';
           $noticia->environment = arg(0);
           $noticia->space       = arg(1);
           $noticia->medio   = isset($destacado->field_field_medio[0]['rendered']['#markup']) ? $destacado->field_field_medio[0]['rendered']['#markup'] : '';
