@@ -332,7 +332,25 @@ function eclip_views_data() {
     'argument' => array(
       'handler' => 'views_handler_argument_numeric',
     ),
-  );    
+  );
+  $data['eclip_article_data']['image'] = array(
+    'title' => t('Show image'),
+    'help' => t('Boolean that indicate if the news should show his image.'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'filter' => array(
+      'title' => t('Show image'),
+      'handler' => 'views_handler_filter_numeric',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+    'argument' => array(
+      'handler' => 'views_handler_argument_numeric',
+    ),
+  );  
   
   /*
    * Highlighted data table definitions.

@@ -954,12 +954,12 @@ a.add-grupo{
 .news-content { list-style-type: none; margin: 0; padding: 0; }
 .news-content span.ui-icon-arrowthick-2-n-s {position: absolute; left: 0; top: 0; cursor:move; }
 .news-content span.ui-icon-circle-close {}
-.news-content span.news-actions{position: absolute; right: 0; top: 0; cursor: pointer; width: 48px;}
+.news-content span.news-actions{position: absolute; right: 0; top: 0; cursor: pointer; width: 64px;}
 .news-content span.news-actions span{float: left;}
 .news-item {padding-left: 5px; background-color: #fff; position: relative;}
 .news-item.ui-sortable-helper{ border: 1px dotted black;}
 .news-content .ui-sortable-placeholder { background-color: transparent;}
-.news-title{display: block; padding: 0 48px 0 15px;}
+.news-title{display: block; padding: 0 64px 0 15px;}
 .news-item.status-0 .news-title {text-decoration:line-through;}
 .news-content .view-content{min-height: 30px;}
 
@@ -967,6 +967,9 @@ a.add-grupo{
 .news-item.vote-1 .ui-vote{ background-position: -128px -192px; }
 .news-item.vote-2 .ui-vote{ background-position: -16px -192px; }
 .news-item.vote-3 .ui-vote{ background-position: -160px -192px; }
+
+.news-item.image-1 .ui-image { background-position: -208px -128px; }
+.news-item.image-0 .ui-image { background-position: 0 -128px; }
 
 #settings-grupo, 
 #settings-cliente, 
