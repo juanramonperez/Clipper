@@ -41,7 +41,13 @@
       </div>        
     </div>
     <div class="main-bottom clear-both">
-        <div class="zone-3"><?php isset($node->nid) ? print _eclip_build_news_by_zone($news, 3) : ''; ?></div>
+        <div class="zone-3">
+            <div class="zone-3-inner"><?php isset($node->nid) ? print _eclip_build_news_by_zone($news, 3) : ''; ?></div>
+        </div>
+        <div class="zone-4">
+            <div class="zone-4-inner"><?php isset($node->nid) ? print _eclip_build_news_by_zone($news, 4) : ''; ?></div>
+        </div>
+       
     </div>
   </div>
 </div>
@@ -59,7 +65,12 @@
       </div>        
     </div>
     <div class="main-bottom clear-both">
-        <div class="clipper-placeholder zone-3"><span class="zone-label">Zone 03</span><?php isset($node->nid) ? print views_embed_view('helper_get_categories', 'default', 3, $node->nid) : ''; ?></div>
+        <div class="main-bottom-left">
+            <div class="clipper-placeholder zone-3"><span class="zone-label">Zone 03</span><?php isset($node->nid) ? print views_embed_view('helper_get_categories', 'default', 3, $node->nid) : ''; ?></div>
+        </div>
+        <div class="main-bottom-right">
+            <div class="clipper-placeholder zone-4"><span class="zone-label">Zone 04</span><?php isset($node->nid) ? print views_embed_view('helper_get_categories', 'default', 4, $node->nid) : ''; ?></div>
+        </div>
     </div>
   </div>
 </div>

@@ -44,6 +44,7 @@ h3 {
 
 h2.category-title {
     margin: 0;
+    font-size: 17px;
 }
 
 .eclip-02.destacado-2 .views-field-nothing {
@@ -115,6 +116,21 @@ h2.category-title {
 .eclip-04 .main-right {
     width: 20%;
     float: left;
+}
+
+.eclip-02 .zone-3-inner{
+    padding-right: 5px;
+    border-right: 2px solid transparent;
+}
+
+.eclip-02 .zone-4-inner{
+    padding-left: 5px;
+}
+
+.eclip-02 .zone-3,
+.eclip-02 .zone-4{
+    float: left;
+    width: 50%;
 }
 
 /*********** Related news *************/

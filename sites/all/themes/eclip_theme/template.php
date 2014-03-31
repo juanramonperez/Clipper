@@ -155,7 +155,7 @@ function eclip_theme_preprocess_page(&$vars) {
       isset($cliente->field_background_footer['und'][0]['rgb']) ? drupal_add_css('#footer { background-color:  ' . $cliente->field_background_footer['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';
       isset($cliente->field_footer_color['und'][0]['rgb']) ? drupal_add_css('#footer { color: ' . $cliente->field_footer_color['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';
       
-      isset($cliente->field_borde_zona['und'][0]['rgb']) ? drupal_add_css('.main-left-inner, .main-center-inner, .main-bottom  { border-color: ' . $cliente->field_borde_zona['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';
+      isset($cliente->field_borde_zona['und'][0]['rgb']) ? drupal_add_css('.zone-3-inner, .main-left-inner, .main-center-inner, .main-bottom  { border-color: ' . $cliente->field_borde_zona['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';
       isset($cliente->field_borde_inferior_destacado['und'][0]['rgb']) ? drupal_add_css('.destacado, .destacado-2, .destacado-2 .views-field-nothing { border-color: ' . $cliente->field_borde_inferior_destacado['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';
       isset($cliente->field_borde_destacado['und'][0]['rgb']) ? drupal_add_css('.destacado img  { border-color: ' . $cliente->field_borde_destacado['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';      
       //isset($cliente->field_news_border['und'][0]['rgb']) ? drupal_add_css('.news-item { border-color: ' . $cliente->field_news_border['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';
