@@ -11,7 +11,7 @@
     <table style="width: 100%">
       <tbody>
         <tr>
-          <td style="width: 60%; vertical-align: top; ">
+          <td style="width: 60%; vertical-align: middle; ">
             <?php print $destacados1; ?>
           </td>
           <td style="width: 40%; vertical-align: middle; text-align: center;">
