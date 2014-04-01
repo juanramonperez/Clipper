@@ -302,7 +302,7 @@ function _eclip_build_news_email_by_zone($news, $zone, $url_prefix, $args = arra
   if (isset($news[$zone])) {
     //dpm($news[$zone]);
     foreach ($news[$zone] as $cat_tid => $new) {
-      $output.= '<h2 style="font-size: 17px; width: 98%; padding: 2px 1%; background-color:' . $category_background  . '; color: ' . $category_color . '; border-bottom: 2px solid ' . $category_border . ';">' . $new['name'] . '</h2>';
+      $output.= '<h2 style="font-size: 20px; width: 98%; padding: 2px 1%; background-color:' . $category_background  . '; color: ' . $category_color . '; border-bottom: 2px solid ' . $category_border . ';">' . $new['name'] . '</h2>';
       //dpm($new);
       $result = views_get_view_result('front_get_news', 'default', $cat_tid, $new['clip_nid'], $new['news']);
       foreach ($result as $key => $item) {
