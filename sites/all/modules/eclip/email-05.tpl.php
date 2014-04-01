@@ -15,14 +15,14 @@ $colores['title_decoration']  = 'none';
         <table style="width: 100%; border-spacing: 0px;">
           <tbody>
             <tr>
-              <td style="width: 58%; vertical-align: top; padding: 15px 15px;">
+              <td style="width: 370px; vertical-align: top; padding: 15px 15px;">
                 <?php print _theme_destacado($destacados, 0, 1, $colores); ?>
               </td>              
-              <td style="width: 18%; vertical-align: top; padding: 15px 15px;">
+              <td style="width: 270px; vertical-align: top; padding: 15px 15px;">
                 <?php $colores['title_size'] = '18px'; ?>
                 <?php print _theme_destacado($destacados, 1, 1, $colores); ?>             
               </td>   
-              <td style="width: 18%; vertical-align: top; padding: 15px 15px;">
+              <td style="width: 270px; vertical-align: top; padding: 15px 15px;">
                 <?php print _theme_destacado($destacados, 2, 1, $colores); ?>
                 <p style="text-align: left;"><?php print l(t('[ver más]'), 'clip/' . $url_prefix . '/' . $node->nid, array('absolute' => TRUE, 'attributes' => array('style' => 'color:' . $colores['link_color'] . '; text-decoration:' . $colores['title_decoration'] . '; font-family
   :' . $colores['title_font']))) ?></p>                  

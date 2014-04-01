@@ -4,7 +4,7 @@
   </thead>
   <tbody>
     <tr>
-      <td style="border-bottom: 2px solid <?php print $borde_inferior_destacado ?>">
+      <td style="border-bottom: 2px solid <?php $borde_inferior_destacado ? print $borde_inferior_destacado : print 'transparent' ?>;">
         <table style="width: 100%">
           <tbody>
             <tr>

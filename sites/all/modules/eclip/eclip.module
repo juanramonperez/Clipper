@@ -302,7 +302,7 @@ function _eclip_build_news_email_by_zone($news, $zone, $url_prefix, $args = arra
   if (isset($news[$zone])) {
     //dpm($news[$zone]);
     foreach ($news[$zone] as $cat_tid => $new) {
-      $output.= '<h2 style="width: 98%; padding: 2px 1%; background-color:' . $category_background  . '; color: ' . $category_color . '; border-bottom: 2px solid ' . $category_border . ';">' . $new['name'] . '</h2>';
+      $output.= '<h2 style="font-size: 17px; width: 98%; padding: 2px 1%; background-color:' . $category_background  . '; color: ' . $category_color . '; border-bottom: 2px solid ' . $category_border . ';">' . $new['name'] . '</h2>';
       //dpm($new);
       $result = views_get_view_result('front_get_news', 'default', $cat_tid, $new['clip_nid'], $new['news']);
       foreach ($result as $key => $item) {
@@ -313,11 +313,11 @@ function _eclip_build_news_email_by_zone($news, $zone, $url_prefix, $args = arra
         isset($item->field_field_medio[0]['rendered']['#markup']) ? $medio = $item->field_field_medio[0]['rendered']['#markup'] : $medio = '';
         isset($item->field_body[0]['raw']['value']) ? $bajada = $item->field_body[0]['raw']['value'] : $bajada = '';
         isset($item->field_field_fecha[0]['rendered']['#markup']) ? $fecha = $item->field_field_fecha[0]['rendered']['#markup'] : $fecha = '';
-        isset($item->node_eclip_article_data_title) ? $title = l($item->node_eclip_article_data_title, $path, array('absolute' => TRUE,'attributes' => array('style' => 'text-decoration: none; color: ' . $link_color))) : $title = '';
+        isset($item->node_eclip_article_data_title) ? $title = l($item->node_eclip_article_data_title, $path, array('absolute' => TRUE,'attributes' => array('style' => 'font-size: 15px; text-decoration: none; color: ' . $link_color))) : $title = '';
         
-        $output.= '<h3>' . $title . '</h3>';
-        $output.= '<strong>' . $medio . '</strong> - ' .  $fecha ;
-        $output.= '<div>' . $bajada . '</div>';
+        $output.= '<h3 style="font-size: 15px; font-family: \'Trebuchet MS\', Helvetica, sans-serif;">' . $title . '</h3>';
+        $output.= '<strong style="font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, sans-serif;">' . $medio . '</strong> - ' .  $fecha ;
+        $output.= '<div style="font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, sans-serif;">' . $bajada . '</div>';
       }
       $output.= '<div>' . l('[más]', 'clip/' . $url_prefix . '/' . $new['clip_nid'], array('absolute' => TRUE, 'attributes' => array('style' => 'color:' . $link_color))) . '</div>';
       //dpm($result);
@@ -533,7 +533,7 @@ function _theme_destacado(&$destacados, $start = 0, $limit = 3, $colores, $email
         'fecha'   => format_date(strtotime($destacados[$i]->fecha), 'largo_sin_hora'),
         'imagen'  => $destacados[$i]->imagen,
         'colores' => $colores,
-      );
+      );      
       $output.= theme('news_item', $noticia);   
     }    
   }
@@ -652,6 +652,7 @@ function template_preprocess_email_05(&$variables){
     $fuente = isset($destacado->field_field_fuente[0]['rendered']['#markup']) ? $destacado->field_field_fuente[0]['rendered']['#markup'] : '';
     $noticia = new stdClass();
     $noticia->titulo  = $destacado->node_eclip_article_data_title;
+    $noticia->show_image  = $destacado->eclip_article_data_image;
     $noticia->clip_nid    = $destacado->eclip_article_data_clip_nid;
     $noticia->article_id  = $destacado->article_data_id;
     $noticia->environment = 'clip';
@@ -694,7 +695,7 @@ function _custom_prepare_email_vars(&$variables){
   $variables['header']              = theme_image(array('path' => $cliente->field_header['und'][0]['uri'], 'attributes' => array()));
   $variables['imagen_destacado']    = isset($variables['node']->field_imagen_destacado['und'][0]['uri']) ? theme_image_style(array('style_name' => 'destacado', 'path' => $variables['node']->field_imagen_destacado['und'][0]['uri'], 'attributes' => array('style' => 'border: 2px solid ' . $variables['image_border']), 'width' => NULL, 'height' => NULL)) : '';  
   
-  $variables['limite'] = isset($variables['node']->field_limite['und'][0]['value']) ? $variables['node']->field_limite['und'][0]['value'] : 5;  
+  $variables['limite'] = isset($variables['node']->field_limite['und'][0]['value']) ? $variables['node']->field_limite['und'][0]['value'] : 5;
 }
 
 /**
@@ -949,7 +950,7 @@ function eclip_send_clip($node) {
   $message = array(
     'id'      => 'clipper_key',
     'from'    => $from,
-    //'to'      => 'gerardocadau@gmail.com',
+    //'to'      => 'gerardocadau@gmail.com, lucho.dream@gmail.com',
     'to'      => 'clipping@e-clip.cl',
     'subject' => $node->title,    
     'body'    => theme($template_name, array('node' => $node, 'news' => _eclip_get_news_by_clip($node->nid))),
