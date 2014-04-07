@@ -435,7 +435,7 @@ function _eclip_jqueryui_cliente_theme_form_validate($form, $form_state) {
  */ 
 function _eclip_jqueryui_cliente_theme_form_submit($form, $form_state) {
   //dpm($form_state);dpm($form);
-  if($form_state['values']['op'] == t('Send e-mail') || $form_state['values']['op'] == t('Save') ){    
+  if($form_state['values']['op'] == t('Save') ){
     if ($form_state['values']['option'] == 'edit') {
       if (node_access('update', 'clip')) {
         $nid = $form_state['values']['node'];
@@ -481,10 +481,11 @@ function _eclip_jqueryui_cliente_theme_form_submit($form, $form_state) {
         _eclip_save_positions($nid, $positions['categories'], $positions['news'], $positions['highlighted']);
         drupal_set_message('Se ha creado correctamente un nuevo clip');
       }
-    }
-    if($form_state['values']['op'] == t('Send e-mail')){
-      eclip_send_clip($node);
-    }    
+    }   
+  }
+  if($form_state['values']['op'] == t('Send e-mail') && $form_state['values']['option'] == 'edit'){
+    $node = node_load($form_state['values']['node']);
+    eclip_send_clip($node);
   }  
   return;
 }
