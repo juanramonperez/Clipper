@@ -35,7 +35,6 @@ body .eclip-05{
     margin-top: 20px;
     margin-left: 30px;
     font-size: 28px;
-    font-weight: bold;
 }
 
 .noticia{
@@ -48,12 +47,10 @@ body .eclip-05{
 
 .zone-top .noticia .title,
 .zone-middle .noticia .title{
-    font-weight: bold;
     font-size: 18px;
 }
 
 .zone-top .column1 .noticia .title{
-    font-weight: bold;
     font-size: 20px;
 }
 
@@ -81,7 +78,6 @@ body .eclip-05{
 }
 
 .category-title {
-    font-weight: bold;
     font-size: 18px;    
 }
 
@@ -125,7 +121,6 @@ body .eclip-05{
 }
 
 .zone-bottom .noticia .title{
-    font-weight: bold;
     font-size: 15px;
     margin-top: 20px;
 }
