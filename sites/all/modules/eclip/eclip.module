@@ -311,9 +311,11 @@ function _eclip_build_news_email_by_zone($news, $zone, $url_prefix, $args = arra
         if($key == (int)$limite) {       
           break;
         }
-        $path = 'clip/' . $url_prefix . '/' . $item->eclip_article_data_clip_nid . '/' . $item->article_data_id;
+        $medio  = isset($item->field_field_medio[0]['rendered']['#markup']) ? $item->field_field_medio[0]['rendered']['#markup'] : '';
+        $fuente = isset($item->field_field_fuente[0]['rendered']['#markup']) ? $item->field_field_fuente[0]['rendered']['#markup'] : '';
+        if(!$medio){ $medio = $fuente;}     
+        $path   = 'clip/' . $url_prefix . '/' . $item->eclip_article_data_clip_nid . '/' . $item->article_data_id;
         isset($item->field_field_server_destacado[0]['raw']['url']) ? $imagen = _eclip_get_url_file($item->field_field_server_destacado[0]['raw']['url']) : $imagen = false;
-        isset($item->field_field_medio[0]['rendered']['#markup']) ? $medio = $item->field_field_medio[0]['rendered']['#markup'] : $medio = '';
         isset($item->field_body[0]['raw']['value']) ? $bajada = $item->field_body[0]['raw']['value'] : $bajada = '';
         isset($item->field_field_fecha[0]['rendered']['#markup']) ? $fecha = $item->field_field_fecha[0]['rendered']['#markup'] : $fecha = '';
         isset($item->node_eclip_article_data_title) ? $title = l($item->node_eclip_article_data_title, $path, array('absolute' => TRUE,'attributes' => array('style' => 'font-size: 15px; text-decoration: none; color: ' . $link_color))) : $title = '';        
@@ -325,7 +327,7 @@ function _eclip_build_news_email_by_zone($news, $zone, $url_prefix, $args = arra
         }        
         $output.= '<div style="font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, Arial;">' . $bajada . '</div>';
       }
-      $output.= '<div>' . l('[más]', 'clip/' . $url_prefix . '/' . $new['clip_nid'], array('absolute' => TRUE, 'attributes' => array('style' => 'text-decoration: none; font-family: \'Trebuchet MS\', Helvetica, Arial; color:' . $link_color))) . '</div>';
+      $output.= '<div style="padding-top:10px; text-align: right;">' . l('[+noticias]', 'clip/' . $url_prefix . '/' . $new['clip_nid'], array('absolute' => TRUE, 'attributes' => array('style' => 'text-decoration: none; font-family: \'Trebuchet MS\', Helvetica, Arial; color:' . $link_color))) . '</div>';
       //dpm($result);
     }
   }
