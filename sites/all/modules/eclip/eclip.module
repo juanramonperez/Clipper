@@ -243,9 +243,10 @@ function _eclip_build_news_email_destacados_1($nid, $url_prefix, $args = array()
     isset($item->field_field_fecha[0]['rendered']['#markup']) ? $fecha = $item->field_field_fecha[0]['rendered']['#markup'] : $fecha = '';
     isset($item->node_eclip_article_data_title) ? $title = l($item->node_eclip_article_data_title, $path, array('absolute' => TRUE, 'attributes' => array('style' => 'text-decoration: none; color: ' . $link_color))) : $title = '';
 
-    $output.= '<h3>' . $title . '</h3>';
-    $output.= '<strong>' . $medio . '</strong> - ' .  $fecha ;
-    $output.= '<div>' . $bajada . '</div>';
+    $output.= '<h3 style="font-size: 15px; font-family: \'Trebuchet MS\', Helvetica, Arial;">' . $title . '</h3>';
+    $output.= '<strong style="font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, Arial;">' . $medio . '</strong> - ';
+    $output.= '<span style="font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, Arial;">'  .  $fecha . '</span>';
+    $output.= '<div style="font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, Arial;">' . $bajada . '</div>';
   }  
   return $output;
 }
@@ -276,9 +277,10 @@ function _eclip_build_news_email_destacados_2($nid, $url_prefix, $args = array()
       } else {
         $output.= '<td style="vertical-align: top; border-left: 2px solid ' . $borde_zona . '; width:33%;">';
       }      
-      $output.= '<h3>' . $title . '</h3>';
-      $output.= '<strong>' . $medio . '</strong> - ' .  $fecha ;
-      $output.= '<div>' . $bajada . '</div>';
+      $output.= '<h3 style="font-size: 15px; font-family: \'Trebuchet MS\', Helvetica, Arial;">' . $title . '</h3>';
+      $output.= '<strong style="font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, Arial;">' . $medio . '</strong> - ';
+      $output.= '<span style="font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, Arial;">'  .  $fecha . '</span>';
+      $output.= '<div style="font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, Arial;">' . $bajada . '</div>';
       $output.= '</td>';
     }
     $output.= '</tr>';
@@ -302,7 +304,7 @@ function _eclip_build_news_email_by_zone($news, $zone, $url_prefix, $args = arra
   if (isset($news[$zone])) {
     //dpm($news[$zone]);
     foreach ($news[$zone] as $cat_tid => $new) {
-      $output.= '<h2 style="font-size: 20px; width: 98%; padding: 2px 1%; background-color:' . $category_background  . '; color: ' . $category_color . '; border-bottom: 2px solid ' . $category_border . ';">' . $new['name'] . '</h2>';
+      $output.= '<h2 style="font-size: 20px; font-family: \'Trebuchet MS\', Helvetica, Arial; width: 98%; padding: 2px 1%; background-color:' . $category_background  . '; color: ' . $category_color . '; border-bottom: 2px solid ' . $category_border . ';">' . $new['name'] . '</h2>';
       //dpm($new);
       $result = views_get_view_result('front_get_news', 'default', $cat_tid, $new['clip_nid'], $new['news']);
       foreach ($result as $key => $item) {
@@ -310,16 +312,20 @@ function _eclip_build_news_email_by_zone($news, $zone, $url_prefix, $args = arra
           break;
         }
         $path = 'clip/' . $url_prefix . '/' . $item->eclip_article_data_clip_nid . '/' . $item->article_data_id;
+        isset($item->field_field_server_destacado[0]['raw']['url']) ? $imagen = _eclip_get_url_file($item->field_field_server_destacado[0]['raw']['url']) : $imagen = false;
         isset($item->field_field_medio[0]['rendered']['#markup']) ? $medio = $item->field_field_medio[0]['rendered']['#markup'] : $medio = '';
         isset($item->field_body[0]['raw']['value']) ? $bajada = $item->field_body[0]['raw']['value'] : $bajada = '';
         isset($item->field_field_fecha[0]['rendered']['#markup']) ? $fecha = $item->field_field_fecha[0]['rendered']['#markup'] : $fecha = '';
-        isset($item->node_eclip_article_data_title) ? $title = l($item->node_eclip_article_data_title, $path, array('absolute' => TRUE,'attributes' => array('style' => 'font-size: 15px; text-decoration: none; color: ' . $link_color))) : $title = '';
-        
-        $output.= '<h3 style="font-size: 15px; font-family: \'Trebuchet MS\', Helvetica, sans-serif;">' . $title . '</h3>';
-        $output.= '<strong style="font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, sans-serif;">' . $medio . '</strong> - ' .  $fecha ;
-        $output.= '<div style="font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, sans-serif;">' . $bajada . '</div>';
+        isset($item->node_eclip_article_data_title) ? $title = l($item->node_eclip_article_data_title, $path, array('absolute' => TRUE,'attributes' => array('style' => 'font-size: 15px; text-decoration: none; color: ' . $link_color))) : $title = '';        
+        $output.= '<h3 style="font-size: 15px; font-family: \'Trebuchet MS\', Helvetica, Arial;">' . $title . '</h3>';     
+        $output.= '<strong style="font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, Arial;">' . $medio . '</strong> - ';
+        $output.= '<span style="font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, Arial;">'  .  $fecha . '</span>';
+        if($imagen){
+          $output.= '<div><img src="' . $imagen . '" alt="imagen destacada" /></div>';
+        }        
+        $output.= '<div style="font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, Arial;">' . $bajada . '</div>';
       }
-      $output.= '<div>' . l('[más]', 'clip/' . $url_prefix . '/' . $new['clip_nid'], array('absolute' => TRUE, 'attributes' => array('style' => 'color:' . $link_color))) . '</div>';
+      $output.= '<div>' . l('[más]', 'clip/' . $url_prefix . '/' . $new['clip_nid'], array('absolute' => TRUE, 'attributes' => array('style' => 'text-decoration: none; font-family: \'Trebuchet MS\', Helvetica, Arial; color:' . $link_color))) . '</div>';
       //dpm($result);
     }
   }
@@ -865,7 +871,7 @@ function _eclip_get_url_file($path, $style = 'default'){
 /**
  * Helper function to print images from url
  */
-function _eclip_theme_file($url, $style = 'default'){    
+function _eclip_theme_file($url, $style = 'default', $download = true){    
     $url = url('sites/default/files/upload/' . $url, array('absolute' => TRUE));
     $image_types = array('image/jpg', 'image/jpeg', 'image/png', 'image/gif');
     $video_types = array('video/mp4');
@@ -875,7 +881,9 @@ function _eclip_theme_file($url, $style = 'default'){
         if(in_array($mime, $image_types)){
             $output = '<div class="file-container">';
             $output.= theme('image', array('path' => $url));
-            $output.= '<p style="text-align: right">' . l(t('Descargar imagen'), $url, array('attributes' => array('target' => '_blank'))) . '</p>';
+            if($download){
+              $output.= '<p style="text-align: right">' . l(t('Descargar imagen'), $url, array('attributes' => array('target' => '_blank'))) . '</p>';
+            }
             $output.= '</div>';
             return $output;
         }
@@ -885,13 +893,17 @@ function _eclip_theme_file($url, $style = 'default'){
             if(isset($preset['settings']['width']) && isset($preset['settings']['height'])){
                 $output = '<div class="file-container">';
                 $output.= theme('jw_player', array('file_url' => $url, 'width' => $preset['settings']['width'], 'height' => $preset['settings']['height']));
-                $output.= '<p style="text-align: right">' . l(t('Descargar video'), $url, array('attributes' => array('target' => '_blank'))) . '</p>';
+                if($download){
+                  $output.= '<p style="text-align: right">' . l(t('Descargar video'), $url, array('attributes' => array('target' => '_blank'))) . '</p>';
+                }
                 $output.= '</div>';
                 return $output;                
             }else{
                 $output = '<div class="file-container">';
                 $output.= theme('jw_player', array('file_url' => $url, 'width' => 600, 'height' => 450));
-                $output.= '<p style="text-align: right">' . l(t('Descargar video'), $url, array('attributes' => array('target' => '_blank'))) . '</p>';
+                if($download){
+                  $output.= '<p style="text-align: right">' . l(t('Descargar video'), $url, array('attributes' => array('target' => '_blank'))) . '</p>';
+                }
                 $output.= '</div>';
                 return $output;                
             }
@@ -950,7 +962,7 @@ function eclip_send_clip($node) {
   $message = array(
     'id'      => 'clipper_key',
     'from'    => $from,
-    //'to'      => 'gerardocadau@gmail.com, lucho.dream@gmail.com',
+    //'to'      => 'gerardocadau@gmail.com',
     'to'      => 'clipping@e-clip.cl',
     'subject' => $node->title,    
     'body'    => theme($template_name, array('node' => $node, 'news' => _eclip_get_news_by_clip($node->nid))),
