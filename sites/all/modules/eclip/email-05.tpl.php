@@ -24,7 +24,7 @@ $colores['title_decoration']  = 'none';
               </td>   
               <td style="width: 270px; vertical-align: top; padding: 15px 15px;">
                 <?php print _theme_destacado($destacados, 2, 1, $colores); ?>
-                <p style="text-align: left;"><?php print l(t('[ver más]'), 'clip/' . $url_prefix . '/' . $node->nid, array('absolute' => TRUE, 'attributes' => array('style' => 'color:' . $colores['link_color'] . '; text-decoration:' . $colores['title_decoration'] . '; font-family
+                <p style="text-align: right;"><?php print l(t('[+noticias]'), 'clip/' . $url_prefix . '/' . $node->nid, array('absolute' => TRUE, 'attributes' => array('style' => 'color:' . $colores['link_color'] . '; text-decoration:' . $colores['title_decoration'] . '; font-family
   :' . $colores['title_font']))) ?></p>                  
               </td>  
             </tr>
@@ -49,7 +49,7 @@ $colores['title_decoration']  = 'none';
               </td>
               <td style="width: 33%; padding: 0px 15px;  vertical-align:top;">
                 <?php print _theme_destacado($destacados, 5, 1, $colores); ?>
-                <p style="text-align: left;"><?php print l(t('[ver más]'), 'clip/' . $url_prefix . '/' . $node->nid, array('absolute' => TRUE, 'attributes' => array('style' => 'color:' . $colores['link_color'] . '; text-decoration:' . $colores['title_decoration'] . '; font-family
+                <p style="text-align: right;"><?php print l(t('[+noticias]'), 'clip/' . $url_prefix . '/' . $node->nid, array('absolute' => TRUE, 'attributes' => array('style' => 'color:' . $colores['link_color'] . '; text-decoration:' . $colores['title_decoration'] . '; font-family
   :' . $colores['title_font']))) ?></p>
               </td>               
             </tr>
