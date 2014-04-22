@@ -37,6 +37,8 @@ function eclip_theme_preprocess_html(&$vars) {
   }
   // Add conditional CSS for IE6.
   drupal_add_css(path_to_theme() . '/fix-ie.css', array('group' => CSS_THEME, 'browsers' => array('IE' => 'lt IE 7', '!IE' => FALSE), 'preprocess' => FALSE));
+
+  drupal_add_js('sites/all/libraries/flowplayer/flowplayer-3.2.13.min.js');
 }
 
 /**
@@ -126,6 +128,7 @@ function eclip_theme_preprocess_page(&$vars) {
         $vars['footer_text'] = $footer;
         drupal_set_title($footer);
       } 
+      $vars['colores']['liston_header'] = _eclip_theme_render_field($cliente, $cliente->field_liston_header, 'field_liston_header');
       $vars['colores']['body_background'] = _eclip_theme_render_field($cliente, $cliente->field_background_color, 'field_background_color');
       $vars['colores']['category_background'] = _eclip_theme_render_field($cliente, $cliente->field_category_background, 'field_category_background');
       $vars['colores']['liston_color'] = _eclip_theme_render_field($cliente, $cliente->field_liston_color, 'field_liston_color');
@@ -193,6 +196,7 @@ function eclip_theme_preprocess_node(&$vars) {
     if($vars['node']->type == 'clip'){
         if(isset($vars['node']->field_cliente['und'][0]['target_id'])){
           $cliente = node_load($vars['node']->field_cliente['und'][0]['target_id']);
+          $vars['colores']['liston_header'] = _eclip_theme_render_field($cliente, $cliente->field_liston_header, 'field_liston_header');
           $vars['colores']['body_background'] = _eclip_theme_render_field($cliente, $cliente->field_background_color, 'field_background_color');
           $vars['colores']['category_background'] = _eclip_theme_render_field($cliente, $cliente->field_category_background, 'field_category_background');
           $vars['colores']['liston_color'] = _eclip_theme_render_field($cliente, $cliente->field_liston_color, 'field_liston_color');
@@ -223,6 +227,7 @@ function eclip_theme_preprocess_node(&$vars) {
         }
         $destacados = views_get_view_result('front_destacados', 'todos', $vars['node']->nid);
         //dpm($destacados);
+        $vars['destacados'] = array();
         foreach ($destacados as $destacado) {
           $noticia = new stdClass();
           $noticia->titulo  = $destacado->node_eclip_article_data_title;
