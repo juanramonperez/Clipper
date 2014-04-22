@@ -111,14 +111,8 @@ body .eclip-05{
     float: left;
 }
 
-.zone-top .column.column1 .image{
-    margin-bottom: 15px;
-    overflow: hidden;    
-}
-
-.zone-top .column.column2 .image{
-    margin-bottom: 15px;
-    overflow: hidden;    
+.zone-top .noticia.con-imagen .image{
+    float: right; 
 }
 
 .zone-middle .column .noticia .image{

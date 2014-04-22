@@ -7,7 +7,7 @@
 ?>
 <?php if($op == 'view') :// el clip se esta viendo (no esta siendo editado)?>
     <?php $news = _eclip_get_news_by_clip($node->nid); ?>
-    <?php drupal_add_css(drupal_get_path('module', 'eclip') . '/css/eclip-05.css'); ?>
+    <?php drupal_add_css(drupal_get_path('module', 'eclip') . '/css/eclip-07.css'); ?>
     <div class="main-background" style="background-color: <?php print $colores['background_color_inner'] ?>">
         <div class="zone-top main">
             <div class="zone-top-inner clearfix" style="border-top: 1px solid <?php print $colores['liston_header'] ?>">
@@ -21,28 +21,23 @@
                         <?php print _theme_destacado($destacados, 1, 1, $colores); ?>
                     </div>
                 </div>
-                <div class="column column3">
-                    <div class="column-inner">
-                        <?php print _theme_destacado($destacados, 2, 1, $colores); ?>
-                    </div>
-                </div>
             </div>
         </div>
         <div class="zone-middle">
             <div class="zone-middle-inner clearfix" style="border-top: 1px solid <?php print $colores['borde_zona'] ?>">
                 <div class="column column1">
                     <div class="column-inner">
-                        <?php print _theme_destacado($destacados, 3, 1, $colores); ?>
+                        <?php print _theme_destacado($destacados, 2, 1, $colores); ?>
                     </div>
                 </div>
                 <div class="column column2">
                     <div class="column-inner">
-                        <?php print _theme_destacado($destacados, 4, 1, $colores); ?>
+                        <?php print _theme_destacado($destacados, 3, 1, $colores); ?>
                     </div>
                 </div>
                 <div class="column column3">
                     <div class="column-inner">
-                        <?php print _theme_destacado($destacados, 5, 1, $colores); ?>
+                        <?php print _theme_destacado($destacados, 4, 1, $colores); ?>
                     </div>
                 </div>
             </div>

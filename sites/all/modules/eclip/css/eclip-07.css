@@ -90,14 +90,12 @@ body .eclip-05{
 
 
 .zone-top .column.column1{
-    width: 40%;
+    width: 50%;
     float: left;
-    clear: left;
 }
 
-.zone-top .column.column2,
-.zone-top .column.column3{
-    width: 30%;
+.zone-top .column.column2{
+    width: 49%;
     float: left;
 }
 
@@ -111,14 +109,9 @@ body .eclip-05{
     float: left;
 }
 
-.zone-top .column.column1 .image{
-    margin-bottom: 15px;
-    overflow: hidden;    
-}
-
+.zone-top .column.column1 .image,
 .zone-top .column.column2 .image{
-    margin-bottom: 15px;
-    overflow: hidden;    
+    float: right;   
 }
 
 .zone-middle .column .noticia .image{

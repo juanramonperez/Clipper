@@ -1,16 +1,17 @@
 <?php
-$colores['title_font']        = '"Trebuchet MS", Helvetica, sans-serif';
+$colores['title_font']        = '"Trebuchet MS", Helvetica, Arial';
 $colores['title_size']        = '20px';
 $colores['title_weight']      = 'Bold';
 $colores['title_decoration']  = 'none';
 ?>
-<table style="width: 913px; background-color: <?php print $colores['body_background'] ?>; border-spacing: 0px; border-collapse: collapse;">
-    <thead>
+
+<p><?php print t('Si Ud. no ve este correo correctamente presione <a href="!link">aquí<a>', array('!link' => url('clip/' . $url_prefix . '/' . $node->nid, array('absolute' => TRUE)))); ?></p>
+<table style="width: 913px; background-color: <?php print $colores['background_color_inner'] ?>; border-spacing: 0px; border-collapse: collapse;">
+  <thead>
     <tr><th style="border-collapse: collapse; border-spacing: 0px; padding: 0px"><?php print $header; ?></th></tr>    
   </thead>
   <tbody>
-    <tr style="height: 20px;"><td style="border-spacing: 0px; border-collapse: collapse"></td></tr>
-    <tr style="background-color: <?php print $colores['background_color_inner'] ?>">
+    <tr style="border-top: 1px solid <?php print $colores['liston_header'] ?>">
       <td>
         <table style="width: 100%; border-spacing: 0px;">
           <tbody>
@@ -33,11 +34,11 @@ $colores['title_decoration']  = 'none';
       </td>
     </tr>
     <tr style="height: 20px;"><td></td></tr>
-    <tr style="background-color: <?php print $colores['background_color_inner'] ?>">
+    <tr style="border-top: 1px solid <?php print $colores['borde_zona'] ?>">
       <td style="padding: 15px 0px;">
         <table style="width: 100%; border-spacing: 0px;">
           <tbody>
-            <tr style="background-color: <?php print $colores['background_color_inner'] ?>;">
+            <tr>
               <td style="width: 34%; padding: 0px 15px;  vertical-align:top; border-right: 1px solid <?php print $colores['borde_zona'] ?>">
                 <?php print _theme_destacado($destacados, 3, 1, $colores);  ?>             
               </td>
