@@ -1,7 +1,5 @@
 <?php
 
-
-
 /**
  * Build add clip form 
  */
@@ -291,10 +289,7 @@ function _eclip_jqueryui_cliente_theme_form($form, $form_state, $node = NULL, $o
   $form['main']['bottom']['hidden']['positions'] = array(
     '#type' => 'hidden',
     '#attributes' => array('id' => array('positions')),
-  );  $form['main']['bottom']['actions']['send'] = array(
-    '#type' => 'submit',
-    '#value' => t('Send e-mail'),
-  );  
+  ); 
   $form['main']['bottom']['hidden']['node'] = array(
     '#type' => 'hidden',
     '#value' => isset($node->nid) ? $node->nid : NULL,
@@ -310,11 +305,7 @@ function _eclip_jqueryui_cliente_theme_form($form, $form_state, $node = NULL, $o
   $form['main']['bottom']['actions']['save'] = array(
     '#type' => 'submit',
     '#value' => t('Save'),
-  );
-  $form['main']['bottom']['actions']['send'] = array(
-    '#type' => 'submit',
-    '#value' => t('Send e-mail'),
-  );    
+  );   
   $form['main']['bottom']['actions']['delete'] = array(
     '#type' => 'submit',
     '#value' => t('Delete'),
@@ -483,10 +474,6 @@ function _eclip_jqueryui_cliente_theme_form_submit($form, $form_state) {
       }
     }   
   }
-  if($form_state['values']['op'] == t('Send e-mail') && $form_state['values']['option'] == 'edit'){
-    $node = node_load($form_state['values']['node']);
-    eclip_send_clip($node);
-  }  
   return;
 }
 
@@ -536,4 +523,15 @@ function eclip_change_template_callback($form, $form_state) {
 function eclip_change_date_callback($form, $form_state) {
   $commands[] = ajax_command_html('.clipper-placeholder.zone-0', eclip_build_add_eclip_categories($form, $form_state));
   return array('#type' => 'ajax', '#commands' => $commands);
+}
+
+/**
+ * Send clip callback
+ */
+function eclip_build_send_clip_callback($node){
+  eclip_send_clip($node);
+  //$messages = drupal_get_messages();
+  $commands[] = ajax_command_prepend('#content', theme('status_messages'));
+  $page = array('#type' => 'ajax', '#commands' => $commands);
+  ajax_deliver($page);
 }
