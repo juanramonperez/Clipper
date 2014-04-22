@@ -4,8 +4,7 @@ $colores['title_size']        = '20px';
 $colores['title_weight']      = 'Bold';
 $colores['title_decoration']  = 'none';
 ?>
-
-<p><?php print t('Si Ud. no ve este correo correctamente presione <a href="!link">aquí<a>', array('!link' => url('clip/' . $url_prefix . '/' . $node->nid, array('absolute' => TRUE)))); ?></p>
+<p style="text-align: center;"><?php print t('Si Ud. no ve este correo correctamente presione <a href="!link">aquí<a>', array('!link' => url('clip/' . $url_prefix . '/' . $node->nid, array('absolute' => TRUE)))); ?></p>
 <table style="width: 913px; background-color: <?php print $colores['background_color_inner'] ?>; border-spacing: 0px; border-collapse: collapse;">
   <thead>
     <tr><th style="border-collapse: collapse; border-spacing: 0px; padding: 0px"><?php print $header; ?></th></tr>    
