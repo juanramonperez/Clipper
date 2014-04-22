@@ -37,7 +37,10 @@
                     $('.related-items[article=' + $(related).attr('article') + ']').toggle();
                 })
                 
-            });            
+            });
+            
+            // Adding flowplayer
+            flowplayer('a.flowplayer', Drupal.settings.basePath + 'sites/all/libraries/flowplayer/flowplayer-3.2.18.swf');        
         }
     }    
 })(jQuery);
