@@ -32,6 +32,14 @@ function eclip_menu() {
     'type' => MENU_CALLBACK,
     'file' => 'eclip.admin.inc',
   );
+  $items['adm/eclip/%node/send'] = array(
+    'title' => 'Enviar e-clip',
+    'page callback' => 'eclip_build_send_clip_callback',
+    'page arguments' => array(2, 'send'),
+    'access arguments' => array('administer clips'),
+    'type' => MENU_CALLBACK,
+    'file' => 'eclip.admin.inc',
+  );  
   $items['adm/eclip/cliente/%node/add'] = array(
     'title' => 'Agregar clip por cliente',
     'page callback' => 'eclip_build_add_clip_cliente_page',
@@ -55,6 +63,13 @@ function eclip_menu() {
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
+  $items['adm/settings'] = array(
+    'title' => 'Configuracion',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('eclip_settings_page'),
+    'access arguments' => array('administer eclip configuration'),
+    'type' => MENU_CALLBACK,
+  );  
   $items['adm/%ctools_js/%/add/group'] = array(
     'title' => 'Add group by category',
     'page callback' => 'eclip_add_group',
@@ -73,6 +88,18 @@ function eclip_menu() {
 }
 
 /**
+ * General settings of eclip
+ */
+function eclip_settings_page(){
+  $form['eclip_main_email'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Email Principal'),
+    '#default_value' => variable_get('eclip_main_email', 'gerardocadau@gmail.com'),
+  );
+  return system_settings_form($form);
+}
+
+/**
  * Implements hook_permission().
  */
 function eclip_permission() {
@@ -81,6 +108,10 @@ function eclip_permission() {
       'title' => t('Administer clips'),
       'description' => t('Add, edit, remove clips.'),
     ),
+    'administer eclip configuration' => array(
+      'title' => t('Administer e-clip site configuration'),
+      'description' => t('Administer all configurations of eclip.'),
+    ),    
   );
 }
 
@@ -628,6 +659,7 @@ function template_preprocess_email_04(&$variables){
 function template_preprocess_email_05(&$variables){
   $cliente = node_load($variables['node']->field_cliente['und'][0]['target_id']);
   
+  $variables['colores']['liston_header'] = _eclip_theme_render_field($cliente, $cliente->field_liston_header, 'field_liston_header');
   $variables['colores']['body_background'] = _eclip_theme_render_field($cliente, $cliente->field_background_color, 'field_background_color');
   $variables['colores']['category_background'] = _eclip_theme_render_field($cliente, $cliente->field_category_background, 'field_category_background');
   $variables['colores']['liston_color'] = _eclip_theme_render_field($cliente, $cliente->field_liston_color, 'field_liston_color');
@@ -890,25 +922,14 @@ function _eclip_theme_file($url, $style = 'default', $download = true){
             return $output;
         }
         if(in_array($mime, $video_types)){
-            $preset = jw_player_preset_load('full_video');
-
-            if(isset($preset['settings']['width']) && isset($preset['settings']['height'])){
-                $output = '<div class="file-container">';
-                $output.= theme('jw_player', array('file_url' => $url, 'width' => $preset['settings']['width'], 'height' => $preset['settings']['height']));
-                if($download){
-                  $output.= '<p style="text-align: right">' . l(t('Descargar video'), $url, array('attributes' => array('target' => '_blank'))) . '</p>';
-                }
-                $output.= '</div>';
-                return $output;                
-            }else{
-                $output = '<div class="file-container">';
-                $output.= theme('jw_player', array('file_url' => $url, 'width' => 600, 'height' => 450));
-                if($download){
-                  $output.= '<p style="text-align: right">' . l(t('Descargar video'), $url, array('attributes' => array('target' => '_blank'))) . '</p>';
-                }
-                $output.= '</div>';
-                return $output;                
-            }
+          $output = '<div class="file-container">';
+          $output.= '<a class="flowplayer" href="' . $url . '" style="display:block;width:600px;height:450px;"></a>';
+          //$output.= theme('jw_player', array('file_url' => $url, 'width' => $preset['settings']['width'], 'height' => $preset['settings']['height']));
+          if($download){
+            $output.= '<p style="text-align: right">' . l(t('Descargar video'), $url, array('attributes' => array('target' => '_blank'))) . '</p>';
+          }
+          $output.= '</div>';
+          return $output;
         }        
     }
 }
@@ -964,8 +985,7 @@ function eclip_send_clip($node) {
   $message = array(
     'id'      => 'clipper_key',
     'from'    => $from,
-    //'to'      => 'gerardocadau@gmail.com',
-    'to'      => 'clipping@e-clip.cl',
+    'to'      => variable_get('eclip_main_email', 'gerardocadau@gmail.com'),
     'subject' => $node->title,    
     'body'    => theme($template_name, array('node' => $node, 'news' => _eclip_get_news_by_clip($node->nid))),
     'headers' => array(
