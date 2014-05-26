@@ -41,19 +41,10 @@ body .eclip-05{
     padding-top: 1px;
 }
 
-.main-title{
-    background-color: #008b8b;
-}
-
 .zone-top .noticia .title,
 .zone-middle .noticia .title{
     font-size: 18px;
 }
-
-.zone-top .column1 .noticia .title{
-    font-size: 20px;
-}
-
 
 .zone-top,
 .zone-middle,
@@ -88,16 +79,10 @@ body .eclip-05{
     font-size: 18px;    
 }
 
-
-.zone-top .column.column1{
-    width: 40%;
-    float: left;
-    clear: left;
-}
-
+.zone-top .column.column1,
 .zone-top .column.column2,
 .zone-top .column.column3{
-    width: 30%;
+    width: 33%;
     float: left;
 }
 

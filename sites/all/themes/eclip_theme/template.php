@@ -124,16 +124,21 @@ function eclip_theme_preprocess_page(&$vars) {
         $image = theme('image', array('path' => $header_uri));
         $vars['customer_header'] = l($image, arg(0) . '/' . $cliente->field_hash['und'][0]['value'], array('html' => TRUE));        
       }
-      if(isset($cliente->field_footer['und'][0]['value']) && $footer = $cliente->field_footer['und'][0]['value']){
-        $vars['footer_text'] = $footer;
-        drupal_set_title($footer);
-      } 
+
+      if(isset($cliente->field_footer_image['und'][0]['uri']) && $footer_uri = $cliente->field_footer_image['und'][0]['uri']){
+        $vars['footer_image'] = theme('image', array('path' => $footer_uri));       
+      }      
+      $vars['footer_text'] = _eclip_theme_render_field($cliente, $cliente->field_footer, 'field_footer');
+      $page_title = _eclip_theme_render_field($cliente, $cliente->field_page_title, 'field_page_title');
+      drupal_set_title($page_title);
+
       $vars['colores']['liston_header'] = _eclip_theme_render_field($cliente, $cliente->field_liston_header, 'field_liston_header');
       $vars['colores']['body_background'] = _eclip_theme_render_field($cliente, $cliente->field_background_color, 'field_background_color');
       $vars['colores']['category_background'] = _eclip_theme_render_field($cliente, $cliente->field_category_background, 'field_category_background');
       $vars['colores']['liston_color'] = _eclip_theme_render_field($cliente, $cliente->field_liston_color, 'field_liston_color');
       $vars['colores']['category_color'] = _eclip_theme_render_field($cliente, $cliente->field_category_color, 'field_category_color');
       $vars['colores']['link_color'] = _eclip_theme_render_field($cliente, $cliente->field_link_color, 'field_link_color');
+      $vars['colores']['link_color_2'] = _eclip_theme_render_field($cliente, $cliente->field_link_color_2, 'field_link_color_2');
       $vars['colores']['background_color_inner'] = _eclip_theme_render_field($cliente, $cliente->field_background_color_inner, 'field_background_color_inner');
       $vars['colores']['font_color'] = _eclip_theme_render_field($cliente, $cliente->field_font_color, 'field_font_color');
       $vars['colores']['image_border'] = _eclip_theme_render_field($cliente, $cliente->field_image_border, 'field_image_border');
@@ -150,6 +155,7 @@ function eclip_theme_preprocess_page(&$vars) {
       isset($cliente->field_liston_color['und'][0]['rgb']) ? drupal_add_css('.category-title { border-bottom: 2px solid ' . $cliente->field_liston_color['und'][0]['rgb'] . ' !important ; }', array('type' => 'inline')) : '';
       isset($cliente->field_category_color['und'][0]['rgb']) ? drupal_add_css('.category-title { color: ' . $cliente->field_category_color['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';
       isset($cliente->field_link_color['und'][0]['rgb']) ? drupal_add_css('a { color: ' . $cliente->field_link_color['und'][0]['rgb'] . ';}', array('type' => 'inline')) : '';
+      isset($cliente->field_link_color_2['und'][0]['rgb']) ? drupal_add_css('a.vermas { color: ' . $cliente->field_link_color_2['und'][0]['rgb'] . ';}', array('type' => 'inline')) : '';
       isset($cliente->field_background_color_inner['und'][0]['rgb']) ? drupal_add_css('#contentConteiner { background-color: ' . $cliente->field_background_color_inner['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';
       isset($cliente->field_font_color['und'][0]['rgb']) ? drupal_add_css('body {color :' . $cliente->field_font_color['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';
       isset($cliente->field_image_border['und'][0]['rgb']) ? drupal_add_css('img { border: 1px solid ' . $cliente->field_image_border['und'][0]['rgb'] . ' !important ;}', array('type' => 'inline')) : '';
@@ -202,6 +208,7 @@ function eclip_theme_preprocess_node(&$vars) {
           $vars['colores']['liston_color'] = _eclip_theme_render_field($cliente, $cliente->field_liston_color, 'field_liston_color');
           $vars['colores']['category_color'] = _eclip_theme_render_field($cliente, $cliente->field_category_color, 'field_category_color');
           $vars['colores']['link_color'] = _eclip_theme_render_field($cliente, $cliente->field_link_color, 'field_link_color');
+          $vars['colores']['link_color_2'] = _eclip_theme_render_field($cliente, $cliente->field_link_color_2, 'field_link_color_2');
           $vars['colores']['background_color_inner'] = _eclip_theme_render_field($cliente, $cliente->field_background_color_inner, 'field_background_color_inner');
           $vars['colores']['font_color'] = _eclip_theme_render_field($cliente, $cliente->field_font_color, 'field_font_color');
           $vars['colores']['image_border'] = _eclip_theme_render_field($cliente, $cliente->field_image_border, 'field_image_border');

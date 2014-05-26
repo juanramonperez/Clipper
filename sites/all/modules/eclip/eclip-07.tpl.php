@@ -1,9 +1,14 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+$colores['title_font']        = 'Trebuchet MS, Helvetica, Arial';
+$colores['title_size']        = '18px';
+$colores['title_weight']      = 'Bold';
+$colores['title_margin_top']  = '0';
+$colores['title_decoration']  = 'none';
+$colores['image_position']    = 'none';
+$colores['image_width']       = '450px';
+$colores['image_height']      = '';
+
 ?>
 <?php if($op == 'view') :// el clip se esta viendo (no esta siendo editado)?>
     <?php $news = _eclip_get_news_by_clip($node->nid); ?>
@@ -23,6 +28,7 @@
                 </div>
             </div>
         </div>
+        <?php $colores['image_width'] = '302px'; ?>
         <div class="zone-middle">
             <div class="zone-middle-inner clearfix" style="border-top: 1px solid <?php print $colores['borde_zona'] ?>">
                 <div class="column column1">
@@ -42,21 +48,26 @@
                 </div>
             </div>
         </div>
+        <?php 
+        $colores['title_margin_top']  = '20px';
+        $colores['image_position']    = 'left';
+        $colores['image_width']       = '80px';
+        ?>        
         <div class="zone-bottom">
             <div class="zone-bottom-inner clearfix" style="border-top: 1px solid <?php print $colores['borde_zona'] ?>">
                 <div class="column column1">
                     <div class="column-inner">
-                        <?php print _theme_categoria($news, 1, $colores); ?>
+                        <?php print _theme_categoria($news, array('zone' => 1, 'colores' => $colores)); ?>
                     </div>            
                 </div>
                 <div class="column column2" style="border-left: 1px solid <?php print $colores['borde_zona'] ?>">
                     <div class="column-inner">
-                        <?php print _theme_categoria($news, 2, $colores); ?>
+                        <?php print _theme_categoria($news, array('zone' => 2, 'colores' => $colores)); ?>
                     </div>
                 </div>
                 <div class="column column3"  style="border-left: 1px solid <?php print $colores['borde_zona'] ?>">
                     <div class="column-inner">
-                        <?php print _theme_categoria($news, 3, $colores); ?>
+                        <?php print _theme_categoria($news, array('zone' => 3, 'colores' => $colores)); ?>
                     </div>
                 </div>
             </div>

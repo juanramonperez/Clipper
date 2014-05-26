@@ -528,8 +528,8 @@ function eclip_change_date_callback($form, $form_state) {
 /**
  * Send clip callback
  */
-function eclip_build_send_clip_callback($node){
-  eclip_send_clip($node);
+function eclip_build_send_clip_callback($node, $type){
+  eclip_send_clip($node, $type);
   //$messages = drupal_get_messages();
   $commands[] = ajax_command_prepend('#content', theme('status_messages'));
   $page = array('#type' => 'ajax', '#commands' => $commands);

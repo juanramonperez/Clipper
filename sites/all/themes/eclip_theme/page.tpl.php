@@ -28,8 +28,9 @@
 
     <!--footer-->
     <div id="footer">
-      <?php print render($page['footer']); ?>
-      <?php print $footer_text; ?>
+      <?php print render($page['footer']); ?>      
+      <div class="footer-image"><?php if(isset($footer_image)) print $footer_image; ?></div>
+      <div class="footer-text"><?php if(isset($footer_text)) print $footer_text; ?></div>
     </div>
     <!--END footer-->
 </div>
