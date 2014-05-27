@@ -240,6 +240,7 @@ function eclip_theme_preprocess_node(&$vars) {
           $noticia->titulo  = $destacado->node_eclip_article_data_title;
           $noticia->show_image  = $destacado->eclip_article_data_image;
           $noticia->clip_nid    = $destacado->eclip_article_data_clip_nid;
+          $noticia->nid         = $destacado->node_eclip_article_data_nid;
           $noticia->article_id  = $destacado->article_data_id;
           $noticia->fuente      = isset($destacado->field_field_fuente[0]['rendered']['#markup']) ? $destacado->field_field_fuente[0]['rendered']['#markup'] : '';
           $noticia->environment = arg(0);

@@ -38,19 +38,25 @@ $colores['image_height']      = 'auto';
       </td>
     </tr>
     <tr style="height: 20px;"><td></td></tr>
+    <?php
+      $destacado_4 = _theme_destacado($destacados, 3, 1, $colores);
+      $destacado_5 = _theme_destacado($destacados, 4, 1, $colores);
+      $destacado_6 = _theme_destacado($destacados, 5, 1, $colores);
+    ?>
+    <?php if($destacado_4 || $destacado_5 || $destacado_6): ?>
     <tr style="border-top: 1px solid <?php print $colores['borde_zona'] ?>">
       <td style="padding: 15px 0px;">
         <table style="width: 100%; border-spacing: 0px;">
           <tbody>
             <tr>
               <td style="width: 34%; padding: 0px 15px;  vertical-align:top;">
-                <?php print _theme_destacado($destacados, 3, 1, $colores);  ?>             
+                <?php print $destacado_4;  ?>             
               </td>
               <td style="width: 33%; padding: 0px 15px;  vertical-align:top;">
-                <?php print _theme_destacado($destacados, 4, 1, $colores);  ?>          
+                <?php print $destacado_5;  ?>          
               </td>
               <td style="width: 33%; padding: 0px 15px;  vertical-align:top;">
-                <?php print _theme_destacado($destacados, 5, 1, $colores); ?>
+                <?php print $destacado_6; ?>
                 <p style="text-align: right;"><?php print l(t('[otras noticias]'), 'clip/' . $url_prefix . '/' . $node->nid, array('absolute' => TRUE, 'attributes' => array('style' => 'font-weight: bold; font-size: 14px; color:' . $colores['link_color_2'] . '; text-decoration:' . $colores['title_decoration'] . '; font-family
   :' . $colores['title_font']))) ?></p>
               </td>               
@@ -59,6 +65,7 @@ $colores['image_height']      = 'auto';
         </table>        
       </td>
     </tr>
+    <?php endif; ?>
     <?php 
     $colores['title_margin_top']  = '20px'; 
     $colores['image_position']    = 'left';

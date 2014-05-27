@@ -225,9 +225,9 @@ function eclip_views_api() {
  * Page callback to display links and render a container for AJAX stuff.
  */
 function eclip_test_page() {
-  $node = node_load(14754);
-
-  $output = theme('email_05', array('node' => $node, 'news' => _eclip_get_news_by_clip($node->nid)));
+  $related  = eclip_get_related_news_v2(262970);
+  $output   = eclip_build_otros_medios_link_v2('amsa', 123, $related);
+  //$output = theme('email_05', array('node' => $node, 'news' => _eclip_get_news_by_clip($node->nid)));
   //dpm($output);
   //return 'hola';
   return $output;
@@ -262,11 +262,17 @@ function _eclip_build_news_email_destacados_1($nid, $url_prefix, $args = array()
   $result = views_get_view_result('front_destacados', 'default', $nid);
   foreach ($result as $key => $item) {
     if($key == 5) break;
-    $path = 'clip/' . $url_prefix . '/' . $item->eclip_article_data_clip_nid . '/' . $item->article_data_id;
+    $related = eclip_get_related_news_v2($item->article_data_id);
+    if($related){
+      $query = array('related' => implode('-', $related));
+    }else{
+      $query = array();
+    }
+    $path = 'clip/' . $url_prefix . '/' . $item->eclip_article_data_clip_nid . '/' . $item->node_eclip_article_data_nid;
     isset($item->field_field_medio[0]['rendered']['#markup']) ? $medio = $item->field_field_medio[0]['rendered']['#markup'] : $medio = '';
     isset($item->field_body[0]['raw']['value']) ? $bajada = $item->field_body[0]['raw']['value'] : $bajada = '';
     isset($item->field_field_fecha[0]['rendered']['#markup']) ? $fecha = $item->field_field_fecha[0]['rendered']['#markup'] : $fecha = '';
-    isset($item->node_eclip_article_data_title) ? $title = l($item->node_eclip_article_data_title, $path, array('absolute' => TRUE, 'attributes' => array('style' => 'text-decoration: none; color: ' . $link_color))) : $title = '';
+    isset($item->node_eclip_article_data_title) ? $title = l($item->node_eclip_article_data_title, $path, array('query' => $query, 'absolute' => TRUE, 'attributes' => array('style' => 'text-decoration: none; color: ' . $link_color))) : $title = '';
 
     $output.= '<h3 style="font-size: 15px; font-family: \'Trebuchet MS\', Helvetica, Arial;">' . $title . '</h3>';
     $output.= '<strong style="font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, Arial;">' . $medio . '</strong> - ';
@@ -292,11 +298,17 @@ function _eclip_build_news_email_destacados_2($nid, $url_prefix, $args = array()
     $output.= '<table>';
     $output.= '<tr>';
     foreach ($result as $key => $item) {
-      $path = 'clip/' . $url_prefix . '/' . $item->eclip_article_data_clip_nid . '/' . $item->article_data_id;
+      $related = eclip_get_related_news_v2($item->article_data_id);
+      if($related){
+        $query = array('related' => implode('-', $related));
+      }else{
+        $query = array();
+      }      
+      $path = 'clip/' . $url_prefix . '/' . $item->eclip_article_data_clip_nid . '/' . $item->node_eclip_article_data_nid;
       isset($item->field_field_medio[0]['rendered']['#markup']) ? $medio = $item->field_field_medio[0]['rendered']['#markup'] : $medio = '';
       isset($item->field_body[0]['raw']['value']) ? $bajada = $item->field_body[0]['raw']['value'] : $bajada = '';
       isset($item->field_field_fecha[0]['rendered']['#markup']) ? $fecha = $item->field_field_fecha[0]['rendered']['#markup'] : $fecha = '';
-      isset($item->node_eclip_article_data_title) ? $title = l($item->node_eclip_article_data_title, $path, array('absolute' => TRUE, 'attributes' => array('style' => 'text-decoration: none; color: ' . $link_color))) : $title = '';
+      isset($item->node_eclip_article_data_title) ? $title = l($item->node_eclip_article_data_title, $path, array('query' => $query, 'absolute' => TRUE, 'attributes' => array('style' => 'text-decoration: none; color: ' . $link_color))) : $title = '';
       if($key == 0){
         $output.= '<td style="vertical-align: top; width:33%;">';
       } else {
@@ -336,14 +348,20 @@ function _eclip_build_news_email_by_zone($news, $zone, $url_prefix, $args = arra
         if($key == (int)$limite) {       
           break;
         }
+        $related = eclip_get_related_news_v2($item->article_data_id);
+        if($related){
+          $query = array('related' => implode('-', $related));
+        }else{
+          $query = array();
+        }        
         $medio  = isset($item->field_field_medio[0]['rendered']['#markup']) ? $item->field_field_medio[0]['rendered']['#markup'] : '';
         $fuente = isset($item->field_field_fuente[0]['rendered']['#markup']) ? $item->field_field_fuente[0]['rendered']['#markup'] : '';
         if(!$medio){ $medio = $fuente;}     
-        $path   = 'clip/' . $url_prefix . '/' . $item->eclip_article_data_clip_nid . '/' . $item->article_data_id;
+        $path   = 'clip/' . $url_prefix . '/' . $item->eclip_article_data_clip_nid . '/' . $item->node_eclip_article_data_nid;
         isset($item->field_field_server_destacado[0]['raw']['url']) ? $imagen = _eclip_get_url_file($item->field_field_server_destacado[0]['raw']['url']) : $imagen = false;
         isset($item->field_body[0]['raw']['value']) ? $bajada = $item->field_body[0]['raw']['value'] : $bajada = '';
         isset($item->field_field_fecha[0]['rendered']['#markup']) ? $fecha = $item->field_field_fecha[0]['rendered']['#markup'] : $fecha = '';
-        isset($item->node_eclip_article_data_title) ? $title = l($item->node_eclip_article_data_title, $path, array('absolute' => TRUE,'attributes' => array('style' => 'font-size: 15px; text-decoration: none; color: ' . $link_color))) : $title = '';        
+        isset($item->node_eclip_article_data_title) ? $title = l($item->node_eclip_article_data_title, $path, array('query' => $query, 'absolute' => TRUE,'attributes' => array('style' => 'font-size: 15px; text-decoration: none; color: ' . $link_color))) : $title = '';        
         $output.= '<h3 style="font-size: 15px; font-family: \'Trebuchet MS\', Helvetica, Arial;">' . $title . '</h3>';     
         $output.= '<strong style="font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, Arial;">' . $medio . '</strong> - ';
         $output.= '<span style="font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, Arial;">'  .  $fecha . '</span>';
@@ -560,7 +578,7 @@ function _theme_destacado(&$destacados, $start = 0, $limit = 3, $colores, $email
         'show_image' => $destacados[$i]->show_image,
         'email'   => $email,
         'titulo'  => $destacados[$i]->titulo, 
-        'link'    => $destacados[$i]->environment . '/' . $destacados[$i]->space . '/' . $destacados[$i]->clip_nid . '/' . $destacados[$i]->article_id,
+        'link'    => $destacados[$i]->environment . '/' . $destacados[$i]->space . '/' . $destacados[$i]->clip_nid . '/' . $destacados[$i]->nid,
         'medio'   => $destacados[$i]->medio ? $destacados[$i]->medio : $destacados[$i]->fuente,
         'bajada'  => $destacados[$i]->bajada,
         'fecha'   => format_date(strtotime($destacados[$i]->fecha), 'largo_sin_hora'),
@@ -599,7 +617,7 @@ function _theme_categoria($news, $options = array()){
             'show_image' => $result_item->eclip_article_data_image,
             'email'   => $options['email'],
             'titulo'  => $result_item->node_eclip_article_data_title,
-            'link'    => $environment . '/' . $prefix . '/' . $result_item->eclip_article_data_clip_nid . '/' . $result_item->article_data_id,
+            'link'    => $environment . '/' . $prefix . '/' . $result_item->eclip_article_data_clip_nid . '/' . $result_item->node_eclip_article_data_nid,
             'medio'   => $medio ? $medio : $fuente,
             'bajada'  => isset($result_item->field_body[0]['rendered']['#markup']) ? $result_item->field_body[0]['rendered']['#markup'] : '',
             'fecha'   => isset($result_item->field_field_fecha[0]['raw']['value']) ? format_date(strtotime($result_item->field_field_fecha[0]['raw']['value']), 'largo_sin_hora') : '',
@@ -635,7 +653,13 @@ function template_preprocess_news_item(&$variables){
   $variables['style_title'].= 'margin-top:' . $variables['colores']['title_margin_top'] . ';';
   $variables['style_title'].= 'display: block;';
   $variables['style_description'] = 'font-family: ' . $variables['colores']['title_font'] . ';';
-  //dpm($variables);
+  // Related news
+  $related = eclip_get_related_news_v2($variables['article_id']);
+  if($related){
+    $variables['query'] = array('related' => implode('-', $related));
+  }else{
+    $variables['query'] = array();
+  }
 }
 
 /**
@@ -653,12 +677,23 @@ function template_preprocess_news_category(&$variables){
  * Preprocess function
  */
 function template_preprocess_news_related(&$variables){
-  $clip     = eclip_load($variables['article_id']);
-  $related  = eclip_get_related_news($clip);
+  $clip    = eclip_load($variables['article_id']);
+  //dpm($clip);
+  $related = eclip_get_related_news_v2($variables['article_id']);
+  $nodes   = node_load_multiple($related);
   $variables['relacionadas'] = array();
-  if(!empty($related)){
-    foreach ($related as $noticia) {
-      $variables['relacionadas'][] = l($noticia->title . ' - (' . $noticia->name . ')', 'clip/' . arg(1) . '/' . $noticia->clip_nid . '/' . $noticia->article_data_id, array('absolute' => TRUE, 'attributes' => array('style' => 'display:block; margin-top: 5px; color:' . $variables['colores']['link_color_2'] . '; text-decoration:' . $variables['colores']['title_decoration'] . '; font-family
+  if(!empty($nodes)){
+    foreach ($nodes as $noticia) {
+      if(isset($noticia->field_medio['und'][0]['tid'])){
+        $term  = taxonomy_term_load($noticia->field_medio['und'][0]['tid']);
+        $medio = $term->name;
+      } else {
+        $medio = _eclip_theme_render_field($noticia, $noticia->field_fuente, 'field_fuente');
+      }
+      $related_args = $related;
+      $related_args[$clip->article_id] = $clip->article_id;
+      unset($related_args[$noticia->nid]);
+      $variables['relacionadas'][] = l($noticia->title . ' - (' . $medio . ')', 'clip/' . arg(1) . '/' . $clip->clip_nid . '/' . $noticia->nid, array('absolute' => TRUE, 'query' => array('related' => implode('-', $related_args)), 'attributes' => array('style' => 'display:block; margin-top: 5px; color:' . $variables['colores']['link_color_2'] . '; text-decoration:' . $variables['colores']['title_decoration'] . '; font-family
   :' . $variables['colores']['title_font'])));
     }
   }
@@ -758,6 +793,7 @@ function _custom_prepare_email_v2(&$variables){
     $noticia->titulo  = $destacado->node_eclip_article_data_title;
     $noticia->show_image  = $destacado->eclip_article_data_image;
     $noticia->clip_nid    = $destacado->eclip_article_data_clip_nid;
+    $noticia->nid         = $destacado->node_eclip_article_data_nid;
     $noticia->article_id  = $destacado->article_data_id;
     $noticia->environment = 'clip';
     $noticia->space       = $variables['url_prefix'];
@@ -931,6 +967,35 @@ function eclip_build_otros_medios_link($article_data_id = NULL) {
   return $output;
 }
 
+/**
+ * Build otros medios button 
+ */
+function eclip_build_otros_medios_link_v2($environment, $base, $clip, $nids = array()) {
+  $output = '';
+  $nodes  = node_load_multiple($nids);
+  if(!empty($nodes)){
+    $output.= '<div class="toggle-related-items" article="' . $clip . '">';
+    $output.= l(t('[Ver misma noticia en otros medios]'), '', array('external' => TRUE, 'fragment' => ' '));
+    $output.= '</div>';
+    $output.= '<div class="related-items" article="' . $clip . '">';
+    foreach ($nodes as $noticia) {
+      if(isset($noticia->field_medio['und'][0]['tid'])){
+        $term  = taxonomy_term_load($noticia->field_medio['und'][0]['tid']);
+        $medio = $term->name;
+      } else {
+        $medio = _eclip_theme_render_field($noticia, $noticia->field_fuente, 'field_fuente');
+      }
+      $related_args = array_combine($nids, $nids);
+      $related_args[$clip] = $clip;
+      unset($related_args[$noticia->nid]);
+      $output.= '<div class="related-item">' . l($noticia->title . ' - (' . $medio . ')', $environment . '/' . $base . '/' . $clip . '/' . $noticia->nid, array('query' => array('related' => implode('-', $related_args)))) . '</div>';
+    }
+    $output.= '</div>';
+  }
+  return $output;
+  //dpm($nodes);
+}
+
 function eclip_get_related_news($clip) {
   $query = db_select('eclip_article_data', 'a');
   $query->leftJoin('node', 'n', 'a.article_id = n.nid');
@@ -948,6 +1013,29 @@ function eclip_get_related_news($clip) {
       ->condition('a.clip_nid', $clip->clip_nid)
       ->condition('a.article_data_id', $clip->article_data_id, '<>');
   return $query->execute()->fetchAll();
+}
+
+function eclip_get_related_news_v2($article_data_id = NULL) {
+  $related  = array();
+  $clip     = eclip_load($article_data_id);
+
+  $query = db_select('eclip_article_data', 'a');
+  $query->leftJoin('node', 'n', 'a.article_id = n.nid');
+  $query->leftJoin('field_data_field_medio', 'm', 'm.entity_id = n.nid AND (m.entity_type = :type AND m.deleted = :deleted)', array(':type' => 'node', ':deleted' => 0));
+  $query->leftJoin('taxonomy_term_data', 't', 't.tid = m.field_medio_tid');
+  $query
+      ->fields('n', array('nid'))
+      ->condition('a.status', '1')
+      ->condition('a.grupo', $clip->grupo)
+      ->condition('a.grupo', 0, '<>')
+      ->condition('a.cat_tid', $clip->cat_tid)
+      ->condition('a.clip_nid', $clip->clip_nid)
+      ->condition('a.article_data_id', $clip->article_data_id, '<>');
+  $result = $query->execute()->fetchAll();
+  foreach ($result as $noticia) {
+    $related[$noticia->nid] = $noticia->nid;
+  }
+  return $related;
 }
 
 /**

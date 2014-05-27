@@ -5,7 +5,7 @@
 		</div>
 	<?php endif; ?>	
 	<div class="title">
-		<a href="<?php print url($link, array('absolute' => TRUE)); ?>" style="<?php print $style_title; ?>"><?php print $titulo; ?></a>
+		<a href="<?php print url($link, array('absolute' => TRUE, 'query' => $query)); ?>" style="<?php print $style_title; ?>"><?php print $titulo; ?></a>
 	</div>	
 	<div class="medio-fecha"><strong style="<?php print $style_medio_fecha; ?>"><?php print $medio; ?> - <?php print $fecha; ?></strong></div>
 	<?php if(!$email): ?>
