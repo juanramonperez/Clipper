@@ -104,6 +104,41 @@ function eclip_settings_page(){
     '#title' => t('Email Principal'),
     '#default_value' => variable_get('eclip_main_email', 'gerardocadau@gmail.com'),
   );
+  $form['font'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Tamaño fuentes'),
+    '#collapsible' => TRUE,
+  );    
+  $form['font']['eclip_general_size'] = array(
+    '#type' => 'textfield',
+    '#size' => 2,
+    '#title' => t('Tamaño texto general'),
+    '#default_value' => variable_get('eclip_general_size', '12'),
+  );
+  $form['font']['eclip_category_size'] = array(
+    '#type' => 'textfield',
+    '#size' => 2,
+    '#title' => t('Tamaño categoría'),
+    '#default_value' => variable_get('eclip_category_size', '18'),
+  );      
+  $form['font']['eclip_title_size'] = array(
+    '#type' => 'textfield',
+    '#size' => 2,
+    '#title' => t('Tamaño título'),
+    '#default_value' => variable_get('eclip_title_size', '18'),
+  );
+  $form['font']['eclip_fecha_size'] = array(
+    '#type' => 'textfield',
+    '#size' => 2,
+    '#title' => t('Tamaño fecha/medio'),
+    '#default_value' => variable_get('eclip_fecha_size', '12'),
+  );   
+  $form['font']['eclip_bajada_size'] = array(
+    '#type' => 'textfield',
+    '#size' => 2,
+    '#title' => t('Tamaño bajada'),
+    '#default_value' => variable_get('eclip_bajada_size', '12'),
+  );     
   return system_settings_form($form);
 }
 
@@ -333,7 +368,7 @@ function _eclip_build_news_email_destacados_2($nid, $url_prefix, $args = array()
  */
 function _eclip_build_news_email_by_zone($news, $zone, $url_prefix, $args = array()) {
   $output = '';
-  isset($args['category_background']) ? $category_background = $args['category_background'] : $category_background = 'transparent';
+  isset($args['category_background']) && $args['category_background'] ? $category_background = $args['category_background'] : $category_background = 'transparent';
   isset($args['category_color'])      ? $category_color = $args['category_color'] : $category_color = '#000';
   isset($args['category_border'])     ? $category_border = $args['category_border'] : $category_border = 'transparent';
   isset($args['link_color'])          ? $link_color = $args['link_color'] : $link_color = '#000';
@@ -341,7 +376,7 @@ function _eclip_build_news_email_by_zone($news, $zone, $url_prefix, $args = arra
   if (isset($news[$zone])) {
     //dpm($news[$zone]);
     foreach ($news[$zone] as $cat_tid => $new) {
-      $output.= '<h2 style="font-size: 20px; font-family: \'Trebuchet MS\', Helvetica, Arial; width: 98%; padding: 2px 1%; background-color:' . $category_background  . '; color: ' . $category_color . '; border-bottom: 2px solid ' . $category_border . ';">' . $new['name'] . '</h2>';
+      $output.= '<div style="font-size: 20px; font-family: \'Trebuchet MS\', Helvetica, Arial; width: 98%; padding: 2px 1%; background-color:' . $category_background  . '; color: ' . $category_color . '; border-bottom: 2px solid ' . $category_border . ';">' . $new['name'] . '</div>';
       //dpm($new);
       $result = views_get_view_result('front_get_news', 'default', $cat_tid, $new['clip_nid'], $new['news']);
       foreach ($result as $key => $item) {
@@ -362,7 +397,7 @@ function _eclip_build_news_email_by_zone($news, $zone, $url_prefix, $args = arra
         isset($item->field_body[0]['raw']['value']) ? $bajada = $item->field_body[0]['raw']['value'] : $bajada = '';
         isset($item->field_field_fecha[0]['rendered']['#markup']) ? $fecha = $item->field_field_fecha[0]['rendered']['#markup'] : $fecha = '';
         isset($item->node_eclip_article_data_title) ? $title = l($item->node_eclip_article_data_title, $path, array('query' => $query, 'absolute' => TRUE,'attributes' => array('style' => 'font-size: 15px; text-decoration: none; color: ' . $link_color))) : $title = '';        
-        $output.= '<h3 style="font-size: 15px; font-family: \'Trebuchet MS\', Helvetica, Arial;">' . $title . '</h3>';     
+        $output.= '<div style="margin-top:15px; font-weight: bold; font-size: 15px; font-family: \'Trebuchet MS\', Helvetica, Arial;">' . $title . '</div>';     
         $output.= '<strong style="font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, Arial;">' . $medio . '</strong> - ';
         $output.= '<span style="font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, Arial;">'  .  $fecha . '</span>';
         if($imagen){
@@ -640,6 +675,7 @@ function _theme_categoria($news, $options = array()){
  */
 function template_preprocess_news_item(&$variables){
   $variables['style_medio_fecha'] = 'font-family: ' . $variables['colores']['title_font'] . ';';
+  $variables['style_medio_fecha'].= 'font-size: ' . $variables['colores']['fecha_size'] . ';';
   $variables['style_image'] = 'float: ' . $variables['colores']['image_position'] . ';';
   $variables['style_image'].= 'margin-top: ' . $variables['colores']['title_margin_top'] . ';';
   $variables['style_img'] = '';
@@ -653,6 +689,7 @@ function template_preprocess_news_item(&$variables){
   $variables['style_title'].= 'margin-top:' . $variables['colores']['title_margin_top'] . ';';
   $variables['style_title'].= 'display: block;';
   $variables['style_description'] = 'font-family: ' . $variables['colores']['title_font'] . ';';
+  $variables['style_description'] = 'font-size: ' . $variables['colores']['bajada_size'] . ';';
   // Related news
   $related = eclip_get_related_news_v2($variables['article_id']);
   if($related){
@@ -667,7 +704,7 @@ function template_preprocess_news_item(&$variables){
  */
 function template_preprocess_news_category(&$variables){
   $variables['style_title_category'] = 'font-family: ' . $variables['colores']['title_font'] . ';';
-  $variables['style_title_category'].= 'font-size: 18px;';
+  $variables['style_title_category'].= 'font-size: ' . $variables['colores']['category_size'] . ';';
   $variables['style_title_category'].= 'color: ' . $variables['colores']['category_color'] . ';';
   $variables['style_title_category'].= 'border-bottom: 1px solid ' . $variables['colores']['liston_color'] . ';';
   //dpm($variables);
@@ -1061,6 +1098,7 @@ function _eclip_theme_file($url, $style = 'default', $download = true){
     $url = url('sites/default/files/upload/' . $url, array('absolute' => TRUE));
     $image_types = array('image/jpg', 'image/jpeg', 'image/png', 'image/gif');
     $video_types = array('video/mp4');
+    $audio_types = array('audio/mpeg', 'audio/mp4', 'audio/ogg', 'audio/vorbis');
     if(file_exists($url)){
         $mime = file_get_mimetype($url);
         
@@ -1068,7 +1106,7 @@ function _eclip_theme_file($url, $style = 'default', $download = true){
             $output = '<div class="file-container">';
             $output.= theme('image', array('path' => $url));
             if($download){
-              $output.= '<p style="text-align: right">' . l(t('Descargar imagen'), $url, array('attributes' => array('target' => '_blank'))) . '</p>';
+              $output.= '<div style="clear: both;">' . '<a class="button-print" title="' . t('Imprimir') . '" onClick="window.print(); return false;">' . t('Imprimir') . '</a>' . l(t('Descargar imagen'), $url, array('attributes' => array('title' => t('Descargar imagen'), 'class' => array('button-download'), 'target' => '_blank'))) . '</div>';
             }
             $output.= '</div>';
             return $output;
@@ -1076,13 +1114,21 @@ function _eclip_theme_file($url, $style = 'default', $download = true){
         if(in_array($mime, $video_types)){
           $output = '<div class="file-container">';
           $output.= '<a class="flowplayer" href="' . $url . '" style="display:block;width:600px;height:450px;"></a>';
-          //$output.= theme('jw_player', array('file_url' => $url, 'width' => $preset['settings']['width'], 'height' => $preset['settings']['height']));
           if($download){
-            $output.= '<p style="text-align: right">' . l(t('Descargar video'), $url, array('attributes' => array('target' => '_blank'))) . '</p>';
+            $output.= '<div style="clear: both;">' . l(t('Descargar video'), $url, array('attributes' => array('title' => t('Descargar video'), 'class' => array('button-download'), 'target' => '_blank'))) . '</div>';
           }
           $output.= '</div>';
           return $output;
-        }        
+        }
+        if(in_array($mime, $audio_types)){
+          $output = '<div class="file-container">';
+          $output.= '<a class="flowplayer-audio" href="' . $url . '" style="display:block;width:600px;height:30px;"></a>';
+          if($download){
+            $output.= '<div style="clear: both;">' . l(t('Descargar audio'), $url, array('attributes' => array('title' => t('Descargar audio'), 'class' => array('button-download'), 'target' => '_blank'))) . '</div>';
+          }
+          $output.= '</div>';
+          return $output;
+        }                
     }
 }
 
@@ -1131,8 +1177,8 @@ function eclip_upload_image_submit($form, &$form_state) {
  * Send clip via email
  */
 function eclip_send_clip($node, $type = 'test') {
-  if($type == 'send'){
-    $cliente = node_load($node->field_cliente['und'][0]['target_id']);
+  $cliente = node_load($node->field_cliente['und'][0]['target_id']);
+  if($type == 'send'){    
     $to =_eclip_theme_render_field($cliente, $cliente->field_email_to, 'field_email_to');
     $cc =_eclip_theme_render_field($cliente, $cliente->field_email_cc, 'field_email_cc');
   }else{
@@ -1141,11 +1187,17 @@ function eclip_send_clip($node, $type = 'test') {
   $from = variable_get('eclip_main_email_from', 'clipping@e-clip.cl');
   $template       = node_load($node->field_theme['und'][0]['target_id']);
   $template_name  = $template->field_email_template['und'][0]['value'];
+  // Subject
+  if(isset($cliente->field_page_title['und'][0]['value'])){
+    $subject = $cliente->field_page_title['und'][0]['value'] . ' ' . date('d/m/Y');
+  } else {
+    $subject = $node->title;
+  }  
   $message = array(
     'id'      => 'clipper_key',
     'from'    => $from,
     'to'      => $to,
-    'subject' => $node->title,    
+    'subject' => $subject,    
     'body'    => theme($template_name, array('node' => $node, 'news' => _eclip_get_news_by_clip($node->nid))),
     'headers' => array(
     	'Content-Type' => 'text/html; charset=UTF-8',
@@ -1179,5 +1231,28 @@ function _eclip_theme_render_field($entity, $field, $field_name, $key = 0){
   if(isset($items[$key])){
     $value = field_view_value('node', $entity, $field_name, $items[$key]);
     return render($value);
+  }
+}
+
+/**
+ * Implements hook_node_insert().
+ */
+function eclip_node_insert($node) {
+  if ($node->type == 'clip' && isset($node->clone_from_original_nid) && $node->clone_from_original_nid) {
+    if(isset($node->field_noticias['und'][0]['value'])){
+      $positions = unserialize($node->field_noticias['und'][0]['value']);
+      _eclip_save_positions($node->nid, $positions['categories'], $positions['news'], $positions['highlighted']);
+    }
+  }  
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for clip_node_form().
+ */
+function eclip_form_clip_node_form_alter(&$form, &$form_state, $form_id) {
+  if(!user_access('administer site configuration')) {
+    $form['field_noticias']['#access'] = FALSE;
+    $form['field_grupo']['#access'] = FALSE;
+    $form['field_clip_grupo']['#access'] = FALSE;
   }
 }

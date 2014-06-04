@@ -1,7 +1,11 @@
 <?php
 
 $colores['title_font']        = 'Trebuchet MS, Helvetica, Arial';
-$colores['title_size']        = '18px';
+$colores['category_size']     = variable_get('eclip_category_size', '18') . 'px';
+$colores['title_size']        = variable_get('eclip_title_size', '18') . 'px';
+$colores['fecha_size']        = variable_get('eclip_fecha_size', '12') . 'px';
+$colores['bajada_size']       = variable_get('eclip_bajada_size', '12') . 'px';
+$colores['general_size']      = variable_get('eclip_general_size', '12') . 'px';
 $colores['title_weight']      = 'Bold';
 $colores['title_margin_top']  = '0';
 $colores['title_decoration']  = 'none';

@@ -1,13 +1,17 @@
 <?php
 
 $colores['title_font']        = 'Trebuchet MS, Helvetica, Arial';
-$colores['title_size']        = '18px';
+$colores['category_size']     = variable_get('eclip_category_size', '18') . 'px';
+$colores['title_size']        = variable_get('eclip_title_size', '18') . 'px';
+$colores['fecha_size']        = variable_get('eclip_fecha_size', '12') . 'px';
+$colores['bajada_size']       = variable_get('eclip_bajada_size', '12') . 'px';
+$colores['general_size']      = variable_get('eclip_general_size', '12') . 'px';
 $colores['title_weight']      = 'Bold';
 $colores['title_margin_top']  = '0';
 $colores['title_decoration']  = 'none';
 $colores['image_position']    = 'none';
 $colores['image_width']       = '450px';
-$colores['image_height']      = 'auto';
+$colores['image_height']      = '';
 
 ?>
 <p style="text-align: center;"><?php print t('Si Ud. no ve este correo correctamente presione <a href="!link">aquí<a>', array('!link' => url('clip/' . $url_prefix . '/' . $node->nid, array('absolute' => TRUE)))); ?></p>
@@ -34,7 +38,7 @@ $colores['image_height']      = 'auto';
         </table>
       </td>
     </tr>
-    <?php $colores['image_width'] = 'auto'; ?>
+    <?php $colores['image_width'] = '302px'; ?>
     <tr style="height: 20px;"><td></td></tr>
     <tr style="border-top: 1px solid <?php print $colores['borde_zona'] ?>">
       <td style="padding: 15px 0px;">

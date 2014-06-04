@@ -59,7 +59,11 @@ function eclip_views_data() {
     'help' => t('The zone asociated with this category.'),
     'argument' => array(
       'handler' => 'views_handler_argument_numeric',
-    ),    
+    ),
+    'filter' => array(
+      'title' => t('Zone ID'),
+      'handler' => 'views_handler_filter_numeric',
+    ),   
   );
   
   // clip nid

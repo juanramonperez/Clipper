@@ -441,7 +441,8 @@ function _eclip_jqueryui_cliente_theme_form_submit($form, $form_state) {
         }else{
             unset($node->field_imagen_destacado);
         }
-        $node->field_limite = array('und' => array(array('value' => $form_state['values']['limite'])));
+        $node->field_limite   = array('und' => array(array('value' => $form_state['values']['limite'])));
+        $node->field_noticias = array('und' => array(array('value' => $form_state['values']['positions'])));
         node_save($node);
         drupal_set_message('Se ha editado correctamente el clip');
       }
@@ -465,7 +466,8 @@ function _eclip_jqueryui_cliente_theme_form_submit($form, $form_state) {
         if($form_state['values']['file']){
             $node->field_imagen_destacado = array('und' => array((array)file_load($form_state['values']['file'])));
         }
-        $node->field_limite = array('und' => array(array('value' => $form_state['values']['limite'])));
+        $node->field_limite   = array('und' => array(array('value' => $form_state['values']['limite'])));
+        $node->field_noticias = array('und' => array(array('value' => $form_state['values']['positions'])));
         node_save($node);
         $nid = $node->nid;
         $positions = unserialize($form_state['values']['positions']);

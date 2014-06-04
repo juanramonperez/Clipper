@@ -99,3 +99,21 @@ html.js div.ctools-dropdown div.ctools-dropdown-container ul li a{
     src: url(fonts/gotham/Gotham-Medium.otf);
     font-weight:bold;
 }
+
+/***************** Buttons *****************/
+
+.button-print, .button-download {
+    margin-right: 5px;
+    text-align: left;
+    width: 32px;
+    height: 32px;
+    text-indent: -9999px;
+    display: block;
+    cursor: pointer;
+    background: url('images/btn-print.png') no-repeat;
+    float: right;
+}
+
+.button-download {
+    background: url('images/btn-download.png') no-repeat;
+}
