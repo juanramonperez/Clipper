@@ -689,7 +689,7 @@ function template_preprocess_news_item(&$variables){
   $variables['style_title'].= 'margin-top:' . $variables['colores']['title_margin_top'] . ';';
   $variables['style_title'].= 'display: block;';
   $variables['style_description'] = 'font-family: ' . $variables['colores']['title_font'] . ';';
-  $variables['style_description'] = 'font-size: ' . $variables['colores']['bajada_size'] . ';';
+  $variables['style_description'].= 'font-size: ' . $variables['colores']['bajada_size'] . ';';
   // Related news
   $related = eclip_get_related_news_v2($variables['article_id']);
   if($related){
