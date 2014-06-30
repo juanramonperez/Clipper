@@ -706,6 +706,8 @@ function template_preprocess_news_category(&$variables){
   $variables['style_title_category'] = 'font-family: ' . $variables['colores']['title_font'] . ';';
   $variables['style_title_category'].= 'font-size: ' . $variables['colores']['category_size'] . ';';
   $variables['style_title_category'].= 'color: ' . $variables['colores']['category_color'] . ';';
+  if($variables['colores']['category_background'])
+    $variables['style_title_category'].= 'background-color: ' . $variables['colores']['category_background'] . ';';
   $variables['style_title_category'].= 'border-bottom: 1px solid ' . $variables['colores']['liston_color'] . ';';
   //dpm($variables);
 }
