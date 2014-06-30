@@ -1,4 +1,4 @@
-<p style="text-align: center;"><?php print t('Si Ud. no ve este correo correctamente presione <a href="!link">aquí<a>', array('!link' => url('clip/' . $url_prefix . '/' . $node->nid, array('absolute' => TRUE)))); ?></p>
+<p style="text-align: center; font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, Arial;"><?php print t('Si Ud. no ve este correo correctamente presione <a href="!link">aquí<a>', array('!link' => url('clip/' . $url_prefix . '/' . $node->nid, array('absolute' => TRUE)))); ?></p>
 <table style="width: 913px">
   <thead>
     <tr><th><?php print $header; ?></th></tr>    
