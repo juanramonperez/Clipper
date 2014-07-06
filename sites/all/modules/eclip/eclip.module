@@ -208,6 +208,14 @@ function eclip_theme() {
       'colores' => null,
     ),
   );
+  $return['news_archive_block'] = array(
+    'template' => 'templates/news-archive-block',
+    'variables' => array( 
+      'colores'     => null,
+      'url_prefix'  => '',
+      'environment' => '',
+    ),
+  );  
   $return['test_email'] = array(
     'template' => 'templates/test-email',
   );   
@@ -697,6 +705,29 @@ function template_preprocess_news_item(&$variables){
   }else{
     $variables['query'] = array();
   }
+}
+
+/**
+ * Preprocess function for news_archive_block theme
+ */
+function template_preprocess_news_archive_block(&$variables){
+  // Category style
+  $variables['style_title_category'] = 'font-family: ' . $variables['colores']['title_font'] . ';';
+  $variables['style_title_category'].= 'font-size: ' . $variables['colores']['category_size'] . ';';
+  $variables['style_title_category'].= 'color: ' . $variables['colores']['category_color'] . ';';
+  if($variables['colores']['category_background'])
+    $variables['style_title_category'].= 'background-color: ' . $variables['colores']['category_background'] . ';';
+  $variables['style_title_category'].= 'border-bottom: 1px solid ' . $variables['colores']['liston_color'] . ';';
+  // Title style
+  $variables['style_title'] = 'font-size: ' . $variables['colores']['title_size'] . ';'; 
+  $variables['style_title'].= 'font-weight: ' . $variables['colores']['title_weight'] . ';';
+  $variables['style_title'].= 'color:' . $variables['colores']['link_color'] . ';';
+  $variables['style_title'].= 'text-decoration:' . $variables['colores']['title_decoration'] . ';'; 
+  $variables['style_title'].= 'font-family:' . $variables['colores']['title_font'] . ';';
+  $variables['style_title'].= 'margin-top:' . $variables['colores']['title_margin_top'] . ';';
+  $variables['style_title'].= 'display: block;';
+  // Link
+  $variables['link'] = $variables['environment'] . '/' . $variables['url_prefix'] . '/archivo';
 }
 
 /**

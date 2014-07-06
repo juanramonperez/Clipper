@@ -72,6 +72,7 @@ $colores['image_height']      = '';
                 <div class="column column3"  style="border-left: 1px solid <?php print $colores['borde_zona'] ?>">
                     <div class="column-inner">
                         <?php print _theme_categoria($news, array('zone' => 3, 'colores' => $colores)); ?>
+                        <?php print theme('news_archive_block', array('environment' => arg(0), 'url_prefix' => arg(1), 'colores' => $colores)); ?>
                     </div>
                 </div>
             </div>
