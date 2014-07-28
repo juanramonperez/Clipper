@@ -1212,8 +1212,9 @@ function eclip_upload_image_submit($form, &$form_state) {
 function eclip_send_clip($node, $type = 'test') {
   $cliente = node_load($node->field_cliente['und'][0]['target_id']);
   if($type == 'send'){    
-    $to =_eclip_theme_render_field($cliente, $cliente->field_email_to, 'field_email_to');
-    $cc =_eclip_theme_render_field($cliente, $cliente->field_email_cc, 'field_email_cc');
+    $to  =_eclip_theme_render_field($cliente, $cliente->field_email_to, 'field_email_to');
+    $cc  =_eclip_theme_render_field($cliente, $cliente->field_email_cc, 'field_email_cc');
+    $bcc =_eclip_theme_render_field($cliente, $cliente->field_email_bcc, 'field_email_bcc');
   }else{
     $to = variable_get('eclip_main_email', 'gerardocadau@gmail.com');
   }
@@ -1242,6 +1243,9 @@ function eclip_send_clip($node, $type = 'test') {
   if(isset($cc)){
     $message['headers']['CC'] = $cc;
   }
+  if(isset($bcc)){
+    $message['headers']['BCC'] = $bcc;
+  }  
 
   $system = drupal_mail_system('eclip', 'key');
 
