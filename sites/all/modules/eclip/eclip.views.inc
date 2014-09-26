@@ -57,6 +57,10 @@ function eclip_views_data() {
   $data['eclip_cat_data']['zone_id'] = array(
     'title' => t('Zone'),
     'help' => t('The zone asociated with this category.'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),    
     'argument' => array(
       'handler' => 'views_handler_argument_numeric',
     ),
