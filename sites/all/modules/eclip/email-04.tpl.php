@@ -16,6 +16,11 @@
                 <div class="img-destacado"><?php print $imagen_destacado; ?></div>
               </td>              
             </tr>
+            <tr>
+              <td colspan="2" style="text-align: right; padding:5px 0;">
+                <?php print l('[+noticias]', 'clip/' . $url_prefix . '/' . $node->nid, array('absolute' => TRUE, 'attributes' => array('style' => 'text-decoration: none; font-family: \'Trebuchet MS\', Helvetica, Arial; color:' . $link_color))); ?>
+              </td>
+            </tr>            
           </tbody>
         </table>
       </td>
@@ -35,6 +40,11 @@
                 Banners
               </td>               
             </tr>
+            <tr>
+              <td colspan="3" style="text-align: right; padding:5px 0;">
+                <?php print l('[+noticias]', 'clip/' . $url_prefix . '/' . $node->nid, array('absolute' => TRUE, 'attributes' => array('style' => 'text-decoration: none; font-family: \'Trebuchet MS\', Helvetica, Arial; color:' . $link_color))); ?>
+              </td>
+            </tr>            
           </tbody>
         </table>        
       </td>

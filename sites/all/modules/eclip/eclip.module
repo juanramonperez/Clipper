@@ -413,7 +413,7 @@ function _eclip_build_news_email_by_zone($news, $zone, $url_prefix, $args = arra
         }        
         $output.= '<div style="font-size: 12px; font-family: \'Trebuchet MS\', Helvetica, Arial;">' . $bajada . '</div>';
       }
-      $output.= '<div style="padding-top:10px; text-align: right;">' . l('[+noticias]', 'clip/' . $url_prefix . '/' . $new['clip_nid'], array('absolute' => TRUE, 'attributes' => array('style' => 'text-decoration: none; font-family: \'Trebuchet MS\', Helvetica, Arial; color:' . $link_color))) . '</div>';
+      //$output.= '<div style="padding-top:10px; text-align: right;">' . l('[+noticias]', 'clip/' . $url_prefix . '/' . $new['clip_nid'], array('absolute' => TRUE, 'attributes' => array('style' => 'text-decoration: none; font-family: \'Trebuchet MS\', Helvetica, Arial; color:' . $link_color))) . '</div>';
       //dpm($result);
     }
   }
