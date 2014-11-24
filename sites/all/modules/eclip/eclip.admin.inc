@@ -57,10 +57,11 @@ function _eclip_jqueryui_theme_form($form, $form_state, $node, $op) {
   );
   $form['main']['bottom']['actions']['save'] = array(
     '#type' => 'submit',
+    '#name' => 'save',
     '#value' => t('Save'),
   );
   $form['main']['bottom']['actions']['delete'] = array(
-    '#type' => 'submit',
+    '#type' => 'submit',    
     '#value' => t('Delete'),
   );
   return $form;
@@ -144,16 +145,17 @@ function eclip_build_add_eclip_form_top($form, $form_state, $node, $op) {
  * Add categories
  */
 function eclip_build_add_eclip_categories($form, $form_state, $node, $op) {
+  $output = '';
   if ($op == 'edit') {
     $output = views_embed_view('helper_get_categories', 'default', 0, $node->nid);
     $output .= '<div class="clear-both"></div>';
     return $output;
   }
-  $categoria = $form_state['values']['categoria'] ? $form_state['values']['categoria'] : 'all';
-  $grupo     = isset($form_state['values']['grupo']) && $form_state['values']['grupo'] ? $form_state['values']['grupo'] : 'all';
-  $date_from = isset($form_state['values']['date_from']) && $form_state['values']['date_from'] ? format_date(strtotime($form_state['values']['date_from']), 'custom', 'YmdHi') : date('YmdHi');
-  $date_to   = isset($form_state['values']['date_to']) && $form_state['values']['date_to'] ? format_date(strtotime($form_state['values']['date_to']), 'custom', 'YmdHi') : date('YmdHi');
-  $output    = views_embed_view('todos_los_articulos', 'default', $grupo, $date_from, $date_to, $categoria);
+  $categoria = isset($form_state['values']['categoria']) && $form_state['values']['categoria'] ? $form_state['values']['categoria'] : NULL;
+  $grupo     = isset($form_state['values']['grupo']) && $form_state['values']['grupo'] ? $form_state['values']['grupo'] : NULL;
+  $date_from = isset($form_state['values']['date_from']) && $form_state['values']['date_from'] ? strtotime($form_state['values']['date_from']) : strtotime(date('Y-m-d 00:00:00'));
+  $date_to   = isset($form_state['values']['date_to']) && $form_state['values']['date_to'] ? strtotime($form_state['values']['date_to']) : strtotime(date('Y-m-d 23:59:59'));
+  $output = _eclip_build_default_categories($grupo, $categoria, $date_from, $date_to);
   $output .= '<div class="clear-both"></div>';
   return $output;
 }
@@ -172,38 +174,40 @@ function _eclip_jqueryui_theme_form_validate($form, $form_state) {
  * Submit form
  */
 function _eclip_jqueryui_theme_form_submit($form, $form_state) {
-  //dpm($form_state);
-  if ($form_state['values']['option'] == 'edit') {
-    if (node_access('update', 'clip_grupo')) {
-      $nid = $form_state['values']['node'];
-      $node = node_load($nid);
-      // node
-      $node->title = $form_state['values']['title'];
-      node_save($node);
-      // positions
-      _eclip_delete_positions($nid);
-      $positions = unserialize($form_state['values']['positions']);
-      _eclip_save_positions($nid, $positions['categories'], $positions['news']);
-      drupal_set_message('Se ha editado correctamente el clip');
-    }
-  } elseif ($form_state['values']['option'] == 'add') {
-    if (node_access('create', 'clip_grupo')) {
-      //dpm($form_state);
-      global $user;
-      $node = new stdClass();
-      $node->title = $form_state['values']['title'];
-      $node->uid = $user->uid;
-      $node->status = 1;
-      $node->type = 'clip_grupo';
-      $node->language = 'und';
-      // fields
-      $node->field_grupo = array('und' => array(array('tid' => $form_state['values']['grupo'])));
-      $node->field_clip_maestro = array('und' => array(array('target_id' => $form_state['values']['node'])));
-      node_save($node);
-      $nid = $node->nid;
-      $positions = unserialize($form_state['values']['positions']);
-      _eclip_save_positions($nid, $positions['categories'], $positions['news']);
-      drupal_set_message('Se ha creado correctamente un nuevo clip');
+  if(isset($form_state['triggering_element']['#name']) && $form_state['triggering_element']['#name'] == 'save'){
+    //dpm($form_state);
+    if ($form_state['values']['option'] == 'edit') {
+      if (node_access('update', 'clip_grupo')) {
+        $nid = $form_state['values']['node'];
+        $node = node_load($nid);
+        // node
+        $node->title = $form_state['values']['title'];
+        node_save($node);
+        // positions
+        _eclip_delete_positions($nid);
+        $positions = unserialize($form_state['values']['positions']);
+        _eclip_save_positions($nid, $positions['categories'], $positions['news']);
+        drupal_set_message('Se ha editado correctamente el clip');
+      }
+    } elseif ($form_state['values']['option'] == 'add') {
+      if (node_access('create', 'clip_grupo')) {
+        //dpm($form_state);
+        global $user;
+        $node = new stdClass();
+        $node->title = $form_state['values']['title'];
+        $node->uid = $user->uid;
+        $node->status = 1;
+        $node->type = 'clip_grupo';
+        $node->language = 'und';
+        // fields
+        $node->field_grupo = array('und' => array(array('tid' => $form_state['values']['grupo'])));
+        $node->field_clip_maestro = array('und' => array(array('target_id' => $form_state['values']['node'])));
+        node_save($node);
+        $nid = $node->nid;
+        $positions = unserialize($form_state['values']['positions']);
+        _eclip_save_positions($nid, $positions['categories'], $positions['news']);
+        drupal_set_message('Se ha creado correctamente un nuevo clip');
+      }
     }
   }
 }
@@ -445,6 +449,26 @@ function _eclip_jqueryui_cliente_theme_form_submit($form, $form_state) {
         $node->field_noticias = array('und' => array(array('value' => $form_state['values']['positions'])));
         node_save($node);
         drupal_set_message('Se ha editado correctamente el clip');
+        // Clear cache
+        // @todo should be a better way to do this
+        if(isset($node->field_cliente['und'][0]['target_id'])){
+          if($cliente = node_load($node->field_cliente['und'][0]['target_id'])){
+            if(isset($cliente->field_hash['und'][0]['value'])){
+              // Flush cache
+              $public_url = strtr('clip/:hash/:nid', array(
+                ':hash' => $cliente->field_hash['und'][0]['value'],
+                ':nid' => $node->nid,
+              ));
+              $intranet_url = strtr('intranet/:hash/:nid', array(
+                ':hash' => $cliente->field_hash['und'][0]['value'],
+                ':nid' => $node->nid,
+              ));              
+              cache_clear_all(url($public_url, array('absolute' => TRUE)), 'cache_page', TRUE);
+              cache_clear_all(url($intranet_url, array('absolute' => TRUE)), 'cache_page', TRUE);
+            }
+          }
+        }
+        //dpm($node);
       }
     } elseif ($form_state['values']['option'] == 'add') {
       if (node_access('create', 'clip')) {
@@ -523,6 +547,9 @@ function eclip_change_template_callback($form, $form_state) {
  * Change date callback
  */
 function eclip_change_date_callback($form, $form_state) {
+  if (form_get_errors()) {
+    return $form;
+  }
   $commands[] = ajax_command_html('.clipper-placeholder.zone-0', eclip_build_add_eclip_categories($form, $form_state));
   return array('#type' => 'ajax', '#commands' => $commands);
 }

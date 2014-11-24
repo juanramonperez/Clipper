@@ -201,6 +201,33 @@ function eclip_theme() {
       'colores' => null,
     ),
   );
+  $return['admin_news_item'] = array(
+    'template' => 'templates/admin-news-item',
+    'variables' => array(
+      'nid' => NULL,
+      'status' => 1,
+      'image'  => 1,
+      'vote'   => 0,
+      'title'  => '',
+      'medio'  => '',
+      'date'   => '',
+    ),
+  );
+  $return['admin_news_category'] = array(
+    'template' => 'templates/admin-news-category',
+    'variables' => array(
+      'tid' => NULL,
+      'title' => 1,
+      'weight' => 0,
+      'news'  => array(),
+    ),
+  );
+  $return['admin_news_categories'] = array(
+    'template' => 'templates/admin-news-categories',
+    'variables' => array(
+      'categories'  => array(),
+    ),
+  );   
   $return['news_related'] = array(
     'template' => 'templates/news-related',
     'variables' => array(
@@ -268,12 +295,10 @@ function eclip_views_api() {
  * Page callback to display links and render a container for AJAX stuff.
  */
 function eclip_test_page() {
-  $related  = eclip_get_related_news_v2(262970);
-  $output   = eclip_build_otros_medios_link_v2('amsa', 123, $related);
-  //$output = theme('email_05', array('node' => $node, 'news' => _eclip_get_news_by_clip($node->nid)));
-  //dpm($output);
-  //return 'hola';
-  return $output;
+  varnish_purge_all_pages();
+  $return = cache_clear_all('^/clip/mlp/39299', 'cache_page', TRUE);
+  dpm($return);
+  return '$output';
   //return views_embed_view('todos_los_articulos', 'default', 39, '20130101', '20500101');
 }
 
@@ -1040,14 +1065,17 @@ function eclip_build_otros_medios_link($article_data_id = NULL) {
 /**
  * Build otros medios button 
  */
-function eclip_build_otros_medios_link_v2($environment, $base, $clip, $nids = array()) {
+function eclip_build_otros_medios_link_v2($environment, $base, $clip_nid, $noticia_nid, $nids = array()) {
+  //dpm($base, 'base');
+  //dpm($nid, 'clip');
+  //dpm($nids, 'nids');
   $output = '';
   $nodes  = node_load_multiple($nids);
   if(!empty($nodes)){
-    $output.= '<div class="toggle-related-items" article="' . $clip . '">';
+    $output.= '<div class="toggle-related-items" article="' . $noticia_nid . '">';
     $output.= l(t('[Ver misma noticia en otros medios]'), '', array('external' => TRUE, 'fragment' => ' '));
     $output.= '</div>';
-    $output.= '<div class="related-items" article="' . $clip . '">';
+    $output.= '<div class="related-items" article="' . $noticia_nid . '">';
     foreach ($nodes as $noticia) {
       if(isset($noticia->field_medio['und'][0]['tid'])){
         $term  = taxonomy_term_load($noticia->field_medio['und'][0]['tid']);
@@ -1056,14 +1084,13 @@ function eclip_build_otros_medios_link_v2($environment, $base, $clip, $nids = ar
         $medio = _eclip_theme_render_field($noticia, $noticia->field_fuente, 'field_fuente');
       }
       $related_args = array_combine($nids, $nids);
-      $related_args[$clip] = $clip;
+      $related_args[$noticia_nid] = $noticia_nid;
       unset($related_args[$noticia->nid]);
-      $output.= '<div class="related-item">' . l($noticia->title . ' - (' . $medio . ')', $environment . '/' . $base . '/' . $clip . '/' . $noticia->nid, array('query' => array('related' => implode('-', $related_args)))) . '</div>';
+      $output.= '<div class="related-item">' . l($noticia->title . ' - (' . $medio . ')', $environment . '/' . $base . '/' . $clip_nid . '/' . $noticia->nid, array('query' => array('related' => implode('-', $related_args)))) . '</div>';
     }
     $output.= '</div>';
   }
   return $output;
-  //dpm($nodes);
 }
 
 function eclip_get_related_news($clip) {
@@ -1292,4 +1319,94 @@ function eclip_form_clip_node_form_alter(&$form, &$form_state, $form_id) {
     $form['field_grupo']['#access'] = FALSE;
     $form['field_clip_grupo']['#access'] = FALSE;
   }
+}
+
+
+function _eclip_get_categories_by_group($group = NULL){
+  if($group){
+    $clients = db_query('SELECT node.nid FROM {node} AS node LEFT JOIN {taxonomy_index} AS tindex ON tindex.nid = node.nid WHERE tindex.tid = :tid AND node.type = :type', array(':tid' => $group, ':type' => 'cliente'))->fetchAllAssoc('nid');
+  }else{
+    $clients = db_query('SELECT node.nid FROM {node} AS node WHERE node.type = :type', array(':type' => 'cliente'))->fetchAllAssoc('nid');    
+  }
+  if($clients){
+    return db_query('SELECT term.name, term.tid FROM {taxonomy_term_data} AS term 
+                            LEFT JOIN {taxonomy_index} AS tindex ON tindex.tid = term.tid 
+                            LEFT JOIN {node} AS node ON tindex.nid = node.nid WHERE node.nid IN (:nids)
+                            GROUP BY term.tid', 
+                              array(':nids' => array_keys($clients)))->fetchAllAssoc('tid');
+  }else{
+    return NULL;
+  }
+}
+
+function _eclip_get_news_by_category($category, $from = NULL, $to = NULL){
+  $noticias = array();
+  $query = db_select('node', 'n');
+  $query->leftJoin('taxonomy_index', 'tindex', 'tindex.nid = n.nid');
+  $query->leftJoin('field_data_field_medio', 'medio', 'medio.entity_id = n.nid');
+  $query->leftJoin('taxonomy_term_data', 'term', 'term.tid = medio.field_medio_tid');
+  $query->fields('n', array('nid', 'title', 'created'))
+        ->fields('term', array('name'))
+        ->condition('tindex.tid', $category)
+        ->condition('n.type', 'noticia')
+        ->range(0, 50)
+        ->orderBy('n.created', 'desc');
+  if($from){
+    $query->condition('n.created', $from, '>=');
+  }
+  if($to){
+    $query->condition('n.created', $to, '<=');
+  }
+  // dpq($query);             
+  $results = $query->execute()->fetchAll();
+  //dpm($results);
+  foreach ($results as $key => $result) {
+    $noticias[$result->nid] = array(
+      'nid' => $result->nid,
+      'title' => $result->title,
+      'date' => $result->created,
+      'medio' => $result->name,
+    );
+  }
+  return $noticias;
+}
+
+function _eclip_get_news_by_filters($grupo, $tid = NULL, $from = NULL, $to = NULL){
+  $categories = _eclip_get_categories_by_group($grupo, $tid);
+  $news = array();
+  foreach ($categories as $category_id => $category) {
+    if($tid){
+      if($tid == $category_id){
+        $news_by_category = _eclip_get_news_by_category($tid, $from, $to);
+        if($news_by_category){
+          $news[$category_id] = array(
+            'tid'   => $category_id,
+            'title' => $category->name,
+            'news'  => $news_by_category,
+          );
+        } 
+      }     
+    }else{
+      $news_by_category = _eclip_get_news_by_category($category_id, $from, $to);
+      if($news_by_category){      
+        $news[$category_id] = array(
+          'tid'   => $category_id,
+          'title' => $category->name,
+          'news'  => $news_by_category,
+        );
+      }
+    }
+  }
+  return $news;
+}
+
+function _eclip_build_default_categories($grupo, $category = NULL, $from = NULL, $to = NULL){
+  $categories = _eclip_get_news_by_filters($grupo, $category, $from, $to);
+  return theme('admin_news_categories', array('categories' => $categories));
+}
+
+function eclip_preprocess_admin_news_item(&$vars){
+  $date = $vars['date'];
+  $vars['date']       = format_date($date, 'custom', 'd/m/Y H:s A');
+  $vars['date_class'] = format_date($date, 'custom', 'A');
 }
