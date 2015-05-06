@@ -449,26 +449,9 @@ function _eclip_jqueryui_cliente_theme_form_submit($form, $form_state) {
         $node->field_noticias = array('und' => array(array('value' => $form_state['values']['positions'])));
         node_save($node);
         drupal_set_message('Se ha editado correctamente el clip');
-        // Clear cache
+        // Clear cache        
         // @todo should be a better way to do this
-        if(isset($node->field_cliente['und'][0]['target_id'])){
-          if($cliente = node_load($node->field_cliente['und'][0]['target_id'])){
-            if(isset($cliente->field_hash['und'][0]['value'])){
-              // Flush cache
-              $public_url = strtr('clip/:hash/:nid', array(
-                ':hash' => $cliente->field_hash['und'][0]['value'],
-                ':nid' => $node->nid,
-              ));
-              $intranet_url = strtr('intranet/:hash/:nid', array(
-                ':hash' => $cliente->field_hash['und'][0]['value'],
-                ':nid' => $node->nid,
-              ));              
-              cache_clear_all(url($public_url, array('absolute' => TRUE)), 'cache_page', TRUE);
-              cache_clear_all(url($intranet_url, array('absolute' => TRUE)), 'cache_page', TRUE);
-            }
-          }
-        }
-        //dpm($node);
+        eclip_flush_clip_cache($node);
       }
     } elseif ($form_state['values']['option'] == 'add') {
       if (node_access('create', 'clip')) {
@@ -497,6 +480,9 @@ function _eclip_jqueryui_cliente_theme_form_submit($form, $form_state) {
         $positions = unserialize($form_state['values']['positions']);
         _eclip_save_positions($nid, $positions['categories'], $positions['news'], $positions['highlighted']);
         drupal_set_message('Se ha creado correctamente un nuevo clip');
+        // Clear cache
+        // @todo should be a better way to do this
+        eclip_flush_clip_cache($node);        
       }
     }   
   }
@@ -560,6 +546,19 @@ function eclip_change_date_callback($form, $form_state) {
 function eclip_build_send_clip_callback($node, $type){
   eclip_send_clip($node, $type);
   //$messages = drupal_get_messages();
+  $commands[] = ajax_command_prepend('#content', theme('status_messages'));
+  $page = array('#type' => 'ajax', '#commands' => $commands);
+  ajax_deliver($page);
+}
+
+/**
+ * Send clip callback
+ */
+function eclip_clear_cache_clip_callback($node){
+  eclip_flush_clip_cache($node);
+  // Cache borradas
+  drupal_set_message(t('Caches borradas para el clip'));
+  // Send command
   $commands[] = ajax_command_prepend('#content', theme('status_messages'));
   $page = array('#type' => 'ajax', '#commands' => $commands);
   ajax_deliver($page);
