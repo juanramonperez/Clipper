@@ -224,7 +224,8 @@ function eclip_theme_preprocess_node(&$vars) {
           $vars['colores']['title_size']   = '';
           $vars['colores']['title_weight'] = ''; 
           $vars['colores']['title_decoration']  = 'none';
-
+          // Display categories menu
+          $vars['colores']['categories_menu'] = isset($cliente->field_menu_categorias['und'][0]['value']) ? $cliente->field_menu_categorias['und'][0]['value'] : 0;
         }
 
         $vars['imagen'] = '';

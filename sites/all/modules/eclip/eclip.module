@@ -47,6 +47,14 @@ function eclip_menu() {
     'access arguments' => array('administer clips'),
     'type' => MENU_CALLBACK,
     'file' => 'eclip.admin.inc',
+  ); 
+  $items['adm/eclip/%node/clear'] = array(
+    'title' => 'Clear e-clip cache',
+    'page callback' => 'eclip_clear_cache_clip_callback',
+    'page arguments' => array(2, 'send'),
+    'access arguments' => array('administer clips'),
+    'type' => MENU_CALLBACK,
+    'file' => 'eclip.admin.inc',
   );  
   $items['adm/eclip/cliente/%node/add'] = array(
     'title' => 'Agregar clip por cliente',
@@ -245,7 +253,13 @@ function eclip_theme() {
   );  
   $return['test_email'] = array(
     'template' => 'templates/test-email',
-  );   
+  );
+  $return['menu_categories'] = array(
+    'template' => 'templates/menu-categories',
+    'variables' => array( 
+      'news'     => array(),
+    ),
+  );     
   return $return;
 }
 
@@ -311,6 +325,7 @@ function _eclip_build_news_by_zone($news, $zone) {
   if (isset($news[$zone])) {
     //dpm($news[$zone]);
     foreach ($news[$zone] as $cat_tid => $new) {
+      $output.= '<a name=category-' . $cat_tid . '></a>';
       $output.= '<h2 class="category-title">' . $new['name'] . '</h2>';
       //dpm($new);
       $output.= views_embed_view('front_get_news', 'default', $cat_tid, $new['clip_nid'], $new['news']);
@@ -696,7 +711,7 @@ function _theme_categoria($news, $options = array()){
           $news_count++;
           if($news_count == $options['limit']) break;
       }
-      $output.= theme('news_category', array('email' => $options['email'], 'titulo' => $new['name'], 'noticias' => $noticias, 'colores' => $options['colores']));
+      $output.= theme('news_category', array('cat_tid' => $cat_tid, 'email' => $options['email'], 'titulo' => $new['name'], 'noticias' => $noticias, 'colores' => $options['colores']));
       if($news_count == $options['limit']) break;
     }
   }
@@ -765,7 +780,6 @@ function template_preprocess_news_category(&$variables){
   if($variables['colores']['category_background'])
     $variables['style_title_category'].= 'background-color: ' . $variables['colores']['category_background'] . ';';
   $variables['style_title_category'].= 'border-bottom: 1px solid ' . $variables['colores']['liston_color'] . ';';
-  //dpm($variables);
 }
 
 /**
@@ -842,6 +856,19 @@ function template_preprocess_email_06(&$variables){
  */
 function template_preprocess_email_07(&$variables){
   _custom_prepare_email_v2($variables);
+}
+
+/**
+ * Implements hook_preprocess_menu_categories().
+ */
+function eclip_preprocess_menu_categories(&$variables) {
+  if (isset($variables['news'])) unset($variables['news'][0]);
+  $variables['menu_items'] = array();  
+  foreach ($variables['news'] as $zid => $zona) {
+    foreach ($zona as $id => $categoria) {      
+      $variables['menu_items'][] = '<a href="#category-' . $id . '">' . $categoria['name'] . '</a>';
+    }
+  }
 }
 
 
@@ -1155,7 +1182,7 @@ function _eclip_get_url_file($path, $style = 'default'){
  * Helper function to print images from url
  */
 function _eclip_theme_file($url, $style = 'default', $download = true){    
-    $url = url('sites/default/files/upload/' . $url, array('absolute' => TRUE));
+    $url = url('sites/default/files/upload/' . $url, array('absolute' => TRUE, 'query' => array('itok' => time())));
     $image_types = array('image/jpg', 'image/jpeg', 'image/png', 'image/gif');
     $video_types = array('video/mp4');
     $audio_types = array('audio/mpeg', 'audio/mp4', 'audio/ogg', 'audio/vorbis');
@@ -1378,23 +1405,23 @@ function _eclip_get_news_by_filters($grupo, $tid = NULL, $from = NULL, $to = NUL
     if($tid){
       if($tid == $category_id){
         $news_by_category = _eclip_get_news_by_category($tid, $from, $to);
-        if($news_by_category){
-          $news[$category_id] = array(
-            'tid'   => $category_id,
-            'title' => $category->name,
-            'news'  => $news_by_category,
-          );
-        } 
-      }     
-    }else{
-      $news_by_category = _eclip_get_news_by_category($category_id, $from, $to);
-      if($news_by_category){      
+        //if($news_by_category){
         $news[$category_id] = array(
           'tid'   => $category_id,
           'title' => $category->name,
           'news'  => $news_by_category,
         );
-      }
+        //} 
+      }     
+    }else{
+      $news_by_category = _eclip_get_news_by_category($category_id, $from, $to);
+      //if($news_by_category){      
+      $news[$category_id] = array(
+        'tid'   => $category_id,
+        'title' => $category->name,
+        'news'  => $news_by_category,
+      );
+      //}
     }
   }
   return $news;
@@ -1409,4 +1436,38 @@ function eclip_preprocess_admin_news_item(&$vars){
   $date = $vars['date'];
   $vars['date']       = format_date($date, 'custom', 'd/m/Y H:s A');
   $vars['date_class'] = format_date($date, 'custom', 'A');
+}
+
+
+/**
+ * Flush cache of given eclip
+ */
+function eclip_flush_clip_cache($node){
+  if(isset($node->field_cliente['und'][0]['target_id'])){
+    if($cliente = node_load($node->field_cliente['und'][0]['target_id'])){
+      if(isset($cliente->field_hash['und'][0]['value'])){
+        // Flush cache
+        $public_url = strtr('clip/:hash/:nid', array(
+          ':hash' => $cliente->field_hash['und'][0]['value'],
+          ':nid' => $node->nid,
+        ));
+        $public_base_url = strtr('clip/:hash', array(
+          ':hash' => $cliente->field_hash['und'][0]['value'],
+        ));              
+        $intranet_base_url = strtr('intranet/:hash', array(
+          ':hash' => $cliente->field_hash['und'][0]['value'],
+        ));               
+        $intranet_url = strtr('intranet/:hash/:nid', array(
+          ':hash' => $cliente->field_hash['und'][0]['value'],
+          ':nid' => $node->nid,
+        ));
+        cache_clear_all(url($public_base_url, array('absolute' => TRUE)), 'cache_page');
+        cache_clear_all(url($public_url, array('absolute' => TRUE)), 'cache_page', TRUE);
+        cache_clear_all(url($intranet_base_url, array('absolute' => TRUE)), 'cache_page');
+        cache_clear_all(url($intranet_url, array('absolute' => TRUE)), 'cache_page', TRUE);
+      }
+    }
+  }
+  // Save node to force the delete cache
+  node_save($node);
 }
